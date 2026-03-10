@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code 上級ワークブック</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0d10;
+  --bg2: #13131a;
+  --bg3: #1a1a24;
+  --border: #2a2a38;
+  --border2: #363650;
+  --text: #e8e6f0;
+  --muted: #6b6880;
+  --dim: #3d3a50;
+  --green: #3dd68c;
+  --green-d: #1a6e42;
+  --green-bg: #0d2e1e;
+  --blue: #60a5fa;
+  --blue-d: #1e4a8a;
+  --blue-bg: #0d1e38;
+  --amber: #fbbf24;
+  --amber-bg: #2a1e06;
+  --purple: #a78bfa;
+  --purple-bg: #1a1030;
+  --red: #f87171;
+  --red-bg: #2a0e0e;
+  --cyan: #22d3ee;
+  --cyan-bg: #061e24;
+
+  /* topic colors */
+  --t1: #3dd68c; /* CLAUDE.md */
+  --t2: #60a5fa; /* Workflow */
+  --t3: #a78bfa; /* Skills */
+  --t4: #fbbf24; /* Slash Commands */
+  --t5: #22d3ee; /* Hooks */
+  --t6: #f87171; /* Subagents */
+  --t7: #fb923c; /* Tasks/MCP */
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans JP',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.7;
+  min-height:100vh;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* ── LAYOUT ── */
+.wrap{max-width:920px;margin:0 auto;padding:0 28px 100px}
+
+/* ── COVER ── */
+.cover{
+  padding:80px 0 64px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:64px;
+  position:relative;
+  overflow:hidden;
+}
+.cover::before{
+  content:'';
+  position:absolute;
+  top:-60px;right:-100px;
+  width:500px;height:500px;
+  background:radial-gradient(circle, rgba(61,214,140,0.06) 0%, transparent 70%);
+  pointer-events:none;
+}
+.cover-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--green);
+  border:1px solid var(--green-d);
+  background:var(--green-bg);
+  padding:5px 12px;border-radius:3px;
+  margin-bottom:24px;
+}
+.cover-badge::before{content:'●';font-size:7px}
+.cover h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(32px,5.5vw,58px);
+  font-weight:800;
+  line-height:1.05;
+  letter-spacing:-2px;
+  margin-bottom:20px;
+  background:linear-gradient(135deg, #e8e6f0 0%, #6b6880 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.cover h1 em{
+  font-style:normal;
+  background:linear-gradient(90deg,var(--green),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.cover-sub{
+  font-size:15px;color:var(--muted);
+  max-width:540px;line-height:1.85;
+  margin-bottom:32px;
+}
+.cover-tags{display:flex;gap:8px;flex-wrap:wrap}
+.ctag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:1px;
+  padding:4px 10px;border-radius:3px;
+  border:1px solid;
+}
+
+/* ── PREREQ BOX ── */
+.prereq{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-left:3px solid var(--amber);
+  border-radius:4px;
+  padding:20px 24px;
+  margin-bottom:48px;
+  font-size:13px;
+  line-height:1.8;
+}
+.prereq-lbl{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--amber);margin-bottom:10px;
+}
+.prereq ul{padding-left:16px;color:var(--muted)}
+.prereq li{margin-bottom:4px}
+.prereq li strong{color:var(--text)}
+
+/* ── LEARNING MAP ── */
+.lmap{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:0;
+  margin-bottom:56px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  overflow:hidden;
+}
+.lmap-item{
+  padding:16px 10px;
+  text-align:center;
+  border-right:1px solid var(--border);
+  position:relative;
+}
+.lmap-item:last-child{border-right:none}
+.lmap-n{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:1px;
+  color:var(--muted);margin-bottom:8px;
+}
+.lmap-icon{font-size:18px;margin-bottom:6px}
+.lmap-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;line-height:1.4;
+  color:var(--muted);
+}
+.lmap-item::after{
+  content:'→';
+  position:absolute;right:-8px;top:50%;
+  transform:translateY(-50%);
+  color:var(--border2);font-size:12px;
+  z-index:1;
+}
+.lmap-item:last-child::after{display:none}
+
+/* ── INDEX ── */
+.idx{
+  border:1px solid var(--border);
+  border-radius:6px;
+  overflow:hidden;
+  margin-bottom:64px;
+}
+.idx-head{
+  display:grid;
+  grid-template-columns:52px 1fr 120px 60px;
+  padding:8px 16px;
+  background:var(--bg3);
+  border-bottom:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);
+}
+.idx-row{
+  display:grid;
+  grid-template-columns:52px 1fr 120px 60px;
+  padding:11px 16px;
+  border-bottom:1px solid var(--border);
+  font-size:13px;
+  align-items:center;
+  transition:background .1s;
+}
+.idx-row:last-child{border-bottom:none}
+.idx-row:hover{background:var(--bg2)}
+.idx-id{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--muted);
+}
+.idx-topic{
+  display:inline-block;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;padding:3px 8px;
+  border-radius:3px;border:1px solid;
+}
+
+/* ── TOPIC SECTION ── */
+.topic-sec{margin-bottom:72px}
+.topic-head{
+  display:flex;align-items:center;gap:16px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:10px;
+}
+.topic-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);
+}
+.topic-title{
+  font-family:'Syne',sans-serif;
+  font-size:22px;font-weight:800;letter-spacing:-0.5px;
+}
+.topic-concept{
+  font-size:13px;color:var(--muted);
+  line-height:1.85;margin-bottom:28px;
+  padding:14px 16px;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:4px;
+}
+.topic-concept strong{color:var(--text)}
+
+/* ── MISSION CARD ── */
+.card{
+  border:1px solid var(--border);
+  border-radius:6px;
+  overflow:hidden;
+  margin-bottom:20px;
+}
+.card-head{
+  padding:18px 22px;
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:flex-start;gap:12px;
+}
+.card-id{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:6px;
+}
+.card-title{font-size:15px;font-weight:700;line-height:1.4}
+.diff-dots{display:flex;gap:3px;align-items:center;flex-shrink:0;padding-top:2px}
+.dd{width:8px;height:8px;border-radius:50%;background:var(--border2)}
+.dd.on{background:var(--text)}
+
+.card-body{padding:22px;background:var(--bg)}
+
+/* scenario */
+.scene{
+  font-size:13px;line-height:1.85;
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:14px 18px;
+  margin-bottom:18px;
+  color:var(--muted);
+}
+.scene strong{color:var(--text)}
+.scene-lbl{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:7px;
+  opacity:.7;
+}
+
+/* file tree */
+.ftree{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:14px 18px;
+  margin-bottom:18px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;line-height:1.9;
+  color:var(--muted);
+}
+.ftree pre{
+  white-space:pre;
+  overflow-x:auto;
+  margin:0;
+  font-family:inherit;
+  font-size:inherit;
+  line-height:inherit;
+  color:inherit;
+}
+.ftree-lbl{
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:10px;color:var(--dim);
+}
+.ftree .dir{color:var(--blue)}
+.ftree .file{color:var(--text)}
+.ftree .new{color:var(--green)}
+.ftree .note{color:var(--dim);font-size:11px}
+
+/* tasks */
+.tasks{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:16px 18px;
+  margin-bottom:18px;
+}
+.tasks-lbl{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:10px;opacity:.7;
+}
+.task-list{list-style:none}
+.task-list li{
+  display:flex;gap:10px;
+  padding:6px 0;
+  font-size:13.5px;
+  border-bottom:1px solid var(--border);
+  line-height:1.65;
+}
+.task-list li:last-child{border-bottom:none}
+.task-list li::before{content:'○';color:var(--border2);flex-shrink:0;margin-top:1px}
+.out{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:3px;
+  padding:1px 7px;
+  color:var(--muted);
+  white-space:nowrap;
+  vertical-align:middle;
+  margin-left:4px;
+}
+
+/* point */
+.point{
+  font-size:12.5px;color:var(--muted);
+  border-left:2px solid var(--border2);
+  padding-left:12px;
+  line-height:1.75;
+}
+.point strong{color:var(--text)}
+
+/* ── TOGGLE ── */
+.tog-btn{
+  display:flex;align-items:center;gap:8px;
+  width:100%;padding:12px 22px;
+  background:var(--bg2);
+  border:none;border-top:1px solid var(--border);
+  cursor:pointer;
+  font-family:'Noto Sans JP',sans-serif;
+  font-size:12px;font-weight:700;
+  color:var(--muted);text-align:left;
+  transition:background .15s;
+}
+.tog-btn:hover{background:var(--bg3)}
+.tog-arr{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;transition:transform .2s;color:var(--border2)}
+.tog-btn.open .tog-arr{transform:rotate(180deg)}
+
+.ans{
+  display:none;
+  padding:24px 22px;
+  background:var(--bg);
+  border-top:1px solid var(--border);
+  animation:ain .2s ease;
+}
+.ans.show{display:block}
+@keyframes ain{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── ANSWER SECTIONS ── */
+.ans-sec{margin-bottom:22px}
+.ans-sec:last-child{margin-bottom:0}
+.ans-lbl{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:2.5px;text-transform:uppercase;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:13px;
+}
+
+/* CODE BLOCK */
+.cb{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;line-height:1.95;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:18px 20px;
+  white-space:pre;
+  overflow-x:auto;
+  margin-bottom:10px;
+  position:relative;
+}
+.cb-label{
+  position:absolute;top:10px;right:14px;
+  font-size:9px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--dim);
+}
+/* syntax tokens */
+.cb .cm{color:#4a4a62}     /* comment */
+.cb .kw{color:var(--green)} /* keyword/important */
+.cb .str{color:var(--amber)} /* string */
+.cb .var{color:var(--cyan)} /* variable/filename */
+.cb .fn{color:var(--purple)} /* function */
+.cb .num{color:var(--red)} /* number */
+.cb .hd{color:var(--blue)}  /* heading/section */
+.cb .op{color:var(--muted)} /* operator/punct */
+
+/* diff block */
+.diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:10px}
+.diff-pane{padding:16px 18px;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.9;white-space:pre-wrap;word-break:break-word}
+.diff-pane.before{background:#1a0e0e;color:#c07070}
+.diff-pane.after{background:var(--green-bg);color:#70c0a0}
+.diff-head{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:4px 4px 0 0;overflow:hidden;margin-bottom:0}
+.diff-head+.diff-grid{border-radius:0 0 4px 4px}
+.diff-htab{padding:6px 18px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;text-align:center}
+.diff-htab.before{background:#2a1414;color:var(--red)}
+.diff-htab.after{background:var(--green-bg);color:var(--green)}
+
+/* tip */
+.tip{
+  background:var(--amber-bg);
+  border:1px solid #4a3810;
+  border-left:3px solid var(--amber);
+  border-radius:0 4px 4px 0;
+  padding:13px 17px;
+  font-size:13px;line-height:1.75;
+}
+.tip strong{color:var(--amber)}
+
+/* warning */
+.warn{
+  background:var(--red-bg);
+  border:1px solid #4a1818;
+  border-left:3px solid var(--red);
+  border-radius:0 4px 4px 0;
+  padding:12px 16px;
+  font-size:12.5px;line-height:1.7;
+  color:#c07070;
+  margin-bottom:10px;
+}
+.warn strong{color:var(--red)}
+
+/* ans text */
+.atxt{font-size:13px;line-height:1.85;color:var(--muted)}
+.atxt strong{color:var(--text)}
+.atxt p{margin-bottom:9px}
+
+/* ── TOPIC COLOR UTILITIES ── */
+.c1{color:var(--t1)} .b1{border-color:var(--t1)} .bg1{background:var(--green-bg)}
+.c2{color:var(--t2)} .b2{border-color:var(--t2)} .bg2c{background:var(--blue-bg)}
+.c3{color:var(--t3)} .b3{border-color:var(--t3)} .bg3c{background:var(--purple-bg)}
+.c4{color:var(--t4)} .b4{border-color:var(--t4)} .bg4{background:var(--amber-bg)}
+.c5{color:var(--t5)} .b5{border-color:var(--t5)} .bg5{background:var(--cyan-bg)}
+.c6{color:var(--t6)} .b6{border-color:var(--t6)} .bg6{background:var(--red-bg)}
+.c7{color:#fb923c}   .b7{border-color:#fb923c}   .bg7{background:#1e1206}
+
+/* topic border left on card */
+.t1-card{border-left:3px solid var(--t1)}
+.t2-card{border-left:3px solid var(--t2)}
+.t3-card{border-left:3px solid var(--t3)}
+.t4-card{border-left:3px solid var(--t4)}
+.t5-card{border-left:3px solid var(--t5)}
+.t6-card{border-left:3px solid var(--t6)}
+.t7-card{border-left:3px solid var(--fb923c,#fb923c)}
+
+@media(max-width:700px){
+  .lmap{grid-template-columns:repeat(4,1fr)}
+  .lmap-item:nth-child(4){border-right:none}
+  .lmap-item:nth-child(4)::after{display:none}
+  .diff-grid,.diff-head{grid-template-columns:1fr}
+  .idx-head,.idx-row{grid-template-columns:44px 1fr 80px}
+  .idx-head > *:last-child,.idx-row > *:last-child{display:none}
+  .cover h1{font-size:28px}
+}
+
+/* ── DOWNLOAD BOX ── */
+.dl-box{
+  background:#13131a;
+  border:1px solid #2a2a38;
+  border-radius:6px;
+  padding:28px 32px;
+  margin-bottom:48px;
+}
+.dl-box-title{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:2.5px;text-transform:uppercase;
+  color:#3dd68c;margin-bottom:10px;font-weight:500;
+}
+.dl-box-sub{
+  font-size:13.5px;color:#6b6880;margin-bottom:20px;line-height:1.6;
+}
+.dl-files{
+  display:flex;flex-wrap:wrap;gap:10px;
+}
+.dl-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#1a1a24;border:1px solid #363650;
+  border-radius:4px;padding:10px 16px;
+  text-decoration:none;color:#e8e6f0;
+  font-size:13px;font-family:'JetBrains Mono',monospace;
+  transition:background 0.15s,border-color 0.15s;
+  cursor:pointer;
+}
+.dl-btn:hover{background:#0d2e1e;color:#3dd68c;border-color:#3dd68c;}
+.dl-btn:hover .dl-arrow{color:#3dd68c;}
+.dl-icon{font-size:15px;}
+.dl-name{font-weight:500;}
+.dl-arrow{color:#6b6880;font-size:16px;margin-left:4px;}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ══ COVER ══ -->
+<header class="cover">
+  <div class="cover-badge">Advanced Workbook — Claude Code Power User</div>
+  <h1>Claude Code<br><em>本格活用</em>ワークブック</h1>
+  <p class="cover-sub">
+    CLAUDE.md から MCP まで。Claude Code を「使う」から「設計する」へ。<br>
+    前ワークブッククリア後の次のステップ ── 全7トピック、10ミッション。
+  </p>
+  <div class="cover-tags">
+    <span class="ctag c1 b1" style="background:var(--green-bg)">CLAUDE.md</span>
+    <span class="ctag c2 b2" style="background:var(--blue-bg)">Workflow</span>
+    <span class="ctag c3 b3" style="background:var(--purple-bg)">Skills</span>
+    <span class="ctag c4 b4" style="background:var(--amber-bg)">Slash Commands</span>
+    <span class="ctag c5 b5" style="background:var(--cyan-bg)">Hooks</span>
+    <span class="ctag c6 b6" style="background:var(--red-bg)">Subagents</span>
+    <span class="ctag c7 b7" style="background:var(--bg7,#1e1206)">Tasks / MCP</span>
+  </div>
+</header>
+
+<!-- ══ PREREQ ══ -->
+<div class="prereq">
+  <div class="prereq-lbl">前提条件</div>
+  <ul>
+    <li><strong>前ワークブッククリア済み</strong>（Claude Code で CSV処理・グラフ化・計算スクリプトを作れる）</li>
+    <li><strong>ターミナル基本操作</strong>（cd, ls, mkdir, cat が使える）</li>
+    <li><strong>Claude Code インストール済み</strong>（<code>claude</code> コマンドで起動できる状態）</li>
+    <li>コードの読み書きは不要。理解して<strong>設計・指示できること</strong>がゴール</li>
+  </ul>
+</div>
+
+<!-- ══ LEARNING MAP ══ -->
+<div class="lmap">
+  <div class="lmap-item"><div class="lmap-n">01</div><div class="lmap-icon">📋</div><div class="lmap-label" style="color:var(--t1)">CLAUDE<br>.md</div></div>
+  <div class="lmap-item"><div class="lmap-n">02</div><div class="lmap-icon">🔄</div><div class="lmap-label" style="color:var(--t2)">Work<br>flow</div></div>
+  <div class="lmap-item"><div class="lmap-n">03</div><div class="lmap-icon">🧩</div><div class="lmap-label" style="color:var(--t3)">Skills</div></div>
+  <div class="lmap-item"><div class="lmap-n">04</div><div class="lmap-icon">⚡</div><div class="lmap-label" style="color:var(--t4)">Slash<br>Cmds</div></div>
+  <div class="lmap-item"><div class="lmap-n">05</div><div class="lmap-icon">🪝</div><div class="lmap-label" style="color:var(--t5)">Hooks</div></div>
+  <div class="lmap-item"><div class="lmap-n">06</div><div class="lmap-icon">🤖</div><div class="lmap-label" style="color:var(--t6)">Sub<br>agents</div></div>
+  <div class="lmap-item"><div class="lmap-n">07</div><div class="lmap-icon">🔌</div><div class="lmap-label" style="color:var(--t7,#fb923c)">Tasks<br>MCP</div></div>
+</div>
+
+<!-- ══ INDEX ══ -->
+<div class="idx">
+  <div class="idx-head"><div>No.</div><div>ミッション</div><div>トピック</div><div>難易度</div></div>
+  <div class="idx-row"><div class="idx-id">1-A</div><div>プロジェクト用 CLAUDE.md を設計・作成する</div><div><span class="idx-topic c1 b1" style="background:var(--green-bg)">CLAUDE.md</span></div><div><span style="color:var(--t1)">●●○○○</span></div></div>
+  <div class="idx-row"><div class="idx-id">2-A</div><div>月次レポート生成ワークフローをテキストで定義する</div><div><span class="idx-topic c2 b2" style="background:var(--blue-bg)">Workflow</span></div><div><span style="color:var(--t2)">●●○○○</span></div></div>
+  <div class="idx-row"><div class="idx-id">2-B</div><div>ワークフロー定義ファイルから Claude Code に実行させる</div><div><span class="idx-topic c2 b2" style="background:var(--blue-bg)">Workflow</span></div><div><span style="color:var(--t2)">●●●○○</span></div></div>
+  <div class="idx-row"><div class="idx-id">3-A</div><div>レビュー分析 Skill を作成して呼び出す</div><div><span class="idx-topic c3 b3" style="background:var(--purple-bg)">Skills</span></div><div><span style="color:var(--t3)">●●●○○</span></div></div>
+  <div class="idx-row"><div class="idx-id">3-B</div><div>競合スクレイピング用 Skill を作り、ワークフローから呼び出す</div><div><span class="idx-topic c3 b3" style="background:var(--purple-bg)">Skills</span></div><div><span style="color:var(--t3)">●●●●○</span></div></div>
+  <div class="idx-row"><div class="idx-id">4-A</div><div>/report スラッシュコマンドを定義して毎月呼び出す</div><div><span class="idx-topic c4 b4" style="background:var(--amber-bg)">Slash Cmds</span></div><div><span style="color:var(--t4)">●●●○○</span></div></div>
+  <div class="idx-row"><div class="idx-id">5-A</div><div>ファイル保存時に自動バリデーションする Hook を設定する</div><div><span class="idx-topic c5 b5" style="background:var(--cyan-bg)">Hooks</span></div><div><span style="color:var(--t5)">●●●●○</span></div></div>
+  <div class="idx-row"><div class="idx-id">6-A</div><div>Subagent を使って競合×売上の並列分析パイプラインを作る</div><div><span class="idx-topic c6 b6" style="background:var(--red-bg)">Subagents</span></div><div><span style="color:var(--t6)">●●●●●</span></div></div>
+  <div class="idx-row"><div class="idx-id">7-A</div><div>Tasks でバックグラウンド処理スケジュールを組む</div><div><span class="idx-topic c7 b7" style="background:var(--bg7,#1e1206)">Tasks</span></div><div><span style="color:#fb923c">●●●●○</span></div></div>
+  <div class="idx-row"><div class="idx-id">7-B</div><div>MCP サーバーを接続して Slack/Notion と連携する</div><div><span class="idx-topic c7 b7" style="background:var(--bg7,#1e1206)">MCP</span></div><div><span style="color:#fb923c">●●●●●</span></div></div>
+</div>
+
+<!-- ══════════════════════════════ -->
+<!-- TOPIC 1: CLAUDE.md -->
+<!-- ══════════════════════════════ -->
+<!-- ★ DOWNLOAD SECTION ★ -->
+<div class="dl-box">
+  <div class="dl-box-title">📁 素材ファイル — Download</div>
+  <p class="dl-box-sub">各ミッションで使用するファイルです。あらかじめ手元に保存しておいてください。</p>
+  <div class="dl-files">
+    <a class="dl-btn" href="data:text/csv;charset=utf-8;base64,44Os44OT44Ol44O8SUQs6LO85YWl5pelLOipleS+oSzjgr/jgqTjg4jjg6ss5pys5paHLOW5tOS7oyzjg6rjg5Tjg7zjg4jlm57mlbAKUjAwMSwyMDI0LTA0LTE1LDUs5q+O5pyd5L2/44Gj44Gm44G+44GZLOacneaZqeS9v+OBhOWni+OCgeOBpjLjg7bmnIjjgILjgY/jgZnjgb/jgYzlj5bjgozjgabjg4jjg7zjg7PjgqLjg4Pjg5fjgZfjgZ/msJfjgYzjgZfjgb7jgZnjgILou73jgYTjg4bjgq/jgrnjg4Hjg6Pjgafph43jga3kvb/jgYTjgZfjgoTjgZnjgYTjgafjgZnjgIIsMzDku6MsMwpSMDAyLDIwMjQtMDQtMTgsNCzmiJDliIbjgYzoia/jgYQsVkMtSVAyMCXjga/ku5bjgavjgarjgYTjgajmgJ3jgaPjgabos7zlhaXjgILkvb/nlKjmhJ/jga/oia/jgYTjgafjgZnjgILjgZ/jgaDlsJHjgZflgKTmrrXjgYzpq5jjgoHjgIIsNDDku6MsMQpSMDAzLDIwMjQtMDQtMjAsNSzmr5vnqbTjgYznm67nq4vjgZ/jgarjgY/jgarjgaPjgZ8sMuODtuaciOS9v+OBo+OBpuavm+eptOOBrumWi+OBjeOBjOawl+OBq+OBquOCieOBquOBj+OBquOCiuOBvuOBl+OBn+OAguWPi+S6uuOBq+OCguWLp+OCgeOBvuOBl+OBn+OAgiwzMOS7oywyClIwMDQsMjAyNC0wNC0yNSwzLOWKueaenOOCkuWun+aEn+S4rSzjgb7jgaAx5pys55uu44Gn5Yq55p6c44Gv5qeY5a2Q6KaL44CC5oiQ5YiG44Gv6Imv44GV44Gd44GG44Gq44Gu44Gn44GX44Gw44KJ44GP57aa44GR44Gm44G/44G+44GZ44CCLDQw5LujLDEKUjAwNSwyMDI0LTA1LTAyLDUs44Oq44OU44O844OI56K65a6aLDPmnKznm67jgafjgZnjgILjgrfjg5/jgYzoloTjgY/jgarjgaPjgabjgY3jgZ/msJfjgYzjgZfjgablrInjgZfjgYTjgafjgZnjgILmnJ3jga7jg6vjg7zjg4bjgqPjg7PjgavmrKDjgYvjgZvjgarjgYTjgIIsMzDku6MsMwpSMDA2LDIwMjQtMDUtMDgsMizlsJHjgZfliLrmv4DjgpLmhJ/jgZjjgZ8s5pWP5oSf6IKM44Gr44Gv5bCR44GX5Yi65r+A44GM44GC44KK44G+44GX44Gf44CC5oiQ5YiG44Gv6Imv44GE44Gu44Gn44GZ44GM44CB6IKM44GM5ZCI44KP44Gq44GE5Lq644KC44GE44KL44GL44KC44CCLDIw5LujLDEKUjAwNywyMDI0LTA1LTEyLDUs44GP44GZ44G/44GM5raI44GI44GfLOS9v+OBhOWni+OCgeOBpjHjg7bmnIjjgafpoZToibLjgYzmmI7jgovjgY/jgarjgaPjgZ/jgajoqIDjgo/jgozjgb7jgZfjgZ/jgILntprjgZHjgZ/jgYTjgafjgZnjgIIsNDDku6MsMgpSMDA4LDIwMjQtMDUtMTksNCzjg4bjgq/jgrnjg4Hjg6PjgYzlpb3jgY0s44K144Op44K144Op44GX44Gm44GE44Gm44K544Kt44Oz44Kx44Ki44Gu5pyA5Yid44Gr5L2/44GE44KE44GZ44GE44CC6YeN44Gt44Gm44KC6YeN44GP44Gq44KJ44Gq44GE44CCLDMw5LujLDEKUjAwOSwyMDI0LTA1LTI1LDMs5YCk5q6144GM44ON44OD44KvLOWKueaenOOBr+aEn+OBmOOBpuOBhOOCi+OBkeOCjOOBqeOAgTg4MDDlhobjga/lsJHjgZfpq5jjgYTjgILjgoLjgYblsJHjgZflronjgZHjgozjgbDov7fjgo/jgZrjg6rjg5Tjg7zjg4jjgIIsMzDku6MsMQpSMDEwLDIwMjQtMDUtMzAsNSzogozjgYzlpInjgo/jgaPjgZ8sM+ODtuaciOS9v+eUqOOAgumAj+aYjuaEn+OBjOautemBleOBhOOAguOBk+OCjOOBjOOBquOBhOOBqOS4jeWuieOBq+OBquOCi+OBj+OCieOBhOaJi+aUvuOBm+OBquOBhOOAgiw0MOS7oyw0ClIwMTEsMjAyNC0wNi0wNCw0LOaIkOWIhuOCquOCv+OCr+OBqOOBl+OBpua6gOi2syxWQy1JUCvjg5Xjgqfjg6vjg6nphbjjga7ntYTjgb/lkIjjgo/jgZvjgpLmjqLjgZfjgabjgYTjgb7jgZfjgZ/jgILlronlrprmgKfjgYzpq5jjgYTjga7jgaflronlv4PjgZfjgabkvb/jgYjjgb7jgZnjgIIsMzDku6MsMgpSMDEyLDIwMjQtMDYtMTAsMSzlkIjjgo/jgarjgYvjgaPjgZ8s56eB44Gu6IKM44Gr44Gv5ZCI44GE44G+44Gb44KT44Gn44GX44Gf44CC44OL44Kt44OT44GM5aKX44GI44Gm44GX44G+44GE6L+U5ZOB44GX44G+44GX44Gf44CCLDIw5LujLDEKUjAxMywyMDI0LTA2LTE0LDUsMuacrOebruizvOWFpSwx5pys55uu44Gn44OP44Oq44GM5Ye644GmMuacrOebruOCkuizvOWFpeOAgue2mee2muOBr+WKm+OBquOCiuOBqOWun+aEn+OBl+OBpuOBhOOBvuOBmeOAgiw1MOS7oywyClIwMTQsMjAyNC0wNi0xOCw0LOacneS9v+OBhOOChOOBmeOBhCzmnJ3kvb/jgaPjgabjgoLjg5njgr/jgaTjgYvjgarjgYTjga7jgYzoia/jgYTjgafjgZnjgILml6XnhLzjgZHmraLjgoHjgajjga7nm7jmgKfjgoLoia/jgYTjgIIsMzDku6MsMQpSMDE1LDIwMjQtMDYtMjIsMyzph4/jgYzlsJHjgarjgYQsMzBtbOOBpzg4MDDlhobjga/jgrPjgrnjg5HjgYzlvq7lppnjgILlirnmnpzjga/jgYLjgovjgajmgJ3jgYbjgZHjganlrrnph4/jgpLjgoLjgYblsJHjgZflopfjgoTjgZfjgabjgbvjgZfjgYTjgIIsNDDku6MsMQpSMDE2LDIwMjQtMDYtMjUsNSzjg5fjg6zjgrzjg7Pjg4jjgavjgoIs5Y+L5Lq644G444Gu6KqV55Sf5pel44OX44Os44K844Oz44OI44Gr6LO85YWl44CC44OR44OD44Kx44O844K444GM57a66bqX44Gn5Zac44Gw44KM44G+44GX44Gf44CCLDMw5LujLDEKUjAxNywyMDI0LTA2LTI4LDQs5YyC44GE44GM5aW944GNLOOBu+OCk+OBruOCiuS4iuWTgeOBqummmeOCiuOBjOOBl+OBvuOBmeOAguS9v+OBhuOBn+OBs+OBq+awl+WIhuOBjOS4iuOBjOOCiuOBvuOBmeOAgiwyMOS7oywxClIwMTgsMjAyNC0wNy0wMSw1LOe2muOBkeOBvuOBmSw244O25pyI44Oq44OU44O844OI5Lit44CC44K544Kt44Oz44Kx44Ki44Gu5qC444Gv44GT44KM44Gn44GZ44CC44Kz44K544OR44KI44KK5Yq55p6c44KS6YeN6KaW44GZ44KL5Lq644Gr44CCLDQw5LujLDYKUjAxOSwyMDI0LTA3LTA0LDIs5pyf5b6F44GX44GZ44GO44GfLOWPo+OCs+ODn+OCkuimi+OBpuacn+W+heOBl+OBmeOBjuOBpuOBl+OBvuOBhOOBvuOBl+OBn+OAguWKueaenOOBjOOCj+OBi+OCiuOBq+OBj+OBj+OAgeWApOauteOBjOmrmOOBhOOBruOBp+e2mee2muaCqeOCk+OBp+OBhOOBvuOBmeOAgiwzMOS7oywxClIwMjAsMjAyNC0wNy0wOCw1LOmAj+aYjuaEn+OBjOmBleOBhizkvb/jgYTlp4vjgoHjgabjgYvjgonljJbnsqfjga7jgorjgYzlhajnhLbpgZXjgYTjgb7jgZnjgILkuIvlnLDjgarjgZfjgafjgoLogozjgYzntrrpupfjgavopovjgYjjgovjgIIsMzDku6MsMgo=" download="customer_reviews.csv">
+      <span class="dl-icon">📊</span><span class="dl-name">customer_reviews.csv</span><span class="dl-arrow">↓</span>
+    </a>
+    <a class="dl-btn" href="data:text/csv;charset=utf-8;base64,5pyILOODgeODo+ODjeODqyzllYblk4Hjgqvjg4bjgrTjg6os5aOy5LiK6YeR6aGNLOazqOaWh+S7tuaVsCzmlrDopo/poaflrqLmlbAs44Oq44OU44O844OI6aGn5a6i5pWwCjIwMjTlubQx5pyILFNOU+W6g+WRiiznvo7lrrnmtrIsMTg1MDAwMCwzMTIsMTk4LDExNAoyMDI05bm0MeaciCzmpJzntKLluoPlkYos576O5a655rayLDkyMDAwMCwxNTYsODksNjcKMjAyNOW5tDHmnIgs44Oh44Or44Oe44KsLOe+juWuuea2siw0MzAwMDAsNzQsMTIsNjIKMjAyNOW5tDHmnIgsU05T5bqD5ZGKLOa0l+mhlOaWmSw2NDAwMDAsMjEwLDE0NSw2NQoyMDI05bm0MeaciCzmpJzntKLluoPlkYos5rSX6aGU5paZLDM4MDAwMCwxMjUsNzEsNTQKMjAyNOW5tDLmnIgsU05T5bqD5ZGKLOe+juWuuea2siwyMTAwMDAwLDM1NSwyMjEsMTM0CjIwMjTlubQy5pyILOaknOe0ouW6g+WRiiznvo7lrrnmtrIsODcwMDAwLDE0Nyw4Miw2NQoyMDI05bm0MuaciCzjg6Hjg6vjg57jgqws576O5a655rayLDUxMDAwMCw4OCw4LDgwCjIwMjTlubQy5pyILFNOU+W6g+WRiizmtJfpoZTmlpksNTkwMDAwLDE5MywxMjAsNzMKMjAyNOW5tDLmnIgs5qSc57Si5bqD5ZGKLOa0l+mhlOaWmSw0MjAwMDAsMTM4LDc5LDU5CjIwMjTlubQz5pyILFNOU+W6g+WRiiznvo7lrrnmtrIsMjM1MDAwMCwzOTgsMjQ1LDE1MwoyMDI05bm0M+aciCzmpJzntKLluoPlkYos576O5a655rayLDEwNTAwMDAsMTc4LDEwMSw3NwoyMDI05bm0M+aciCzjg6Hjg6vjg57jgqws576O5a655rayLDY4MDAwMCwxMTcsMTQsMTAzCjIwMjTlubQz5pyILFNOU+W6g+WRiizmtJfpoZTmlpksNzIwMDAwLDIzNiwxNTgsNzgKMjAyNOW5tDPmnIgs5qSc57Si5bqD5ZGKLOa0l+mhlOaWmSw0NTAwMDAsMTQ4LDg1LDYzCjIwMjTlubQ05pyILFNOU+W6g+WRiiznvo7lrrnmtrIsMTk4MDAwMCwzMzUsMTk1LDE0MAoyMDI05bm0NOaciCzmpJzntKLluoPlkYos576O5a655rayLDk4MDAwMCwxNjYsOTQsNzIKMjAyNOW5tDTmnIgs44Oh44Or44Oe44KsLOe+juWuuea2siw1OTAwMDAsMTAyLDksOTMKMjAyNOW5tDTmnIgsU05T5bqD5ZGKLOa0l+mhlOaWmSw2ODAwMDAsMjIzLDE0MSw4MgoyMDI05bm0NOaciCzmpJzntKLluoPlkYos5rSX6aGU5paZLDM5MDAwMCwxMjgsNzMsNTUKMjAyNOW5tDXmnIgsU05T5bqD5ZGKLOe+juWuuea2siwyMjgwMDAwLDM4NiwyMzgsMTQ4CjIwMjTlubQ15pyILOaknOe0ouW6g+WRiiznvo7lrrnmtrIsMTEyMDAwMCwxOTAsMTA4LDgyCjIwMjTlubQ15pyILOODoeODq+ODnuOCrCznvo7lrrnmtrIsNzQwMDAwLDEyOCwxMSwxMTcKMjAyNOW5tDXmnIgsU05T5bqD5ZGKLOa0l+mhlOaWmSw4MTAwMDAsMjY2LDE3OCw4OAoyMDI05bm0NeaciCzmpJzntKLluoPlkYos5rSX6aGU5paZLDQ3MDAwMCwxNTQsODgsNjYKMjAyNOW5tDbmnIgsU05T5bqD5ZGKLOe+juWuuea2siwyNjUwMDAwLDQ0OSwyNzgsMTcxCjIwMjTlubQ25pyILOaknOe0ouW6g+WRiiznvo7lrrnmtrIsMTM4MDAwMCwyMzQsMTMzLDEwMQoyMDI05bm0NuaciCzjg6Hjg6vjg57jgqws576O5a655rayLDkyMDAwMCwxNTksMTYsMTQzCjIwMjTlubQ25pyILFNOU+W6g+WRiizmtJfpoZTmlpksOTUwMDAwLDMxMSwyMDksMTAyCjIwMjTlubQ25pyILOaknOe0ouW6g+WRiizmtJfpoZTmlpksNTQwMDAwLDE3NywxMDEsNzYK" download="sales_monthly.csv">
+      <span class="dl-icon">📊</span><span class="dl-name">sales_monthly.csv</span><span class="dl-arrow">↓</span>
+    </a>
+    <a class="dl-btn" href="data:text/plain;charset=utf-8;base64,44CQ56u25ZCI44OW44Op44Oz44OJ6Kq/5p+744Oh44Oi44CR5ouF5b2T77ya44Oe44O844Kx44OB44O844Og44CA5pu05paw77yaMjAyNOW5tDbmnIgKCuKWoCBB44OW44Op44Oz44OJ44CM44Or44Of44Ko44OpIOOCu+ODqeODoCBDK+OAjQotIOS+oeagvO+8mjYsNjAw5YaGIC8gMzBtTAotIOaIkOWIhu+8mlZDLUlQIDE1JeOAgeODiuOCpOOCouOCt+ODs+OCouODn+ODiTMlCi0g44Od44K444K344On44Oz77ya44Kz44K544OR6YeN6KaW44CB5YWl6ZaA5bGk5ZCR44GRCi0g6LKp5aOy44OB44Oj44ON44Or77yaQW1hem9u44O75qW95aSp44Oh44Kk44OzCi0gU05T5oim55Wl77ya44Oe44Kk44Kv44Ot44Kk44Oz44OV44Or44Ko44Oz44K144O85aSa55SoCi0g5by344G/77ya5L6h5qC844Gu5a6J44GV44CBQW1hem9u44Gn44Gu6auY6KmV5L6h5Lu25pWw77yIMiw0MDDku7botoXvvIkKLSDlvLHjgb/vvJrjg5bjg6njg7Pjg4njgrnjg4jjg7zjg6rjg7zjgYzlvLHjgYTjgIHjg6rjg5Tjg7zjg4jnjofjgYzkvY7jgYTvvIjmjqjlrpozMCXku6XkuIvvvIkKCuKWoCBC44OW44Op44Oz44OJ44CMU2tpbnRlbGwgVkMyMOOAjQotIOS+oeagvO+8mjEyLDAwMOWGhiAvIDI1bUwKLSDmiJDliIbvvJpWQy1JUCAyMCXjgIHjg6zjg4Hjg47jg7zjg6swLjMl44CB44Oa44OX44OB44OJ6KSH5ZCI5L2TCi0g44Od44K444K344On44Oz77ya44OX44Os44Of44Ki44Og44O75oiQ5YiG44Kq44K/44Kv5ZCR44GRCi0g6LKp5aOy44OB44Oj44ON44Or77ya6Ieq56S+RUPkuK3lv4PjgIHkuIDpg6jjgrvjg6zjgq/jg4jjgrfjg6fjg4Pjg5cKLSBTTlPmiKbnlaXvvJrmiJDliIbop6PoqqzjgrPjg7Pjg4bjg7Pjg4TvvIhZb3VUdWJl44O7SW5zdGFncmFt77yJCi0g5by344G/77ya5oiQ5YiG6YeP44O744OW44Op44Oz44OJ5Yqb44O744OV44Kh44Oz44Kz44Of44Ol44OL44OG44KjCi0g5byx44G/77ya6auY5L6h5qC844Gn5YWl6ZaA5bGk44GM5omL44KS5Ye644GX44Gr44GP44GE44CB5pyd5L2/44GE5LiN5Y+v77yI44Os44OB44OO44O844Or6YWN5ZCI77yJCgrilqAgQ+ODluODqeODs+ODieOAjOODm+ODr+OCpOODiOODqeODnCBFWOOAjQotIOS+oeagvO+8mjQsOTgw5YaGIC8gNTBtTAotIOaIkOWIhu+8mlZDLUlQIDEwJeOAgeOCouODq+ODluODgeODszMl44CB44Kz44Op44O844Ky44OzCi0g44Od44K444K344On44Oz77ya5aSn6KGG5ZCR44GR44O75bm06b2i5bGk5bqD44KB77yIMjDjgJw2MOS7o++8iQotIOiyqeWjsuODgeODo+ODjeODq++8muODieODqeODg+OCsOOCueODiOOCou+8i0VDCi0gU05T5oim55Wl77ya44OG44Os44OTQ03jg7voirjog73kurrotbfnlKgKLSDlvLfjgb/vvJroqo3nn6Xluqbjg7vosqnlo7LntrLjga7luoPjgZXjg7vlhaXmiYvjgZfjgoTjgZnjgZUKLSDlvLHjgb/vvJrmiJDliIbmv4PluqbjgYzkvY7jgYTjgIHjgIzmiJDliIbjgqrjgr/jgq/jgI3jgavjga/pn7/jgYvjgarjgYQKCuKWoCBE44OW44Op44Oz44OJ44CMQ2zDqSBCaW9tZSDjgrvjg6njg6DjgI0KLSDkvqHmoLzvvJoxNSw4MDDlhoYgLyAyMG1MCi0g5oiQ5YiG77yaVkMtSVAgMTgl44CB44OQ44Kk44Kq44O844Og5oiQ5YiG77yI54m56Kix5Y+W5b6X77yJ44CB44OV44Kn44Or44Op6YW4Ci0g44Od44K444K344On44Oz77ya6LaF44Op44Kw44K444Ol44Ki44Oq44O844CB5a+M6KOV5bGk5ZCR44GRCi0g6LKp5aOy44OB44Oj44ON44Or77ya55m+6LKo5bqX44O76Ieq56S+RUPvvIjmi5vlvoXliLbvvIkKLSBTTlPmiKbnlaXvvJrjg6rjg7zjg6vli5XnlLvjg7vjgrnjg4jjg7zjg6rjg7zjgrrpmZDlrprjgrPjg7Pjg4bjg7Pjg4QKLSDlvLfjgb/vvJrpq5jku5jliqDkvqHlgKTjg7vjg5fjg6zjg5/jgqLjg6Djg5bjg6njg7Pjg4fjgqPjg7PjgrDjg7vluIzlsJHmgKfmvJTlh7oKLSDlvLHjgb/vvJrkvqHmoLzluK/jgYzpq5jjgZnjgY7jgabluILloLTopo/mqKHjgYzlsI/jgZXjgYQKCuKWoCDluILloLTlhajkvZPjga7lgr7lkJHvvIgyMDI05bm05LiK5Y2K5pyf77yJCi0gVkMtSVDjgrvjg6njg6DluILloLTjga/liY3lubTmr5QrMjMl5oiQ6ZW377yIRDJD5Lit5b+D77yJCi0g44CM5oiQ5YiG44Kq44K/44Kv44CN5bGk77yIMzDjgJw0Neats+Wls+aAp++8ieOBruizvOiyt+WKm+OBjOmrmOOBvuOBo+OBpuOBhOOCiwotIFNOU+OBp+OBruaIkOWIhuino+iqrOOCs+ODs+ODhuODs+ODhOOBjOizvOiyt+aEj+assuOBq+ebtOe1kOOBmeOCi+WCvuWQkQotIOOAjOe2muOBkeOCieOCjOOCi+S+oeagvOOBi+OBqeOBhuOBi+OAjeOBjOODquODlOODvOODiOeOh+OCkuW3puWPs+OBmeOCi+S4u+imgeWboAo=" download="competitor_info.txt">
+      <span class="dl-icon">📄</span><span class="dl-name">competitor_info.txt</span><span class="dl-arrow">↓</span>
+    </a>
+    <a class="dl-btn" href="data:text/plain;charset=utf-8;base64,44CQ5ZWG5ZOB5LuV5qeY5pu444CR44OT44K/44Kw44Ot44KmIOOCu+ODqeODoCDjgqjjgq/jgrnjg4jjg6rjg7zjg6AKCuKWoCDllYblk4HlkI3vvJrjg5Pjgr/jgrDjg63jgqYg44K744Op44OgIOOCqOOCr+OCueODiOODquODvOODoArilqAg5L6h5qC877yaOCw4MDDlhobvvIjnqI7ovrzvvIkK4pagIOWuuemHj++8mjMwbUwK4pagIOeZuuWjsuaXpe+8mjIwMjTlubQ35pyIMeaXpQoK4pagIOS4u+imgeaIkOWIhgotIOODk+OCv+ODn+ODs0PoqpjlsI7kvZPvvIhWQy1JUO+8iTIwJemFjeWQiO+8mualreeVjOacgOmrmOawtOa6luOAguODoeODqeODi+ODs+eUn+aIkOaKkeWItuOBqOe+jueZveWKueaenAotIOODiuOCpOOCouOCt+ODs+OCouODn+ODiTUl77ya5q+b56m05byV44GN57eg44KB44O744OI44O844Oz44Ki44OD44OX44O76IKM44OQ44Oq44Ki5by35YyWCi0g44OS44Ki44Or44Ot44Oz6YW4M+eoru+8muihqOmdouOAnOa3seWxpOOBvuOBp+WkmuWxpOS/nea5vwotIOODrOODgeODjuODvOODqzAuMSXvvJrjgr/jg7zjg7Pjgqrjg7zjg5Djg7zkv4PpgLLjg7vjg4/jg6rmlLnlloQKLSDjg5Xjgqfjg6vjg6nphbjvvJrjg5Pjgr/jg5/jg7ND44Gu6YW45YyW44KS6Ziy44GQ5a6J5a6a5YyW5oiQ5YiGCgrilqAg44OG44Kv44K544OB44OjCuawtOOBruOCiOOBhuOBq+i7veOBhOOCuOOCp+ODq+eKtuOAguiCjOOBquOBmOOBv+OBjOiJr+OBj+OAgeODmeOCv+OBpOOBjeOCvOODreOAggoK4pagIOS9v+eUqOaWueazlQrmnJ3mmanjga7mtJfpoZTlvozjgIHljJbnsqfmsLTjga7lvozjgasy44CcM+ODl+ODg+OCt+ODpeOCkumhlOWFqOS9k+OBq+OBquOBmOOBvuOBm+OCi+OAguaXpeS4reS9v+eUqOaZguOBr1VW44Kx44Ki5b+F6aCI44CCCgrilqAg44K/44O844Ky44OD44OICi0g44Oh44Kk44Oz44K/44O844Ky44OD44OI77yaMzDjgJw0Neats+Wls+aApwotIOaCqeOBv++8muOBj+OBmeOBv+ODu+OCt+ODn+ODu+avm+eptOODu+ODj+ODquS4jei2swotIOizvOiyt+WLleapn++8muaIkOWIhuOBq+OBk+OBoOOCj+OCi+OAjOaIkOWIhuOCquOCv+OCr+OAjeWxpOOAgee+juWuueODnuODi+OCogoK4pagIOODluODqeODs+ODieODiOODvOODswrnp5HlrabnmoTmoLnmi6DjgpLph43oppbjgZfjgaTjgaTjgoLjgIHmirzjgZfjgaTjgZHjgYzjgb7jgZfjgY/jgarjgYTjgILnn6XnmoTjg7voqqDlrp/jg7vlsJHjgZfjg6njgrDjgrjjg6XjgqLjg6rjg7zmhJ/jgIIKCuKWoCDnq7blkIjlt67nlbDljJbjg53jgqTjg7Pjg4gKMS4gVkMtSVAgMjAl44Go44GE44GG5qWt55WM5pyA6auY5rC05rqW44Gu6YWN5ZCI6YePCjIuIOODleOCp+ODq+ODqemFuOOBq+OCiOOCi+WuieWumuWMluOBp+mFuOWMluOBl+OBq+OBj+OBhAozLiDmnJ3mmankvb/jgYjjgovjg47jg7Pjg6zjg4Hjg47jg7zjg6vku6Pmm7/jgoLjgafjgY3jgovoqK3oqIgK" download="product_spec.txt">
+      <span class="dl-icon">📄</span><span class="dl-name">product_spec.txt</span><span class="dl-arrow">↓</span>
+    </a>
+  </div>
+</div>
+<!-- ★ END DOWNLOAD SECTION ★ -->
+
+<section class="topic-sec">
+  <div class="topic-head">
+    <span class="topic-num">Topic 01</span>
+    <span class="topic-title" style="color:var(--t1)">CLAUDE.md</span>
+  </div>
+  <div class="topic-concept">
+    <strong>CLAUDE.md とは何か：</strong>プロジェクトのルートに置く設定ファイル。Claude Code がセッション開始時に必ず読み込み、「このプロジェクトで何をするか・どう振る舞うか」を覚える。一度書けばセッションをまたいで指示が持続する。<br>
+    <strong>何を書くか：</strong>プロジェクト概要・使用ファイル・出力ルール・禁止事項・よく使うコマンドのエイリアス。「毎回同じことを最初に説明している」なら CLAUDE.md に書くべき内容。
+  </div>
+
+  <!-- 1-A -->
+  <div class="card t1-card">
+    <div class="card-head">
+      <div>
+        <div class="card-id c1">Mission 1-A ／ CLAUDE.md</div>
+        <div class="card-title">D2C分析プロジェクト用の CLAUDE.md を設計・作成する</div>
+      </div>
+      <div class="diff-dots"><div class="dd on"></div><div class="dd on"></div><div class="dd"></div><div class="dd"></div><div class="dd"></div></div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        前ワークブックで作った sales_monthly.csv、customer_reviews.csv、competitor_info.txt を毎週使って分析している。毎回 Claude Code に「このフォルダには〜」と説明するのを自動化したい。プロジェクトルートに CLAUDE.md を置くと、次回から説明ゼロで作業が始まる。
+      </div>
+      <div class="ftree">
+        <div class="ftree-lbl">ファイル構造（作業前）</div><pre><span class="dir">d2c-analytics/</span>
+├── <span class="file">sales_monthly.csv</span>
+├── <span class="file">customer_reviews.csv</span>
+├── <span class="file">competitor_info.txt</span>
+└── <span class="file">product_spec.txt</span>  <span class="new">← CLAUDE.md をここに作る</span></pre></div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li>プロジェクト概要・ファイル一覧・出力ルールを含む CLAUDE.md を作成する<span class="out">CLAUDE.md</span></li>
+          <li>「レポートは必ず outputs/ フォルダに保存」「グラフは PNG+日本語フォント対応」のルールを書く</li>
+          <li>作成後に新しいセッションで <code>claude</code> を起動し、何も説明せず「売上サマリーを出して」と指示して動作確認する</li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>CLAUDE.md がないセッションとある セッションで最初の応答がどう変わるか比べてみること。</div>
+    </div>
+    <button class="tog-btn" onclick="tog(this)">解説・模範 CLAUDE.md を見る <span class="tog-arr">▼</span></button>
+    <div class="ans">
+      <div class="ans-sec">
+        <div class="ans-lbl c1">模範 CLAUDE.md</div>
+        <div class="cb"><span class="cb-label">CLAUDE.md</span><span class="hd"># D2C Analytics Project — ビタグロウ</span>
+
+<span class="hd">## プロジェクト概要</span>
+D2Cコスメブランド「ビタグロウ セラム エクストリーム」の
+マーケティング分析プロジェクト。
+
+<span class="hd">## データファイル</span>
+<span class="kw">- sales_monthly.csv</span>    : チャネル別月次売上（1〜6月）
+<span class="kw">- customer_reviews.csv</span>  : 商品レビュー 20件（評価・本文・属性）
+<span class="kw">- competitor_info.txt</span>   : 競合4社の調査メモ
+<span class="kw">- product_spec.txt</span>      : 自社商品仕様書
+
+<span class="hd">## 出力ルール（必ず守ること）</span>
+- レポートファイルは <span class="var">outputs/</span> フォルダに保存する
+- グラフは PNG 形式・日本語フォント対応（文字化け禁止）
+- 数値は万円単位、小数点1桁
+- CSV 出力時のエンコードは UTF-8-BOM（Excel対応）
+
+<span class="hd">## よく使う操作</span>
+- 「月次レポート」= sales_monthly.csv → monthly_report.docx
+- 「競合分析」   = competitor_info.txt + product_spec.txt → positioning_report.docx
+- 「レビュー分析」= customer_reviews.csv → review_report.docx
+
+<span class="hd">## 禁止事項</span>
+- 既存ファイルを上書きしない（新規ファイル名に日付を付ける）
+- ダミーデータで補完しない（データが不足なら確認する）</div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl" style="color:var(--muted)">書くべき内容と書かなくていい内容</div>
+        <div class="diff-head">
+          <div class="diff-htab before">✗ 書かなくていい</div>
+          <div class="diff-htab after">✓ 書くべき</div>
+        </div>
+        <div class="diff-grid">
+          <div class="diff-pane before">「丁寧に答えてください」
+「日本語で話してください」
+「あなたはアナリストです」
+
+→ セッション毎に指示すればいい
+→ CLAUDE.md は永続するので
+  人格・口調より「プロジェクト固有の事実」を書く</div>
+          <div class="diff-pane after">ファイル名と各ファイルの内容
+出力先フォルダのルール
+数値フォーマット（万円・小数点桁数）
+文字コード・フォントの指定
+プロジェクト固有の用語定義</div>
+        </div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl" style="color:var(--amber)">ポイント</div>
+        <div class="tip"><strong>「毎回説明していること」がCLAUDE.mdに書く候補。</strong>セッションをまたぐたびに「このフォルダには…」と説明し直しているなら、それは CLAUDE.md の仕事。逆に毎回変わる条件（「今日は6月データだけ見たい」）は都度指示する。この区別ができると生産性が大きく変わる。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ -->
+<!-- TOPIC 2: Workflow -->
+<!-- ══════════════════════════════ -->
+<section class="topic-sec">
+  <div class="topic-head">
+    <span class="topic-num">Topic 02</span>
+    <span class="topic-title" style="color:var(--t2)">ワークフロー定義</span>
+  </div>
+  <div class="topic-concept">
+    <strong>ワークフロー定義とは：</strong>「どのファイルを読み→どう処理し→何を出力する」という一連の手順をテキストファイルに書いたもの。Claude Code に渡すと、書いた通りに自律実行してくれる。<br>
+    <strong>なぜ使うか：</strong>毎月同じ手順を繰り返す作業（月次レポート・競合モニタリング）をファイルに書いておけば、来月は「このワークフローを実行して」の一言で完了する。
+  </div>
+
+  <!-- 2-A -->
+  <div class="card t2-card">
+    <div class="card-head">
+      <div>
+        <div class="card-id c2">Mission 2-A ／ Workflow</div>
+        <div class="card-title">月次レポート生成ワークフローをテキストファイルで定義する</div>
+      </div>
+      <div class="diff-dots"><div class="dd on"></div><div class="dd on"></div><div class="dd"></div><div class="dd"></div><div class="dd"></div></div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        月次レポートを毎月手作業で作っているが、やることは毎回同じ。<strong>①売上CSV読み込み → ②チャネル別集計 → ③グラフ生成 → ④Wordレポート出力</strong> の4ステップを workflows/monthly_report.md に書いて、来月からはそのファイルを渡すだけにしたい。
+      </div>
+      <div class="ftree">
+        <div class="ftree-lbl">作成するファイル</div><pre><span class="dir">d2c-analytics/</span>
+├── CLAUDE.md
+├── <span class="new">workflows/</span>
+│   └── <span class="new">monthly_report.md</span>   ← 今回作る
+└── ...</pre></div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li>ワークフロー定義ファイル <code>workflows/monthly_report.md</code> を作成する<span class="out">monthly_report.md</span></li>
+          <li>ステップは①〜④を明示し、各ステップで「入力ファイル・処理内容・出力ファイル」を書く</li>
+          <li>エラー時の挙動（処理を止めて確認する）もステップとして含める</li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>ワークフロー定義は「人間が読んでも理解できる」粒度で書く。Claude Code が読むだけでなく、チームメンバーが見ても何をしているかわかる仕様書になるのが理想。</div>
+    </div>
+    <button class="tog-btn" onclick="tog(this)">解説・模範ワークフロー定義を見る <span class="tog-arr">▼</span></button>
+    <div class="ans">
+      <div class="ans-sec">
+        <div class="ans-lbl c2">模範 workflows/monthly_report.md</div>
+        <div class="cb"><span class="cb-label">monthly_report.md</span><span class="hd"># ワークフロー：月次売上レポート生成</span>
+
+<span class="hd">## 目的</span>
+sales_monthly.csv から経営陣向けの月次レポートを自動生成する。
+
+<span class="hd">## 入力ファイル</span>
+<span class="kw">- sales_monthly.csv</span>（d2c-analytics/ 直下）
+
+<span class="hd">## 出力ファイル</span>
+<span class="kw">- outputs/monthly_report_YYYYMM.docx</span>（日付を自動付与）
+<span class="kw">- outputs/graphs/channel_trend_YYYYMM.png</span>
+<span class="kw">- outputs/graphs/category_trend_YYYYMM.png</span>
+
+<span class="hd">## 実行ステップ</span>
+
+<span class="fn">### Step 1: データ読み込みと検証</span>
+- sales_monthly.csv を読み込む
+- 列名が正しいか確認（月, チャネル, 商品カテゴリ, 売上金額, 注文件数, 新規顧客数, リピート顧客数）
+- <span class="kw">異常値（売上が0以下、NaN）があれば処理を止めて確認を求める</span>
+
+<span class="fn">### Step 2: 集計処理</span>
+- チャネル別・月別の売上金額を集計
+- 前月比を計算（最新月 vs 前月）
+- 直近6ヶ月の移動平均を計算
+
+<span class="fn">### Step 3: グラフ生成</span>
+- チャネル別月次売上推移（折れ線）→ <span class="var">channel_trend_YYYYMM.png</span>
+- カテゴリ別月次売上（積み上げ棒）→ <span class="var">category_trend_YYYYMM.png</span>
+- 日本語フォント対応、軸ラベルは日本語、万円単位
+
+<span class="fn">### Step 4: Wordレポート生成</span>
+- エグゼクティブサマリー（3行）を自動生成
+- グラフを貼り付け
+- チャネル別評価コメントを追記
+- <span class="var">outputs/monthly_report_YYYYMM.docx</span> として保存
+
+<span class="hd">## エラー処理</span>
+- Step 1 でデータ異常を検出した場合：処理を中断し、異常箇所を報告して指示を待つ
+- Step 3 でフォント未インストールの場合：英語フォントで続行して警告を出す</div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl" style="color:var(--amber)">ポイント</div>
+        <div class="tip"><strong>ワークフロー定義の3要素は「入力・処理・出力」。</strong>各ステップでこの3つが明確なら Claude Code は迷わず動ける。特に出力ファイル名に <code>YYYYMM</code> のような動的部分を含めると、毎月実行しても上書きされない安全な設計になる。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2-B -->
+  <div class="card t2-card">
+    <div class="card-head">
+      <div>
+        <div class="card-id c2">Mission 2-B ／ Workflow</div>
+        <div class="card-title">ワークフロー定義ファイルを Claude Code に渡して実行させる</div>
+      </div>
+      <div class="diff-dots"><div class="dd on"></div><div class="dd on"></div><div class="dd on"></div><div class="dd"></div><div class="dd"></div></div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        2-A で作った monthly_report.md を、実際に Claude Code に渡して実行させる。ここでのゴールは「ワークフロー定義ファイルを読んで、全ステップを自律実行してもらう」こと。途中で止まったときの対処も体験する。
+      </div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li>Claude Code に <code>workflows/monthly_report.md</code> を読ませて全ステップを実行させる<span class="out">月次レポート一式</span></li>
+          <li>実行中に Claude Code が「確認を求めてきた場合」の対処を体験する</li>
+          <li>出力ファイルが <code>outputs/</code> に正しく保存されたか確認する</li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>ワークフロー定義が曖昧だと Claude Code が途中で止まる。どのステップで止まったかをメモしておき、定義を改善するフィードバックループを回すこと。</div>
+    </div>
+    <button class="tog-btn" onclick="tog(this)">解説・模範指示文を見る <span class="tog-arr">▼</span></button>
+    <div class="ans">
+      <div class="ans-sec">
+        <div class="ans-lbl c2">Claude Code への模範指示文</div>
+        <div class="cb"><span class="cb-label">ターミナル入力</span><span class="kw">workflows/monthly_report.md</span> を読み込んで、
+書かれているステップをすべて実行してください。
+
+実行前に以下を確認してください：
+- sales_monthly.csv が存在するか
+- outputs/ フォルダが存在しなければ作成する
+
+各ステップが完了したら「Step X 完了」と報告してから次に進んでください。
+エラーが発生した場合はすぐに停止して原因を教えてください。</div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl" style="color:var(--muted)">止まったときの対処パターン</div>
+        <div class="cb"><span class="cb-label">対話例</span><span class="cm"># Claude が止まって確認を求めてきた場合</span>
+Claude: 「Step 1 で売上金額が 0 の行が 2件あります。
+         処理を続けますか？除外しますか？」
+
+<span class="kw">→ 対処A：続行する場合</span>
+「0の行は除外して処理を続けてください」
+
+<span class="kw">→ 対処B：確認したい場合</span>
+「どの行かを表示してから判断します」
+
+<span class="cm"># ワークフロー定義が曖昧で止まった場合</span>
+Claude: 「グラフのサイズが指定されていません。
+         デフォルト（1200x800px）で進めますか？」
+
+<span class="kw">→ ワークフロー定義に追記する：</span>
+「グラフサイズ：1200x800px、dpi:150」</div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl" style="color:var(--amber)">ポイント</div>
+        <div class="tip"><strong>「止まった箇所＝定義に書くべきこと」。</strong>Claude Code が確認を求めてくるたびにワークフロー定義を更新していくと、数回で「一切止まらず最後まで動く」完成版ができあがる。これがワークフロー定義の育て方。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ -->
+<!-- TOPIC 3: Skills -->
+<!-- ══════════════════════════════ -->
+<section class="topic-sec">
+  <div class="topic-head">
+    <span class="topic-num">Topic 03</span>
+    <span class="topic-title" style="color:var(--t3)">Skills（スキル定義）</span>
+  </div>
+  <div class="topic-concept">
+    <strong>Skill とは：</strong>特定の処理を「再利用可能な部品」として定義したファイル。ワークフローから呼び出したり、単独で使ったりできる。CLAUDE.md がプロジェクト全体の設定なら、Skill は「特定タスクの専門家」。<br>
+    <strong>典型的な使い方：</strong><code>skills/review_analysis.md</code> に「レビュー分析の手順と出力フォーマット」を書いておき、ワークフローの中から <code>review_analysis スキルを使ってください</code> と呼び出す。
+  </div>
+
+  <!-- 3-A -->
+  <div class="card t3-card">
+    <div class="card-head">
+      <div>
+        <div class="card-id c3">Mission 3-A ／ Skills</div>
+        <div class="card-title">レビュー分析 Skill を作成して、ワークフローから呼び出す</div>
+      </div>
+      <div class="diff-dots"><div class="dd on"></div><div class="dd on"></div><div class="dd on"></div><div class="dd"></div><div class="dd"></div></div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        レビュー分析は月次レポートにも競合分析にも使う汎用処理。毎回同じ分析手順を書くのをやめて、<strong>skills/review_analysis.md</strong> に一度定義しておき、どのワークフローからも呼び出せるようにする。
+      </div>
+      <div class="ftree">
+        <div class="ftree-lbl">作成するファイル</div><pre><span class="dir">d2c-analytics/</span>
+├── CLAUDE.md
+├── workflows/
+│   └── monthly_report.md
+├── <span class="new">skills/</span>
+│   └── <span class="new">review_analysis.md</span>    ← 今回作る
+└── ...</pre></div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li>レビュー分析の手順・入出力・フォーマットを定義した <code>skills/review_analysis.md</code> を作成する<span class="out">review_analysis.md</span></li>
+          <li>Skill には「呼び出しトリガーとなるキーワード」と「出力フォーマットのテンプレート」を含める</li>
+          <li>Claude Code に単独で Skill を呼び出させて動作確認する<span class="out">レビュー分析結果</span></li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>Skill の品質は「出力フォーマットの明確さ」で決まる。「箇条書きで3つ」「表形式で」など出力の型を決めておくと、どのワークフローに組み込んでも一貫した品質になる。</div>
+    </div>
+    <button class="tog-btn" onclick="tog(this)">解説・模範 Skill ファイルを見る <span class="tog-arr">▼</span></button>
+    <div class="ans">
+      <div class="ans-sec">
+        <div class="ans-lbl c3">模範 skills/review_analysis.md</div>
+        <div class="cb"><span class="cb-label">review_analysis.md</span><span class="hd"># Skill: レビュー分析</span>
+
+<span class="hd">## 呼び出しトリガー</span>
+「レビュー分析スキルを使って」または「review_analysis を実行して」
+
+<span class="hd">## 入力</span>
+<span class="kw">- customer_reviews.csv</span>（必須）
+- 分析対象期間（オプション・未指定なら全件）
+
+<span class="hd">## 処理手順</span>
+1. CSV を読み込み、評価・年代・リピート回数を確認する
+2. 評価の平均・分布を計算する
+3. レビュー本文から<span class="kw">ポジティブ言及TOP3・ネガティブ言及TOP3</span>を抽出する
+   （根拠となるレビューIDを必ず記載）
+4. 価格・成分・テクスチャ・効果実感の4軸で言及傾向を分類する
+5. 出力フォーマットに従って結果をまとめる
+
+<span class="hd">## 出力フォーマット</span>
+<span class="str">```
+【レビュー分析サマリー】
+実施日：YYYY-MM-DD
+対象件数：N件
+
+■ 評価スコア
+- 平均：X.X / 5.0
+- 分布：5★(N件) 4★(N件) 3★(N件) 2★(N件) 1★(N件)
+
+■ ポジティブ TOP3
+1. [テーマ]（根拠：R001, R005）
+2. [テーマ]（根拠：R003）
+3. [テーマ]（根拠：R007, R010）
+
+■ ネガティブ TOP3
+1. [テーマ]（根拠：R006, R012）
+...
+
+■ 属性別サマリー
+| 軸      | ポジ | ネガ | 主なコメント |
+|---------|------|------|------------|
+| 価格    | X件  | X件  | ...        |
+...
+```</span>
+
+<span class="hd">## 出力先</span>
+ワークフローから呼ばれた場合 → ワークフローの出力先に従う
+単独実行の場合 → <span class="var">outputs/review_analysis_YYYYMMDD.md</span></div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl c3">ワークフローからの呼び出し方</div>
+        <div class="cb"><span class="cb-label">monthly_report.md に追記する例</span><span class="fn">### Step 2.5: レビュー分析の挿入</span>
+<span class="kw">skills/review_analysis.md</span> の Skill を使って
+customer_reviews.csv を分析し、
+結果を月次レポートの「顧客フィードバック」セクションに挿入する。</div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl" style="color:var(--amber)">ポイント</div>
+        <div class="tip"><strong>Skill は「部品」、Workflow は「設計図」、CLAUDE.md は「プロジェクト仕様書」。</strong>この3層構造が揃うと、Claude Code は設計図を読んで部品を組み合わせながら自律的に仕事を進められる。1つのSkillを複数のWorkflowから再利用することで、定義の重複がなくなり保守が楽になる。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3-B -->
+  <div class="card t3-card">
+    <div class="card-head">
+      <div>
+        <div class="card-id c3">Mission 3-B ／ Skills（応用）</div>
+        <div class="card-title">競合モニタリング Skill を作り、パラメータを渡して呼び出す</div>
+      </div>
+      <div class="diff-dots"><div class="dd on"></div><div class="dd on"></div><div class="dd on"></div><div class="dd on"></div><div class="dd"></div></div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        competitor_info.txt を使った競合分析を Skill 化する。今回は「分析する競合ブランド数」や「比較軸」をパラメータとして渡せる設計にして、柔軟に呼び出せる Skill を作る。
+      </div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li>パラメータ付き Skill <code>skills/competitor_analysis.md</code> を作成する<span class="out">competitor_analysis.md</span></li>
+          <li>パラメータ：<code>brands</code>（分析対象ブランド）、<code>axes</code>（比較軸：価格/成分/チャネルなど）</li>
+          <li>「Aブランドと Bブランドだけ価格と成分で比較して」という呼び出しで動作確認する<span class="out">競合比較レポート</span></li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>パラメータを受け取る Skill を作ると「汎用ツール」になる。パラメータなしの Skill は「決まった処理をするマクロ」。どちらが向いているかはユースケースによって変わる。</div>
+    </div>
+    <button class="tog-btn" onclick="tog(this)">解説・模範 Skill を見る <span class="tog-arr">▼</span></button>
+    <div class="ans">
+      <div class="ans-sec">
+        <div class="ans-lbl c3">模範 skills/competitor_analysis.md</div>
+        <div class="cb"><span class="cb-label">competitor_analysis.md</span><span class="hd"># Skill: 競合分析</span>
+
+<span class="hd">## 呼び出し方</span>
+<span class="str">competitor_analysis スキルを使って。
+パラメータ：
+  brands: [分析したいブランド名（複数可、未指定=全ブランド）]
+  axes:   [比較軸（価格 / 成分濃度 / チャネル / ターゲット）]</span>
+
+例：
+<span class="kw">「competitor_analysis を実行して。
+  brands: A, B。axes: 価格, 成分濃度」</span>
+
+<span class="hd">## 入力ファイル</span>
+- <span class="kw">competitor_info.txt</span>（必須）
+- <span class="kw">product_spec.txt</span>（自社比較に使用）
+
+<span class="hd">## 処理</span>
+1. 指定された brands のデータを competitor_info.txt から抽出
+2. 指定された axes の情報を各ブランドから取り出す
+3. 自社（ビタグロウ）のデータを product_spec.txt から取り出す
+4. 指定 axes を列とした比較表を作成する
+5. 自社の相対的なポジションにコメントを付ける
+
+<span class="hd">## 出力フォーマット</span>
+- 比較表（Markdown テーブル）
+- 自社ポジションの総評（3行以内）
+- 推奨アクション（1〜2点）
+
+<span class="hd">## 出力先</span>
+<span class="var">outputs/competitor_analysis_YYYYMMDD.md</span></div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl" style="color:var(--amber)">ポイント</div>
+        <div class="tip"><strong>パラメータは「使うたびに変わる条件」に使う。</strong>「どのブランドを比較するか」は毎回変わる可能性があるのでパラメータ向き。「出力先フォルダ」は毎回変わらないので CLAUDE.md に書くべき。この判断基準を持つと Skill の設計が上手くなる。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ -->
+<!-- TOPIC 4: Slash Commands -->
+<!-- ══════════════════════════════ -->
+<section class="topic-sec">
+  <div class="topic-head">
+    <span class="topic-num">Topic 04</span>
+    <span class="topic-title" style="color:var(--t4)">スラッシュコマンド</span>
+  </div>
+  <div class="topic-concept">
+    <strong>スラッシュコマンドとは：</strong><code>/report</code> のように <code>/</code> で始まるショートカット。長い指示文をコマンド一発に圧縮できる。<code>.claude/commands/</code> フォルダに Markdown ファイルを置くだけで定義できる。<br>
+    <strong>典型的な使い方：</strong><code>/monthly</code> と打つだけで月次レポート生成ワークフローが走る。<code>/review</code> でレビュー分析が走る。繰り返し使う操作をコマンドにまとめることで入力ミスもなくなる。
+  </div>
+
+  <!-- 4-A -->
+  <div class="card t4-card">
+    <div class="card-head">
+      <div>
+        <div class="card-id c4">Mission 4-A ／ Slash Commands</div>
+        <div class="card-title">/report と /review スラッシュコマンドを定義して呼び出す</div>
+      </div>
+      <div class="diff-dots"><div class="dd on"></div><div class="dd on"></div><div class="dd on"></div><div class="dd"></div><div class="dd"></div></div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        毎月のルーティンを2つのコマンドに圧縮する。<code>/report</code> で月次レポートワークフロー全体が走り、<code>/review</code> でレビュー分析 Skill が実行される。コマンドファイルは <code>.claude/commands/</code> に置く。
+      </div>
+      <div class="ftree">
+        <div class="ftree-lbl">作成するファイル</div><pre><span class="dir">d2c-analytics/</span>
+├── CLAUDE.md
+├── <span class="new">.claude/</span>
+│   └── <span class="new">commands/</span>
+│       ├── <span class="new">report.md</span>    ← /report コマンド
+│       └── <span class="new">review.md</span>    ← /review コマンド
+├── workflows/
+└── skills/</pre></div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li><code>.claude/commands/report.md</code> を作成して <code>/report</code> コマンドを定義する<span class="out">report.md</span></li>
+          <li><code>.claude/commands/review.md</code> を作成して <code>/review</code> コマンドを定義する<span class="out">review.md</span></li>
+          <li>Claude Code で <code>/report</code> と入力して、月次レポートが自動実行されることを確認する<span class="out">動作確認</span></li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>スラッシュコマンドは「ワークフローやSkillへの入口」として機能する。コマンドファイルの中身はシンプルでいい。「どのワークフロー/Skillを呼ぶか」と「引数をどう渡すか」だけ書けば十分。</div>
+    </div>
+    <button class="tog-btn" onclick="tog(this)">解説・模範コマンドファイルを見る <span class="tog-arr">▼</span></button>
+    <div class="ans">
+      <div class="ans-sec">
+        <div class="ans-lbl c4">模範 .claude/commands/report.md</div>
+        <div class="cb"><span class="cb-label">report.md（/report コマンド）</span><span class="hd"># /report</span>
+
+月次売上レポートを生成します。
+
+<span class="kw">workflows/monthly_report.md</span> を読み込んで、
+書かれているすべてのステップを実行してください。
+
+引数が渡された場合（例：/report 2024-06）：
+- 指定された年月のデータのみを対象にする
+- 出力ファイル名に指定年月を使う
+
+引数がない場合：
+- 最新月（CSVの最後の月）を対象にする</div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl c4">模範 .claude/commands/review.md</div>
+        <div class="cb"><span class="cb-label">review.md（/review コマンド）</span><span class="hd"># /review</span>
+
+カスタマーレビューを分析します。
+
+<span class="kw">skills/review_analysis.md</span> の Skill を実行してください。
+
+引数が渡された場合（例：/review 30代）：
+- 指定された年代のレビューのみを対象にする
+
+引数がない場合：
+- 全レビューを対象にする</div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl" style="color:var(--amber)">ポイント</div>
+        <div class="tip"><strong>コマンド・Skill・Workflowの3層を正しく分離する。</strong>コマンドは「起動ボタン」、Skill は「処理の部品」、Workflow は「処理の設計図」。コマンドに処理の中身を全部書くのは避ける。呼び出す先（Workflow or Skill）を指定するだけにするとメンテナンスが楽になる。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ -->
+<!-- TOPIC 5: Hooks -->
+<!-- ══════════════════════════════ -->
+<section class="topic-sec">
+  <div class="topic-head">
+    <span class="topic-num">Topic 05</span>
+    <span class="topic-title" style="color:var(--t5)">Hooks（自動トリガー）</span>
+  </div>
+  <div class="topic-concept">
+    <strong>Hook とは：</strong>「特定のイベントが起きたとき自動的に実行される処理」のこと。ファイル保存時・コマンド実行前後・エラー発生時など、イベントに紐づけて Claude Code の動作をカスタマイズできる。<br>
+    <strong>典型的な使い方：</strong>出力ファイルが保存されるたびに自動でバリデーション（数値が正常か確認）を走らせる。デプロイ前に自動テストを実行させる。これにより「確認忘れ」を構造的に防げる。
+  </div>
+
+  <!-- 5-A -->
+  <div class="card t5-card">
+    <div class="card-head">
+      <div>
+        <div class="card-id c5">Mission 5-A ／ Hooks</div>
+        <div class="card-title">outputs/ への保存時に自動バリデーションする Hook を設定する</div>
+      </div>
+      <div class="diff-dots"><div class="dd on"></div><div class="dd on"></div><div class="dd on"></div><div class="dd on"></div><div class="dd"></div></div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        月次レポートを自動生成すると、たまに売上合計が前月より異常に大きい/小さいデータが混入することがある。<code>outputs/</code> に CSV が保存されるたびに<strong>自動で数値チェック</strong>を走らせ、異常値があれば警告を出す Hook を設定する。
+      </div>
+      <div class="ftree">
+        <div class="ftree-lbl">作成するファイル</div><pre><span class="dir">d2c-analytics/</span>
+├── CLAUDE.md
+├── .claude/
+│   ├── commands/
+│   └── <span class="new">hooks/</span>
+│       └── <span class="new">validate_output.md</span>    ← 今回作る
+└── ...</pre></div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li><code>.claude/hooks/validate_output.md</code> に Hook 定義を作成する<span class="out">validate_output.md</span></li>
+          <li>トリガー：<code>outputs/*.csv</code> が生成・更新されたとき</li>
+          <li>チェック内容：売上金額が 0 以下の行がないか・前月比が 300% 超の異常値がないか</li>
+          <li>CLAUDE.md に Hook の存在を記載して、セッションをまたいでも有効になるようにする</li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>Hook は「後工程の品質保証」として使う。自動生成で起きやすいミス（異常値・文字化け・フォーマット崩れ）を人間が見る前に捕まえる仕組みを作ること。</div>
+    </div>
+    <button class="tog-btn" onclick="tog(this)">解説・模範 Hook 定義を見る <span class="tog-arr">▼</span></button>
+    <div class="ans">
+      <div class="ans-sec">
+        <div class="ans-lbl c5">模範 .claude/hooks/validate_output.md</div>
+        <div class="cb"><span class="cb-label">validate_output.md</span><span class="hd"># Hook: 出力ファイルのバリデーション</span>
+
+<span class="hd">## トリガー</span>
+<span class="kw">outputs/*.csv</span> が新規作成または更新されたとき
+
+<span class="hd">## 実行する検証</span>
+
+<span class="fn">### 検証1: 数値の妥当性チェック</span>
+- 売上金額列に <span class="kw">0以下の値</span>がないか確認する
+- 前月比が <span class="kw">300%を超える値</span>がないか確認する
+- NaN / null / 空文字がないか確認する
+
+<span class="fn">### 検証2: フォーマットチェック</span>
+- ヘッダー行が正しいか（期待するカラム名と一致するか）
+- 日付列のフォーマットが "YYYY年M月" 形式か
+
+<span class="hd">## 結果の報告</span>
+問題なし：
+<span class="str">「✓ validate_output: [ファイル名] の検証が完了しました。異常なし。」</span>
+
+問題あり：
+<span class="str">「⚠ validate_output: [ファイル名] で以下の問題を検出しました。
+  - [問題の内容と行番号]
+  処理を続けますか？（続行 / 修正してから再実行）」</span>
+
+<span class="hd">## CLAUDE.md への追記</span>
+CLAUDE.md の「出力ルール」に以下を追加してください：
+<span class="kw">「outputs/に CSV を保存するたびに
+  .claude/hooks/validate_output.md の Hook が自動実行されます」</span></div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl" style="color:var(--amber)">ポイント</div>
+        <div class="tip"><strong>Hook は「自動検査員」として設計する。</strong>人間が毎回目視確認するのではなく、起きやすいミスのパターンを Hook に書いておく。一度書けば以後ずっと自動でチェックされる。「どんなミスが起きやすいか」のリストが Hook の設計書になる。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ -->
+<!-- TOPIC 6: Subagents -->
+<!-- ══════════════════════════════ -->
+<section class="topic-sec">
+  <div class="topic-head">
+    <span class="topic-num">Topic 06</span>
+    <span class="topic-title" style="color:var(--t6)">Subagents（サブエージェント）</span>
+  </div>
+  <div class="topic-concept">
+    <strong>Subagent とは：</strong>メインの Claude Code が「別の Claude エージェント」を起動して並列処理させる仕組み。「レビュー分析」と「競合分析」を同時進行させることで、逐次処理より大幅に時間を短縮できる。<br>
+    <strong>なぜ使うか：</strong>互いに依存しない処理は並列化できる。1エージェントが1つのタスクに集中するため、コンテキストの混濁（データが混ざるバグ）も防げる。
+  </div>
+
+  <!-- 6-A -->
+  <div class="card t6-card">
+    <div class="card-head">
+      <div>
+        <div class="card-id c6">Mission 6-A ／ Subagents</div>
+        <div class="card-title">競合分析・レビュー分析・売上分析を Subagent で並列実行するワークフローを設計する</div>
+      </div>
+      <div class="diff-dots"><div class="dd on"></div><div class="dd on"></div><div class="dd on"></div><div class="dd on"></div><div class="dd on"></div></div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        Q3施策立案のために競合分析・レビュー分析・売上分析の3つを同時に行いたい。これらは互いに独立しているので、3つの Subagent に同時並列で実行させ、全部終わったら結果を統合して施策ロードマップを作る。
+      </div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li>並列実行のワークフロー <code>workflows/q3_strategy.md</code> を設計する<span class="out">q3_strategy.md</span></li>
+          <li>3つの処理を Subagent として定義し、それぞれに担当 Skill を割り当てる</li>
+          <li>全 Subagent 完了後に結果を統合して施策ロードマップを生成するステップを含める</li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>「並列化できる処理」と「逐次にしなければならない処理」を見極めること。統合ステップは全 Subagent の完了を待ってから実行する（依存関係の管理）。</div>
+    </div>
+    <button class="tog-btn" onclick="tog(this)">解説・模範ワークフローを見る <span class="tog-arr">▼</span></button>
+    <div class="ans">
+      <div class="ans-sec">
+        <div class="ans-lbl c6">模範 workflows/q3_strategy.md</div>
+        <div class="cb"><span class="cb-label">q3_strategy.md</span><span class="hd"># ワークフロー：Q3 施策立案（Subagent 並列版）</span>
+
+<span class="hd">## 目的</span>
+3種類の分析を並列実行し、Q3 施策ロードマップを生成する。
+
+<span class="hd">## Phase 1: 並列分析（Subagent 3本を同時起動）</span>
+
+<span class="kw">以下の3つのSubagentを同時に起動してください：</span>
+
+<span class="fn">### Subagent A — 売上分析</span>
+担当 Skill: <span class="kw">skills/sales_analysis.md</span>（作成済みのものを使用）
+入力: sales_monthly.csv
+出力: <span class="var">outputs/subagent_sales_YYYYMMDD.md</span>
+
+<span class="fn">### Subagent B — レビュー分析</span>
+担当 Skill: <span class="kw">skills/review_analysis.md</span>
+入力: customer_reviews.csv
+出力: <span class="var">outputs/subagent_review_YYYYMMDD.md</span>
+
+<span class="fn">### Subagent C — 競合分析</span>
+担当 Skill: <span class="kw">skills/competitor_analysis.md</span>
+入力: competitor_info.txt, product_spec.txt
+出力: <span class="var">outputs/subagent_competitor_YYYYMMDD.md</span>
+
+<span class="hd">## Phase 2: 統合（全Subagent完了後に実行）</span>
+<span class="kw">Subagent A・B・C がすべて完了したことを確認してから</span>以下を実行する：
+
+1. 3つの出力ファイルを読み込む
+2. 各分析から「最重要インサイト2点」を抽出する
+3. 以下の3軸で施策を整理する：
+   - チャネル改善（売上分析起点）
+   - 商品改良（レビュー分析起点）
+   - 競合対策（競合分析起点）
+4. 各施策に優先度・担当チーム・KPI・実施月を付ける
+5. <span class="var">outputs/q3_roadmap_YYYYMMDD.xlsx</span> として保存する</div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl" style="color:var(--muted)">並列化できる処理 / できない処理</div>
+        <div class="diff-head">
+          <div class="diff-htab before">✗ 逐次にすべき（依存関係あり）</div>
+          <div class="diff-htab after">✓ 並列化できる（独立）</div>
+        </div>
+        <div class="diff-grid">
+          <div class="diff-pane before">「レビュー分析の結果を受けて
+競合分析の切り口を変える」
+
+← 前の処理の結果を
+  次の処理が使うケース</div>
+          <div class="diff-pane after">「レビュー分析」
+「競合分析」
+「売上分析」
+
+← 3つが互いに無関係で
+  同じ最終出力（施策）に向かうケース</div>
+        </div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl" style="color:var(--amber)">ポイント</div>
+        <div class="tip"><strong>Subagent の設計は「何を独立させて、何を統合するか」の判断が全て。</strong>Phase 1 は並列、Phase 2 は全完了待ち逐次、という2フェーズ構造が Subagent を使う典型パターン。統合ステップでコンテキストが混ざらないよう、各 Subagent の出力を別ファイルに書かせるのが重要。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ -->
+<!-- TOPIC 7: Tasks / MCP -->
+<!-- ══════════════════════════════ -->
+<section class="topic-sec">
+  <div class="topic-head">
+    <span class="topic-num">Topic 07</span>
+    <span class="topic-title" style="color:#fb923c">Tasks ／ MCP</span>
+  </div>
+  <div class="topic-concept">
+    <strong>Tasks とは：</strong>Claude Code をバックグラウンドで定期実行・スケジュール実行させる仕組み。「毎月1日に月次レポートを自動生成」のような定期処理を設定できる。<br>
+    <strong>MCP (Model Context Protocol) とは：</strong>Claude Code が外部サービス（Slack・Notion・Google Drive など）と接続するための標準プロトコル。MCP サーバーを接続すると、Claude Code が「Slack にメッセージを送る」「Notion にデータを書き込む」などの外部連携が可能になる。
+  </div>
+
+  <!-- 7-A -->
+  <div class="card" style="border:1px solid var(--border);border-left:3px solid #fb923c">
+    <div class="card-head">
+      <div>
+        <div class="card-id c7">Mission 7-A ／ Tasks</div>
+        <div class="card-title">月次レポート生成を毎月1日に自動実行する Task を設定する</div>
+      </div>
+      <div class="diff-dots"><div class="dd on"></div><div class="dd on"></div><div class="dd on"></div><div class="dd on"></div><div class="dd"></div></div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        毎月1日に手動で <code>/report</code> を実行していたのを自動化したい。CLAUDE.md に Task 定義を追加して、毎月1日の朝9時に月次レポートが自動生成されるように設定する。
+      </div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li>CLAUDE.md に Task セクションを追加して定期実行を定義する<span class="out">CLAUDE.md（更新版）</span></li>
+          <li>Task の内容：毎月1日 09:00 に <code>workflows/monthly_report.md</code> を実行</li>
+          <li>実行完了後に <code>outputs/</code> の最新ファイル一覧をコンソールに出力するステップを追加する</li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>Task は「誰もトリガーしなくても動く」設計にする。エラーが発生しても次のアクション（通知 or 再試行）を定義しておかないと、気づかないまま失敗し続ける。</div>
+    </div>
+    <button class="tog-btn" onclick="tog(this)">解説・模範 Task 定義を見る <span class="tog-arr">▼</span></button>
+    <div class="ans">
+      <div class="ans-sec">
+        <div class="ans-lbl c7">CLAUDE.md への Task セクション追記例</div>
+        <div class="cb"><span class="cb-label">CLAUDE.md（追記部分）</span><span class="hd">## Tasks（定期実行）</span>
+
+<span class="fn">### monthly-report</span>
+<span class="kw">スケジュール：毎月1日 09:00</span>
+実行内容：<span class="var">workflows/monthly_report.md</span> を全ステップ実行する
+完了後：outputs/ 内の最新ファイル一覧をターミナルに出力する
+
+エラー発生時：
+- エラーログを <span class="var">outputs/logs/error_YYYYMMDD.log</span> に保存する
+- 処理を中断して原因をログに記録する
+- 次回の手動実行時にログを読んで問題を報告する</div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl" style="color:var(--amber)">ポイント</div>
+        <div class="tip"><strong>Task はエラー処理とセットで設計する。</strong>自動実行は「誰も見ていないときに動く」ので、失敗したときの記録・通知をあらかじめ決めておく必要がある。エラーログをファイルに書き出す設計にすると、次に手動実行したときに Claude Code が「前回こういうエラーがありました」と報告してくれる。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7-B -->
+  <div class="card" style="border:1px solid var(--border);border-left:3px solid #fb923c">
+    <div class="card-head">
+      <div>
+        <div class="card-id c7">Mission 7-B ／ MCP</div>
+        <div class="card-title">MCP で Slack と接続し、レポート完了時に自動通知するワークフローを作る</div>
+      </div>
+      <div class="diff-dots"><div class="dd on"></div><div class="dd on"></div><div class="dd on"></div><div class="dd on"></div><div class="dd on"></div></div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        月次レポートが自動生成されたら、マーケティングチームの Slack チャンネルに「今月のレポートができました」と自動通知したい。MCP で Slack サーバーを接続し、ワークフローの最後のステップとして通知を送る設定を追加する。
+      </div>
+      <div class="warn"><strong>前提：</strong>Slack の MCP サーバーが接続済みであること。接続設定は <code>claude mcp add</code> コマンドで行う（Anthropic 公式ドキュメント参照）。</div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li>CLAUDE.md に MCP 接続情報を記載する<span class="out">CLAUDE.md（更新版）</span></li>
+          <li><code>workflows/monthly_report.md</code> に Slack 通知ステップを追加する<span class="out">monthly_report.md（更新版）</span></li>
+          <li>通知メッセージのテンプレートを定義する（ファイル名・生成日時・サマリー1行を含む）</li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>MCP を使うと Claude Code が「ファイル操作+外部サービス操作」を一つのワークフローの中でシームレスに行える。「作る→通知する→記録する」を1コマンドで完結させる設計を目指す。</div>
+    </div>
+    <button class="tog-btn" onclick="tog(this)">解説・模範 MCP 設定を見る <span class="tog-arr">▼</span></button>
+    <div class="ans">
+      <div class="ans-sec">
+        <div class="ans-lbl c7">CLAUDE.md への MCP セクション追記例</div>
+        <div class="cb"><span class="cb-label">CLAUDE.md（追記部分）</span><span class="hd">## MCP 接続サービス</span>
+
+<span class="fn">### Slack</span>
+接続名：<span class="kw">slack-mcp</span>
+用途：レポート完了通知・エラーアラート
+通知先チャンネル：<span class="var">#marketing-reports</span>
+
+通知に含める情報：
+- 生成ファイル名
+- 生成日時
+- エグゼクティブサマリー（1行）</div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl c7">monthly_report.md への Slack 通知ステップ追記例</div>
+        <div class="cb"><span class="cb-label">monthly_report.md（追記ステップ）</span><span class="fn">### Step 5: Slack 通知（MCP）</span>
+<span class="kw">slack-mcp</span> を使って <span class="var">#marketing-reports</span> チャンネルに
+以下のフォーマットで通知を送る：
+
+<span class="str">📊 月次レポートが生成されました
+ファイル：[出力ファイル名]
+生成日時：[YYYY-MM-DD HH:MM]
+サマリー：[Step 4 で生成したエグゼクティブサマリー1行]</span>
+
+送信後「Step 5 完了: Slack 通知送信済み」と報告する。</div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl" style="color:var(--muted)">MCP で接続できる主なサービス</div>
+        <div class="cb"><span class="cb-label">参考</span><span class="kw">Slack</span>       → チャンネル投稿・DM送信
+<span class="kw">Notion</span>      → ページ作成・データベース更新
+<span class="kw">Google Drive</span> → ファイルアップロード・共有
+<span class="kw">GitHub</span>      → Issue作成・PR作成
+<span class="kw">Gmail</span>       → メール送信
+<span class="kw">Asana / Linear</span> → タスク作成・ステータス更新
+
+<span class="cm"># 接続方法（ターミナルで実行）</span>
+claude mcp add slack-mcp <span class="str">https://mcp.slack.com/sse</span>
+claude mcp add notion-mcp <span class="str">https://mcp.notion.com/sse</span></div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl" style="color:var(--amber)">全体設計のまとめ</div>
+        <div class="tip"><strong>7トピックで作り上げた構造の全体像。</strong><br><br>
+        <strong>CLAUDE.md</strong> ── プロジェクトの記憶。常に読まれる設定書。<br>
+        <strong>Workflow</strong> ── 処理の設計図。ステップ定義と依存関係を管理。<br>
+        <strong>Skills</strong> ── 再利用可能な処理部品。複数のWorkflowから呼ばれる。<br>
+        <strong>Slash Commands</strong> ── 頻繁に使う操作の起動ボタン。<br>
+        <strong>Hooks</strong> ── 自動品質保証。ファイル保存時などに自動で走る検査。<br>
+        <strong>Subagents</strong> ── 並列処理の設計。独立した分析を同時に走らせる。<br>
+        <strong>Tasks + MCP</strong> ── 自律化の完成形。スケジュール実行＋外部連携。<br><br>
+        この7層が揃ったとき、Claude Code は「対話型ツール」から<strong>「自律動作するワークフローエンジン」</strong>に変わる。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /wrap -->
+<script>
+function tog(btn){
+  const p=btn.nextElementSibling;
+  const open=p.classList.contains('show');
+  p.classList.toggle('show',!open);
+  btn.classList.toggle('open',!open);
+}
+</script>
+</body>
+</html>

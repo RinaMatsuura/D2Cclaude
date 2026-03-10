@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude 実践ワークブック｜D2Cマネージャー向け</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&family=DM+Mono:ital,wght@0,400;0,500&family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1c1a17;
+  --paper: #f6f3ed;
+  --paper2: #edeae1;
+  --cream: #faf8f3;
+  --line: #d8d2c6;
+  --line2: #c5bfb0;
+  --g: #2a6048;       /* cowork green */
+  --b: #1c3560;       /* code blue */
+  --r: #7a2c00;       /* competitor red-brown */
+  --w: #b87820;       /* warm gold */
+  --muted: #6a6358;
+  --gpale: #e7f3ec;
+  --bpale: #e7ecf6;
+  --rpale: #f8ebe3;
+  --wpale: #fdf2df;
+  --tag: #e4dfd4;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--ink);line-height:1.75}
+.wrap{max-width:880px;margin:0 auto;padding:0 28px 100px}
+
+/* COVER */
+.cover{padding:64px 0 52px;border-bottom:2.5px solid var(--ink);margin-bottom:52px}
+.eyebrow{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+.cover h1{font-family:'Fraunces',serif;font-size:clamp(36px,6vw,62px);font-weight:900;line-height:1.05;letter-spacing:-2px;margin-bottom:18px}
+.cover h1 .g{color:var(--g)} .cover h1 .b{color:var(--b)} .cover h1 .r{color:var(--r)}
+.cover-sub{font-size:14.5px;color:var(--muted);max-width:520px;line-height:1.85;margin-bottom:30px}
+.tags{display:flex;gap:8px;flex-wrap:wrap}
+.tg{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 11px;border-radius:3px;border:1px solid}
+.tg-g{background:var(--gpale);color:var(--g);border-color:#aed6be}
+.tg-b{background:var(--bpale);color:var(--b);border-color:#aabcd8}
+.tg-r{background:var(--rpale);color:var(--r);border-color:#e4b89a}
+.tg-n{background:var(--tag);color:var(--muted);border-color:var(--line2)}
+
+/* HOW TO */
+.howto{background:var(--paper2);border:1px solid var(--line2);border-radius:5px;padding:26px 30px;margin-bottom:52px}
+.howto h3{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:18px}
+.how-item{display:flex;gap:12px;align-items:flex-start}
+.how-n{font-family:'Fraunces',serif;font-size:30px;font-weight:900;color:var(--line2);line-height:1;flex-shrink:0;margin-top:-2px}
+.how-t{font-size:12.5px;color:var(--muted);line-height:1.65} .how-t strong{color:var(--ink)}
+
+/* INDEX */
+.idx-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:52px}
+.idx-table th{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:2px solid var(--ink);text-align:left}
+.idx-table td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.idx-table tr:last-child td{border-bottom:none}
+.idx-lv{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)}
+
+/* LEVEL HEADER */
+.lv-section{margin-bottom:60px}
+.lv-head{display:flex;align-items:baseline;gap:14px;padding-bottom:12px;border-bottom:2px solid var(--ink);margin-bottom:10px}
+.lv-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+.lv-title{font-family:'Fraunces',serif;font-size:25px;font-weight:900;letter-spacing:-0.5px}
+.lv-desc{font-size:13px;color:var(--muted);margin-bottom:26px;line-height:1.8;padding-top:8px}
+
+/* MISSION CARD */
+.card{border:1px solid var(--line2);border-radius:5px;overflow:hidden;margin-bottom:22px}
+.card-g{border-left:4px solid var(--g)}
+.card-b{border-left:4px solid var(--b)}
+.card-r{border-left:4px solid var(--r)}
+
+.card-head{padding:16px 22px;background:var(--cream);border-bottom:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.card-id{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px}
+.card-g .card-id{color:var(--g)} .card-b .card-id{color:var(--b)} .card-r .card-id{color:var(--r)}
+.card-title{font-size:15.5px;font-weight:700;line-height:1.45}
+.card-htags{display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0;padding-top:2px}
+
+.card-body{padding:22px;background:var(--paper)}
+
+/* SCENARIO */
+.scene{background:white;border:1px solid var(--line);border-radius:4px;padding:14px 18px;margin-bottom:18px;font-size:13px;line-height:1.85}
+.scene-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+
+/* MATERIALS */
+.mats{margin-bottom:18px}
+.mats-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.mat-list{display:flex;gap:8px;flex-wrap:wrap}
+.mat-file{display:flex;align-items:center;gap:7px;padding:7px 13px;background:white;border:1px solid var(--line2);border-radius:4px;font-size:12px}
+.mat-icon{font-size:15px}
+
+/* TASKS */
+.tasks{background:white;border:1px solid var(--line);border-radius:4px;padding:16px 18px;margin-bottom:18px}
+.tasks-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.card-g .tasks-lbl{color:var(--g)} .card-b .tasks-lbl{color:var(--b)} .card-r .tasks-lbl{color:var(--r)}
+.task-list{list-style:none}
+.task-list li{display:flex;gap:9px;padding:6px 0;font-size:13.5px;border-bottom:1px dashed var(--line);line-height:1.65}
+.task-list li:last-child{border-bottom:none}
+.task-list li::before{content:'□';color:var(--line2);flex-shrink:0;margin-top:1px}
+.out{font-family:'DM Mono',monospace;font-size:10px;background:var(--tag);border-radius:3px;padding:2px 7px;color:var(--muted);white-space:nowrap;vertical-align:middle;margin-left:3px}
+
+/* POINT */
+.point{background:var(--tag);border-radius:4px;padding:11px 15px;font-size:13px;color:var(--muted);line-height:1.7}
+.point strong{color:var(--ink)}
+
+/* TOGGLE */
+.toggle-btn{display:flex;align-items:center;gap:8px;width:100%;padding:13px 22px;background:var(--paper2);border:none;border-top:1px solid var(--line);cursor:pointer;font-family:'Noto Sans JP',sans-serif;font-size:12.5px;font-weight:700;color:var(--muted);text-align:left;transition:background .15s}
+.toggle-btn:hover{background:var(--paper)}
+.toggle-arrow{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;transition:transform .2s}
+.toggle-btn.open .toggle-arrow{transform:rotate(180deg)}
+
+.ans-panel{display:none;padding:26px 22px;background:var(--cream);border-top:1px solid var(--line);animation:fadein .2s ease}
+.ans-panel.show{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+
+/* ANSWER SECTIONS */
+.ans-sec{margin-bottom:22px}
+.ans-sec:last-child{margin-bottom:0}
+.ans-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;padding-bottom:8px;border-bottom:1px solid var(--line);margin-bottom:13px}
+.ans-lbl.ag{color:var(--g);border-color:#aed6be}
+.ans-lbl.ab{color:var(--b);border-color:#aabcd8}
+.ans-lbl.ar{color:var(--r);border-color:#e4b89a}
+.ans-lbl.aw{color:var(--w);border-color:#e0c880}
+.ans-lbl.abk{color:var(--ink);border-color:var(--line2)}
+
+/* PROMPT BLOCK */
+.pblock{font-family:'DM Mono',monospace;font-size:11.5px;line-height:1.95;background:#1c1a17;color:#e8e3d8;border-radius:4px;padding:18px 20px;white-space:pre-wrap;word-break:break-word;margin-bottom:10px}
+.pblock .cm{color:#7a7060}
+.pblock .kw{color:#7ec8a0}
+.pblock .vl{color:#e8c060}
+.pblock .hl{color:#88b8e8}
+
+/* GOOD/BAD */
+.gb-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.gb{padding:13px 15px;border-radius:4px;font-size:13px;line-height:1.7}
+.gb.good{background:var(--gpale)} .gb.bad{background:var(--rpale)}
+.gb-lbl{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px;display:block}
+.gb.good .gb-lbl{color:var(--g)} .gb.bad .gb-lbl{color:#a03030}
+
+/* TIP */
+.tip{background:var(--wpale);border-left:3px solid var(--w);border-radius:0 4px 4px 0;padding:13px 17px;font-size:13px;line-height:1.75}
+.tip strong{color:var(--w)}
+
+/* ANS TEXT */
+.atxt{font-size:13px;line-height:1.85}
+.atxt p{margin-bottom:9px}
+.atxt ul{padding-left:18px}
+.atxt li{margin-bottom:5px}
+.atxt strong{font-weight:700}
+
+/* DIFFICULTY DOTS */
+.dots{display:inline-flex;gap:3px;align-items:center}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--line2)}
+.dot.on{background:var(--ink)}
+
+/* TOOL COMPARISON */
+.tool-compare{margin-bottom:14px}
+.tool-compare-head{display:flex;gap:0;margin-bottom:0}
+.tc-tab{flex:1;padding:8px 14px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;border:1px solid var(--line2);background:var(--tag);color:var(--muted);cursor:default;text-align:center}
+.tc-tab:first-child{border-radius:4px 0 0 0}
+.tc-tab:last-child{border-radius:0 4px 0 0;border-left:none}
+.tc-tab.cowork{background:var(--gpale);color:var(--g);border-color:#aed6be}
+.tc-tab.chat{background:var(--bpale);color:var(--b);border-color:#aabcd8}
+.tc-panels{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line2);border-top:none;border-radius:0 0 4px 4px;overflow:hidden}
+.tc-panel{padding:16px 18px;font-family:'DM Mono',monospace;font-size:11.5px;line-height:1.95;white-space:pre-wrap;word-break:break-word}
+.tc-panel.cowork{background:#1c1a17;color:#e8e3d8;border-right:1px solid var(--line2)}
+.tc-panel.chat{background:#1c2840;color:#d8e4f0}
+.tc-panel .cm{color:#7a7060}
+.tc-panel .kw{color:#7ec8a0}
+.tc-panel .hl{color:#88b8e8}
+.tc-panel .vl{color:#e8c060}
+.tc-diff-note{font-size:12px;color:var(--muted);background:var(--tag);border-radius:0 0 4px 4px;padding:9px 14px;border:1px solid var(--line2);border-top:none;margin-bottom:4px;line-height:1.65}
+.tc-diff-note strong{color:var(--ink)}
+
+@media(max-width:600px){
+  .gb-grid{grid-template-columns:1fr}
+  .cover h1{font-size:30px}
+  .card-head{flex-direction:column}
+  .tc-panels{grid-template-columns:1fr}
+  .tc-tab:first-child{border-radius:4px 0 0 0}
+  .tc-tab:last-child{border-radius:0 4px 0 0;border-left:1px solid #aabcd8}
+  .tc-panel.cowork{border-right:none;border-bottom:1px solid var(--line2)}
+}
+
+/* ── DOWNLOAD BOX ── */
+.dl-box{
+  background:#edeae1;
+  border:2px solid #1c1a17;
+  border-radius:4px;
+  padding:28px 32px;
+  margin-bottom:48px;
+}
+.dl-box-title{
+  font-family:'DM Mono',monospace;
+  font-size:11px;letter-spacing:2.5px;text-transform:uppercase;
+  color:#1c1a17;margin-bottom:10px;font-weight:500;
+}
+.dl-box-sub{
+  font-size:13.5px;color:#6a6358;margin-bottom:20px;line-height:1.6;
+}
+.dl-files{
+  display:flex;flex-wrap:wrap;gap:10px;
+}
+.dl-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#f6f3ed;border:1.5px solid #c5bfb0;
+  border-radius:3px;padding:10px 16px;
+  text-decoration:none;color:#1c1a17;
+  font-size:13px;font-family:'DM Mono',monospace;
+  transition:background 0.15s,border-color 0.15s;
+  cursor:pointer;
+}
+.dl-btn:hover{background:#2a6048;color:#fff;border-color:#2a6048;}
+.dl-btn:hover .dl-arrow{color:#fff;}
+.dl-icon{font-size:15px;}
+.dl-name{font-weight:500;}
+.dl-arrow{color:#6a6358;font-size:16px;margin-left:4px;}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ══ COVER ══ -->
+<header class="cover">
+  <div class="eyebrow">D2C Manager Training Workbook — Claude Cowork &amp; Code</div>
+  <h1><span class="g">Cowork</span> &amp; <span class="b">Code</span><br>実践ワークブック</h1>
+  <p class="cover-sub">クリックして答えるのではなく、素材ファイルを使い、実際に手を動かして成果物を作る。<br>Lv.1 から段階的に、初心者を脱却するための全10ミッション。</p>
+  <div class="tags">
+    <span class="tg tg-g">Cowork — Lv.1〜2</span>
+    <span class="tg tg-r">競合調査 — Lv.3</span>
+    <span class="tg tg-b">Claude Code — Lv.4〜5</span>
+    <span class="tg tg-n">D2C / EC 実務特化</span>
+    <span class="tg tg-n">素材ファイル付き</span>
+  </div>
+</header>
+
+<!-- ══ HOW TO USE ══ -->
+<div class="howto">
+  <h3>このワークブックの使い方</h3>
+  <div class="how-grid">
+    <div class="how-item"><div class="how-n">1</div><div class="how-t"><strong>素材ファイルを用意</strong><br>各ミッションで指定されたCSV・TXTファイルを手元に置く</div></div>
+    <div class="how-item"><div class="how-n">2</div><div class="how-t"><strong>まず自分で取り組む</strong><br>解説を見る前に、CoworkまたはCodeで実際に試す</div></div>
+    <div class="how-item"><div class="how-n">3</div><div class="how-t"><strong>解説を開いて比較</strong><br>模範プロンプト・スクリプトと自分の違いを分析する</div></div>
+    <div class="how-item"><div class="how-n">4</div><div class="how-t"><strong>改善して次へ</strong><br>「なぜ違うか」を理解してから次のレベルに進む</div></div>
+  </div>
+</div>
+
+<!-- ══ INDEX TABLE ══ -->
+<table class="idx-table">
+  <thead><tr><th>No.</th><th>ミッション</th><th>ツール</th><th>レベル</th><th>成果物</th></tr></thead>
+  <tbody>
+    <tr><td>1-A</td><td>商品仕様書からSNS投稿文を3パターン生成</td><td><span class="tg tg-g" style="font-size:10px">Cowork</span></td><td class="idx-lv">Lv.1</td><td>投稿文×3</td></tr>
+    <tr><td>1-B</td><td>担当者の弱いコピーをCoworkで批評＆ブラッシュアップ</td><td><span class="tg tg-g" style="font-size:10px">Cowork</span></td><td class="idx-lv">Lv.1</td><td>改善コピー＋最強案</td></tr>
+    <tr><td>2-A</td><td>レビューCSVを渡して商品改善レポートを作成</td><td><span class="tg tg-g" style="font-size:10px">Cowork</span></td><td class="idx-lv">Lv.2</td><td>部門別提言レポート</td></tr>
+    <tr><td>2-B</td><td>売上CSVから経営陣向け月次レポートを生成</td><td><span class="tg tg-g" style="font-size:10px">Cowork</span></td><td class="idx-lv">Lv.2</td><td>月次レポート文書</td></tr>
+    <tr><td>3-A</td><td>競合4社のメモをCoworkで構造化・ポジショニング分析</td><td><span class="tg tg-r" style="font-size:10px">競合×Cowork</span></td><td class="idx-lv">Lv.3</td><td>競合マップ＋戦略提言</td></tr>
+    <tr><td>3-B</td><td>競合テキストをCodeで比較表CSVに変換</td><td><span class="tg tg-r" style="font-size:10px">競合×Code</span></td><td class="idx-lv">Lv.3</td><td>competitor_matrix.csv</td></tr>
+    <tr><td>4-A</td><td>売上CSVをグラフ化するスクリプトを作る</td><td><span class="tg tg-b" style="font-size:10px">Claude Code</span></td><td class="idx-lv">Lv.4</td><td>Pythonスクリプト＋グラフPNG</td></tr>
+    <tr><td>4-B</td><td>チャネル別CPO・ROASを自動計算してCSV出力</td><td><span class="tg tg-b" style="font-size:10px">Claude Code</span></td><td class="idx-lv">Lv.4</td><td>cpo_analysis.csv</td></tr>
+    <tr><td>5-A</td><td>競合CSV＋売上CSVを結合して自社比較レポートHTML生成</td><td><span class="tg tg-b" style="font-size:10px">Claude Code</span></td><td class="idx-lv">Lv.5</td><td>自動生成HTMLレポート</td></tr>
+    <tr><td>5-B</td><td>Cowork＋Codeの全ファイルを使った施策ロードマップ設計</td><td><span class="tg tg-g" style="font-size:10px">Cowork</span><span class="tg tg-b" style="font-size:10px;margin-left:4px">Code</span></td><td class="idx-lv">Lv.5</td><td>施策ロードマップ</td></tr>
+  </tbody>
+</table>
+
+<!-- ══════════════════════════════ -->
+<!-- LEVEL 1: Cowork基礎 -->
+<!-- ══════════════════════════════ -->
+<!-- DOWNLOAD SECTION -->
+<div class="dl-box">
+  <div class="dl-box-title">📁 素材ファイル — ダウンロード</div>
+  <p class="dl-box-sub">各ミッションで使用するファイルです。あらかじめ手元に保存しておいてください。</p>
+  <div class="dl-files">
+    <a class="dl-btn" href="data:text/csv;charset=utf-8;base64,44Os44OT44Ol44O8SUQs6LO85YWl5pelLOipleS+oSzjgr/jgqTjg4jjg6ss5pys5paHLOW5tOS7oyzjg6rjg5Tjg7zjg4jlm57mlbAKUjAwMSwyMDI0LTA0LTE1LDUs5q+O5pyd5L2/44Gj44Gm44G+44GZLOacneaZqeS9v+OBhOWni+OCgeOBpjLjg7bmnIjjgILjgY/jgZnjgb/jgYzlj5bjgozjgabjg4jjg7zjg7PjgqLjg4Pjg5fjgZfjgZ/msJfjgYzjgZfjgb7jgZnjgILou73jgYTjg4bjgq/jgrnjg4Hjg6Pjgafph43jga3kvb/jgYTjgZfjgoTjgZnjgYTjgafjgZnjgIIsMzDku6MsMwpSMDAyLDIwMjQtMDQtMTgsNCzmiJDliIbjgYzoia/jgYQsVkMtSVAyMCXjga/ku5bjgavjgarjgYTjgajmgJ3jgaPjgabos7zlhaXjgILkvb/nlKjmhJ/jga/oia/jgYTjgafjgZnjgILjgZ/jgaDlsJHjgZflgKTmrrXjgYzpq5jjgoHjgIIsNDDku6MsMQpSMDAzLDIwMjQtMDQtMjAsNSzmr5vnqbTjgYznm67nq4vjgZ/jgarjgY/jgarjgaPjgZ8sMuODtuaciOS9v+OBo+OBpuavm+eptOOBrumWi+OBjeOBjOawl+OBq+OBquOCieOBquOBj+OBquOCiuOBvuOBl+OBn+OAguWPi+S6uuOBq+OCguWLp+OCgeOBvuOBl+OBn+OAgiwzMOS7oywyClIwMDQsMjAyNC0wNC0yNSwzLOWKueaenOOCkuWun+aEn+S4rSzjgb7jgaAx5pys55uu44Gn5Yq55p6c44Gv5qeY5a2Q6KaL44CC5oiQ5YiG44Gv6Imv44GV44Gd44GG44Gq44Gu44Gn44GX44Gw44KJ44GP57aa44GR44Gm44G/44G+44GZ44CCLDQw5LujLDEKUjAwNSwyMDI0LTA1LTAyLDUs44Oq44OU44O844OI56K65a6aLDPmnKznm67jgafjgZnjgILjgrfjg5/jgYzoloTjgY/jgarjgaPjgabjgY3jgZ/msJfjgYzjgZfjgablrInjgZfjgYTjgafjgZnjgILmnJ3jga7jg6vjg7zjg4bjgqPjg7PjgavmrKDjgYvjgZvjgarjgYTjgIIsMzDku6MsMwpSMDA2LDIwMjQtMDUtMDgsMizlsJHjgZfliLrmv4DjgpLmhJ/jgZjjgZ8s5pWP5oSf6IKM44Gr44Gv5bCR44GX5Yi65r+A44GM44GC44KK44G+44GX44Gf44CC5oiQ5YiG44Gv6Imv44GE44Gu44Gn44GZ44GM44CB6IKM44GM5ZCI44KP44Gq44GE5Lq644KC44GE44KL44GL44KC44CCLDIw5LujLDEKUjAwNywyMDI0LTA1LTEyLDUs44GP44GZ44G/44GM5raI44GI44GfLOS9v+OBhOWni+OCgeOBpjHjg7bmnIjjgafpoZToibLjgYzmmI7jgovjgY/jgarjgaPjgZ/jgajoqIDjgo/jgozjgb7jgZfjgZ/jgILntprjgZHjgZ/jgYTjgafjgZnjgIIsNDDku6MsMgpSMDA4LDIwMjQtMDUtMTksNCzjg4bjgq/jgrnjg4Hjg6PjgYzlpb3jgY0s44K144Op44K144Op44GX44Gm44GE44Gm44K544Kt44Oz44Kx44Ki44Gu5pyA5Yid44Gr5L2/44GE44KE44GZ44GE44CC6YeN44Gt44Gm44KC6YeN44GP44Gq44KJ44Gq44GE44CCLDMw5LujLDEKUjAwOSwyMDI0LTA1LTI1LDMs5YCk5q6144GM44ON44OD44KvLOWKueaenOOBr+aEn+OBmOOBpuOBhOOCi+OBkeOCjOOBqeOAgTg4MDDlhobjga/lsJHjgZfpq5jjgYTjgILjgoLjgYblsJHjgZflronjgZHjgozjgbDov7fjgo/jgZrjg6rjg5Tjg7zjg4jjgIIsMzDku6MsMQpSMDEwLDIwMjQtMDUtMzAsNSzogozjgYzlpInjgo/jgaPjgZ8sM+ODtuaciOS9v+eUqOOAgumAj+aYjuaEn+OBjOautemBleOBhOOAguOBk+OCjOOBjOOBquOBhOOBqOS4jeWuieOBq+OBquOCi+OBj+OCieOBhOaJi+aUvuOBm+OBquOBhOOAgiw0MOS7oyw0ClIwMTEsMjAyNC0wNi0wNCw0LOaIkOWIhuOCquOCv+OCr+OBqOOBl+OBpua6gOi2syxWQy1JUCvjg5Xjgqfjg6vjg6nphbjjga7ntYTjgb/lkIjjgo/jgZvjgpLmjqLjgZfjgabjgYTjgb7jgZfjgZ/jgILlronlrprmgKfjgYzpq5jjgYTjga7jgaflronlv4PjgZfjgabkvb/jgYjjgb7jgZnjgIIsMzDku6MsMgpSMDEyLDIwMjQtMDYtMTAsMSzlkIjjgo/jgarjgYvjgaPjgZ8s56eB44Gu6IKM44Gr44Gv5ZCI44GE44G+44Gb44KT44Gn44GX44Gf44CC44OL44Kt44OT44GM5aKX44GI44Gm44GX44G+44GE6L+U5ZOB44GX44G+44GX44Gf44CCLDIw5LujLDEKUjAxMywyMDI0LTA2LTE0LDUsMuacrOebruizvOWFpSwx5pys55uu44Gn44OP44Oq44GM5Ye644GmMuacrOebruOCkuizvOWFpeOAgue2mee2muOBr+WKm+OBquOCiuOBqOWun+aEn+OBl+OBpuOBhOOBvuOBmeOAgiw1MOS7oywyClIwMTQsMjAyNC0wNi0xOCw0LOacneS9v+OBhOOChOOBmeOBhCzmnJ3kvb/jgaPjgabjgoLjg5njgr/jgaTjgYvjgarjgYTjga7jgYzoia/jgYTjgafjgZnjgILml6XnhLzjgZHmraLjgoHjgajjga7nm7jmgKfjgoLoia/jgYTjgIIsMzDku6MsMQpSMDE1LDIwMjQtMDYtMjIsMyzph4/jgYzlsJHjgarjgYQsMzBtbOOBpzg4MDDlhobjga/jgrPjgrnjg5HjgYzlvq7lppnjgILlirnmnpzjga/jgYLjgovjgajmgJ3jgYbjgZHjganlrrnph4/jgpLjgoLjgYblsJHjgZflopfjgoTjgZfjgabjgbvjgZfjgYTjgIIsNDDku6MsMQpSMDE2LDIwMjQtMDYtMjUsNSzjg5fjg6zjgrzjg7Pjg4jjgavjgoIs5Y+L5Lq644G444Gu6KqV55Sf5pel44OX44Os44K844Oz44OI44Gr6LO85YWl44CC44OR44OD44Kx44O844K444GM57a66bqX44Gn5Zac44Gw44KM44G+44GX44Gf44CCLDMw5LujLDEKUjAxNywyMDI0LTA2LTI4LDQs5YyC44GE44GM5aW944GNLOOBu+OCk+OBruOCiuS4iuWTgeOBqummmeOCiuOBjOOBl+OBvuOBmeOAguS9v+OBhuOBn+OBs+OBq+awl+WIhuOBjOS4iuOBjOOCiuOBvuOBmeOAgiwyMOS7oywxClIwMTgsMjAyNC0wNy0wMSw1LOe2muOBkeOBvuOBmSw244O25pyI44Oq44OU44O844OI5Lit44CC44K544Kt44Oz44Kx44Ki44Gu5qC444Gv44GT44KM44Gn44GZ44CC44Kz44K544OR44KI44KK5Yq55p6c44KS6YeN6KaW44GZ44KL5Lq644Gr44CCLDQw5LujLDYKUjAxOSwyMDI0LTA3LTA0LDIs5pyf5b6F44GX44GZ44GO44GfLOWPo+OCs+ODn+OCkuimi+OBpuacn+W+heOBl+OBmeOBjuOBpuOBl+OBvuOBhOOBvuOBl+OBn+OAguWKueaenOOBjOOCj+OBi+OCiuOBq+OBj+OBj+OAgeWApOauteOBjOmrmOOBhOOBruOBp+e2mee2muaCqeOCk+OBp+OBhOOBvuOBmeOAgiwzMOS7oywxClIwMjAsMjAyNC0wNy0wOCw1LOmAj+aYjuaEn+OBjOmBleOBhizkvb/jgYTlp4vjgoHjgabjgYvjgonljJbnsqfjga7jgorjgYzlhajnhLbpgZXjgYTjgb7jgZnjgILkuIvlnLDjgarjgZfjgafjgoLogozjgYzntrrpupfjgavopovjgYjjgovjgIIsMzDku6MsMgo=" download="customer_reviews.csv"><span class="dl-icon">📊</span><span class="dl-name">customer_reviews.csv</span><span class="dl-arrow">↓</span></a>
+    <a class="dl-btn" href="data:text/csv;charset=utf-8;base64,5pyILOODgeODo+ODjeODqyzllYblk4Hjgqvjg4bjgrTjg6os5aOy5LiK6YeR6aGNLOazqOaWh+S7tuaVsCzmlrDopo/poaflrqLmlbAs44Oq44OU44O844OI6aGn5a6i5pWwCjIwMjTlubQx5pyILFNOU+W6g+WRiiznvo7lrrnmtrIsMTg1MDAwMCwzMTIsMTk4LDExNAoyMDI05bm0MeaciCzmpJzntKLluoPlkYos576O5a655rayLDkyMDAwMCwxNTYsODksNjcKMjAyNOW5tDHmnIgs44Oh44Or44Oe44KsLOe+juWuuea2siw0MzAwMDAsNzQsMTIsNjIKMjAyNOW5tDHmnIgsU05T5bqD5ZGKLOa0l+mhlOaWmSw2NDAwMDAsMjEwLDE0NSw2NQoyMDI05bm0MeaciCzmpJzntKLluoPlkYos5rSX6aGU5paZLDM4MDAwMCwxMjUsNzEsNTQKMjAyNOW5tDLmnIgsU05T5bqD5ZGKLOe+juWuuea2siwyMTAwMDAwLDM1NSwyMjEsMTM0CjIwMjTlubQy5pyILOaknOe0ouW6g+WRiiznvo7lrrnmtrIsODcwMDAwLDE0Nyw4Miw2NQoyMDI05bm0MuaciCzjg6Hjg6vjg57jgqws576O5a655rayLDUxMDAwMCw4OCw4LDgwCjIwMjTlubQy5pyILFNOU+W6g+WRiizmtJfpoZTmlpksNTkwMDAwLDE5MywxMjAsNzMKMjAyNOW5tDLmnIgs5qSc57Si5bqD5ZGKLOa0l+mhlOaWmSw0MjAwMDAsMTM4LDc5LDU5CjIwMjTlubQz5pyILFNOU+W6g+WRiiznvo7lrrnmtrIsMjM1MDAwMCwzOTgsMjQ1LDE1MwoyMDI05bm0M+aciCzmpJzntKLluoPlkYos576O5a655rayLDEwNTAwMDAsMTc4LDEwMSw3NwoyMDI05bm0M+aciCzjg6Hjg6vjg57jgqws576O5a655rayLDY4MDAwMCwxMTcsMTQsMTAzCjIwMjTlubQz5pyILFNOU+W6g+WRiizmtJfpoZTmlpksNzIwMDAwLDIzNiwxNTgsNzgKMjAyNOW5tDPmnIgs5qSc57Si5bqD5ZGKLOa0l+mhlOaWmSw0NTAwMDAsMTQ4LDg1LDYzCjIwMjTlubQ05pyILFNOU+W6g+WRiiznvo7lrrnmtrIsMTk4MDAwMCwzMzUsMTk1LDE0MAoyMDI05bm0NOaciCzmpJzntKLluoPlkYos576O5a655rayLDk4MDAwMCwxNjYsOTQsNzIKMjAyNOW5tDTmnIgs44Oh44Or44Oe44KsLOe+juWuuea2siw1OTAwMDAsMTAyLDksOTMKMjAyNOW5tDTmnIgsU05T5bqD5ZGKLOa0l+mhlOaWmSw2ODAwMDAsMjIzLDE0MSw4MgoyMDI05bm0NOaciCzmpJzntKLluoPlkYos5rSX6aGU5paZLDM5MDAwMCwxMjgsNzMsNTUKMjAyNOW5tDXmnIgsU05T5bqD5ZGKLOe+juWuuea2siwyMjgwMDAwLDM4NiwyMzgsMTQ4CjIwMjTlubQ15pyILOaknOe0ouW6g+WRiiznvo7lrrnmtrIsMTEyMDAwMCwxOTAsMTA4LDgyCjIwMjTlubQ15pyILOODoeODq+ODnuOCrCznvo7lrrnmtrIsNzQwMDAwLDEyOCwxMSwxMTcKMjAyNOW5tDXmnIgsU05T5bqD5ZGKLOa0l+mhlOaWmSw4MTAwMDAsMjY2LDE3OCw4OAoyMDI05bm0NeaciCzmpJzntKLluoPlkYos5rSX6aGU5paZLDQ3MDAwMCwxNTQsODgsNjYKMjAyNOW5tDbmnIgsU05T5bqD5ZGKLOe+juWuuea2siwyNjUwMDAwLDQ0OSwyNzgsMTcxCjIwMjTlubQ25pyILOaknOe0ouW6g+WRiiznvo7lrrnmtrIsMTM4MDAwMCwyMzQsMTMzLDEwMQoyMDI05bm0NuaciCzjg6Hjg6vjg57jgqws576O5a655rayLDkyMDAwMCwxNTksMTYsMTQzCjIwMjTlubQ25pyILFNOU+W6g+WRiizmtJfpoZTmlpksOTUwMDAwLDMxMSwyMDksMTAyCjIwMjTlubQ25pyILOaknOe0ouW6g+WRiizmtJfpoZTmlpksNTQwMDAwLDE3NywxMDEsNzYK" download="sales_monthly.csv"><span class="dl-icon">📊</span><span class="dl-name">sales_monthly.csv</span><span class="dl-arrow">↓</span></a>
+    <a class="dl-btn" href="data:text/plain;charset=utf-8;base64,44CQ56u25ZCI44OW44Op44Oz44OJ6Kq/5p+744Oh44Oi44CR5ouF5b2T77ya44Oe44O844Kx44OB44O844Og44CA5pu05paw77yaMjAyNOW5tDbmnIgKCuKWoCBB44OW44Op44Oz44OJ44CM44Or44Of44Ko44OpIOOCu+ODqeODoCBDK+OAjQotIOS+oeagvO+8mjYsNjAw5YaGIC8gMzBtTAotIOaIkOWIhu+8mlZDLUlQIDE1JeOAgeODiuOCpOOCouOCt+ODs+OCouODn+ODiTMlCi0g44Od44K444K344On44Oz77ya44Kz44K544OR6YeN6KaW44CB5YWl6ZaA5bGk5ZCR44GRCi0g6LKp5aOy44OB44Oj44ON44Or77yaQW1hem9u44O75qW95aSp44Oh44Kk44OzCi0gU05T5oim55Wl77ya44Oe44Kk44Kv44Ot44Kk44Oz44OV44Or44Ko44Oz44K144O85aSa55SoCi0g5by344G/77ya5L6h5qC844Gu5a6J44GV44CBQW1hem9u44Gn44Gu6auY6KmV5L6h5Lu25pWw77yIMiw0MDDku7botoXvvIkKLSDlvLHjgb/vvJrjg5bjg6njg7Pjg4njgrnjg4jjg7zjg6rjg7zjgYzlvLHjgYTjgIHjg6rjg5Tjg7zjg4jnjofjgYzkvY7jgYTvvIjmjqjlrpozMCXku6XkuIvvvIkKCuKWoCBC44OW44Op44Oz44OJ44CMU2tpbnRlbGwgVkMyMOOAjQotIOS+oeagvO+8mjEyLDAwMOWGhiAvIDI1bUwKLSDmiJDliIbvvJpWQy1JUCAyMCXjgIHjg6zjg4Hjg47jg7zjg6swLjMl44CB44Oa44OX44OB44OJ6KSH5ZCI5L2TCi0g44Od44K444K344On44Oz77ya44OX44Os44Of44Ki44Og44O75oiQ5YiG44Kq44K/44Kv5ZCR44GRCi0g6LKp5aOy44OB44Oj44ON44Or77ya6Ieq56S+RUPkuK3lv4PjgIHkuIDpg6jjgrvjg6zjgq/jg4jjgrfjg6fjg4Pjg5cKLSBTTlPmiKbnlaXvvJrmiJDliIbop6PoqqzjgrPjg7Pjg4bjg7Pjg4TvvIhZb3VUdWJl44O7SW5zdGFncmFt77yJCi0g5by344G/77ya5oiQ5YiG6YeP44O744OW44Op44Oz44OJ5Yqb44O744OV44Kh44Oz44Kz44Of44Ol44OL44OG44KjCi0g5byx44G/77ya6auY5L6h5qC844Gn5YWl6ZaA5bGk44GM5omL44KS5Ye644GX44Gr44GP44GE44CB5pyd5L2/44GE5LiN5Y+v77yI44Os44OB44OO44O844Or6YWN5ZCI77yJCgrilqAgQ+ODluODqeODs+ODieOAjOODm+ODr+OCpOODiOODqeODnCBFWOOAjQotIOS+oeagvO+8mjQsOTgw5YaGIC8gNTBtTAotIOaIkOWIhu+8mlZDLUlQIDEwJeOAgeOCouODq+ODluODgeODszMl44CB44Kz44Op44O844Ky44OzCi0g44Od44K444K344On44Oz77ya5aSn6KGG5ZCR44GR44O75bm06b2i5bGk5bqD44KB77yIMjDjgJw2MOS7o++8iQotIOiyqeWjsuODgeODo+ODjeODq++8muODieODqeODg+OCsOOCueODiOOCou+8i0VDCi0gU05T5oim55Wl77ya44OG44Os44OTQ03jg7voirjog73kurrotbfnlKgKLSDlvLfjgb/vvJroqo3nn6Xluqbjg7vosqnlo7LntrLjga7luoPjgZXjg7vlhaXmiYvjgZfjgoTjgZnjgZUKLSDlvLHjgb/vvJrmiJDliIbmv4PluqbjgYzkvY7jgYTjgIHjgIzmiJDliIbjgqrjgr/jgq/jgI3jgavjga/pn7/jgYvjgarjgYQKCuKWoCBE44OW44Op44Oz44OJ44CMQ2zDqSBCaW9tZSDjgrvjg6njg6DjgI0KLSDkvqHmoLzvvJoxNSw4MDDlhoYgLyAyMG1MCi0g5oiQ5YiG77yaVkMtSVAgMTgl44CB44OQ44Kk44Kq44O844Og5oiQ5YiG77yI54m56Kix5Y+W5b6X77yJ44CB44OV44Kn44Or44Op6YW4Ci0g44Od44K444K344On44Oz77ya6LaF44Op44Kw44K444Ol44Ki44Oq44O844CB5a+M6KOV5bGk5ZCR44GRCi0g6LKp5aOy44OB44Oj44ON44Or77ya55m+6LKo5bqX44O76Ieq56S+RUPvvIjmi5vlvoXliLbvvIkKLSBTTlPmiKbnlaXvvJrjg6rjg7zjg6vli5XnlLvjg7vjgrnjg4jjg7zjg6rjg7zjgrrpmZDlrprjgrPjg7Pjg4bjg7Pjg4QKLSDlvLfjgb/vvJrpq5jku5jliqDkvqHlgKTjg7vjg5fjg6zjg5/jgqLjg6Djg5bjg6njg7Pjg4fjgqPjg7PjgrDjg7vluIzlsJHmgKfmvJTlh7oKLSDlvLHjgb/vvJrkvqHmoLzluK/jgYzpq5jjgZnjgY7jgabluILloLTopo/mqKHjgYzlsI/jgZXjgYQKCuKWoCDluILloLTlhajkvZPjga7lgr7lkJHvvIgyMDI05bm05LiK5Y2K5pyf77yJCi0gVkMtSVDjgrvjg6njg6DluILloLTjga/liY3lubTmr5QrMjMl5oiQ6ZW377yIRDJD5Lit5b+D77yJCi0g44CM5oiQ5YiG44Kq44K/44Kv44CN5bGk77yIMzDjgJw0Neats+Wls+aAp++8ieOBruizvOiyt+WKm+OBjOmrmOOBvuOBo+OBpuOBhOOCiwotIFNOU+OBp+OBruaIkOWIhuino+iqrOOCs+ODs+ODhuODs+ODhOOBjOizvOiyt+aEj+assuOBq+ebtOe1kOOBmeOCi+WCvuWQkQotIOOAjOe2muOBkeOCieOCjOOCi+S+oeagvOOBi+OBqeOBhuOBi+OAjeOBjOODquODlOODvOODiOeOh+OCkuW3puWPs+OBmeOCi+S4u+imgeWboAo=" download="competitor_info.txt"><span class="dl-icon">📄</span><span class="dl-name">competitor_info.txt</span><span class="dl-arrow">↓</span></a>
+    <a class="dl-btn" href="data:text/plain;charset=utf-8;base64,44CQ5ZWG5ZOB5LuV5qeY5pu444CR44OT44K/44Kw44Ot44KmIOOCu+ODqeODoCDjgqjjgq/jgrnjg4jjg6rjg7zjg6AKCuKWoCDllYblk4HlkI3vvJrjg5Pjgr/jgrDjg63jgqYg44K744Op44OgIOOCqOOCr+OCueODiOODquODvOODoArilqAg5L6h5qC877yaOCw4MDDlhobvvIjnqI7ovrzvvIkK4pagIOWuuemHj++8mjMwbUwK4pagIOeZuuWjsuaXpe+8mjIwMjTlubQ35pyIMeaXpQoK4pagIOS4u+imgeaIkOWIhgotIOODk+OCv+ODn+ODs0PoqpjlsI7kvZPvvIhWQy1JUO+8iTIwJemFjeWQiO+8mualreeVjOacgOmrmOawtOa6luOAguODoeODqeODi+ODs+eUn+aIkOaKkeWItuOBqOe+jueZveWKueaenAotIOODiuOCpOOCouOCt+ODs+OCouODn+ODiTUl77ya5q+b56m05byV44GN57eg44KB44O744OI44O844Oz44Ki44OD44OX44O76IKM44OQ44Oq44Ki5by35YyWCi0g44OS44Ki44Or44Ot44Oz6YW4M+eoru+8muihqOmdouOAnOa3seWxpOOBvuOBp+WkmuWxpOS/nea5vwotIOODrOODgeODjuODvOODqzAuMSXvvJrjgr/jg7zjg7Pjgqrjg7zjg5Djg7zkv4PpgLLjg7vjg4/jg6rmlLnlloQKLSDjg5Xjgqfjg6vjg6nphbjvvJrjg5Pjgr/jg5/jg7ND44Gu6YW45YyW44KS6Ziy44GQ5a6J5a6a5YyW5oiQ5YiGCgrilqAg44OG44Kv44K544OB44OjCuawtOOBruOCiOOBhuOBq+i7veOBhOOCuOOCp+ODq+eKtuOAguiCjOOBquOBmOOBv+OBjOiJr+OBj+OAgeODmeOCv+OBpOOBjeOCvOODreOAggoK4pagIOS9v+eUqOaWueazlQrmnJ3mmanjga7mtJfpoZTlvozjgIHljJbnsqfmsLTjga7lvozjgasy44CcM+ODl+ODg+OCt+ODpeOCkumhlOWFqOS9k+OBq+OBquOBmOOBvuOBm+OCi+OAguaXpeS4reS9v+eUqOaZguOBr1VW44Kx44Ki5b+F6aCI44CCCgrilqAg44K/44O844Ky44OD44OICi0g44Oh44Kk44Oz44K/44O844Ky44OD44OI77yaMzDjgJw0Neats+Wls+aApwotIOaCqeOBv++8muOBj+OBmeOBv+ODu+OCt+ODn+ODu+avm+eptOODu+ODj+ODquS4jei2swotIOizvOiyt+WLleapn++8muaIkOWIhuOBq+OBk+OBoOOCj+OCi+OAjOaIkOWIhuOCquOCv+OCr+OAjeWxpOOAgee+juWuueODnuODi+OCogoK4pagIOODluODqeODs+ODieODiOODvOODswrnp5HlrabnmoTmoLnmi6DjgpLph43oppbjgZfjgaTjgaTjgoLjgIHmirzjgZfjgaTjgZHjgYzjgb7jgZfjgY/jgarjgYTjgILnn6XnmoTjg7voqqDlrp/jg7vlsJHjgZfjg6njgrDjgrjjg6XjgqLjg6rjg7zmhJ/jgIIKCuKWoCDnq7blkIjlt67nlbDljJbjg53jgqTjg7Pjg4gKMS4gVkMtSVAgMjAl44Go44GE44GG5qWt55WM5pyA6auY5rC05rqW44Gu6YWN5ZCI6YePCjIuIOODleOCp+ODq+ODqemFuOOBq+OCiOOCi+WuieWumuWMluOBp+mFuOWMluOBl+OBq+OBj+OBhAozLiDmnJ3mmankvb/jgYjjgovjg47jg7Pjg6zjg4Hjg47jg7zjg6vku6Pmm7/jgoLjgafjgY3jgovoqK3oqIgK" download="product_spec.txt"><span class="dl-icon">📄</span><span class="dl-name">product_spec.txt</span><span class="dl-arrow">↓</span></a>
+  </div>
+</div>
+
+<section class="lv-section">
+  <div class="lv-head">
+    <span class="lv-label">Level 01</span>
+    <span class="lv-title">Cowork基礎 ── 素材を渡してコンテンツを作る</span>
+  </div>
+  <p class="lv-desc">「役割・背景・条件・出力形式」の4要素を指示に盛り込む基本形を習得する。同じ素材でも指示の質で成果物のクオリティが大きく変わることを体感するのがゴール。</p>
+
+  <!-- 1-A -->
+  <div class="card card-g">
+    <div class="card-head">
+      <div>
+        <div class="card-id">Mission 1-A ／ Cowork</div>
+        <div class="card-title">商品仕様書を渡して、Instagram投稿文を3パターン作る</div>
+      </div>
+      <div class="card-htags">
+        <span class="tg tg-g">Cowork</span>
+        <span class="dots"><span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        新商品「ビタグロウ セラム エクストリーム」のローンチSNS投稿を担当している。商品仕様書は手元にあるが、自分でコピーを書く時間がない。Coworkに投稿文を3パターン作らせたい。
+      </div>
+      <div class="mats">
+        <div class="mats-lbl">使用素材</div>
+        <div class="mat-list">
+          <div class="mat-file"><span class="mat-icon">📄</span>product_spec.txt<a class="dl-inline" href="data:text/plain;charset=utf-8;base64,44CQ5ZWG5ZOB5LuV5qeY5pu444CR44OT44K/44Kw44Ot44KmIOOCu+ODqeODoCDjgqjjgq/jgrnjg4jjg6rjg7zjg6AKCuKWoCDllYblk4HlkI3vvJrjg5Pjgr/jgrDjg63jgqYg44K744Op44OgIOOCqOOCr+OCueODiOODquODvOODoArilqAg5L6h5qC877yaOCw4MDDlhobvvIjnqI7ovrzvvIkK4pagIOWuuemHj++8mjMwbUwK4pagIOeZuuWjsuaXpe+8mjIwMjTlubQ35pyIMeaXpQoK4pagIOS4u+imgeaIkOWIhgotIOODk+OCv+ODn+ODs0PoqpjlsI7kvZPvvIhWQy1JUO+8iTIwJemFjeWQiO+8mualreeVjOacgOmrmOawtOa6luOAguODoeODqeODi+ODs+eUn+aIkOaKkeWItuOBqOe+jueZveWKueaenAotIOODiuOCpOOCouOCt+ODs+OCouODn+ODiTUl77ya5q+b56m05byV44GN57eg44KB44O744OI44O844Oz44Ki44OD44OX44O76IKM44OQ44Oq44Ki5by35YyWCi0g44OS44Ki44Or44Ot44Oz6YW4M+eoru+8muihqOmdouOAnOa3seWxpOOBvuOBp+WkmuWxpOS/nea5vwotIOODrOODgeODjuODvOODqzAuMSXvvJrjgr/jg7zjg7Pjgqrjg7zjg5Djg7zkv4PpgLLjg7vjg4/jg6rmlLnlloQKLSDjg5Xjgqfjg6vjg6nphbjvvJrjg5Pjgr/jg5/jg7ND44Gu6YW45YyW44KS6Ziy44GQ5a6J5a6a5YyW5oiQ5YiGCgrilqAg44OG44Kv44K544OB44OjCuawtOOBruOCiOOBhuOBq+i7veOBhOOCuOOCp+ODq+eKtuOAguiCjOOBquOBmOOBv+OBjOiJr+OBj+OAgeODmeOCv+OBpOOBjeOCvOODreOAggoK4pagIOS9v+eUqOaWueazlQrmnJ3mmanjga7mtJfpoZTlvozjgIHljJbnsqfmsLTjga7lvozjgasy44CcM+ODl+ODg+OCt+ODpeOCkumhlOWFqOS9k+OBq+OBquOBmOOBvuOBm+OCi+OAguaXpeS4reS9v+eUqOaZguOBr1VW44Kx44Ki5b+F6aCI44CCCgrilqAg44K/44O844Ky44OD44OICi0g44Oh44Kk44Oz44K/44O844Ky44OD44OI77yaMzDjgJw0Neats+Wls+aApwotIOaCqeOBv++8muOBj+OBmeOBv+ODu+OCt+ODn+ODu+avm+eptOODu+ODj+ODquS4jei2swotIOizvOiyt+WLleapn++8muaIkOWIhuOBq+OBk+OBoOOCj+OCi+OAjOaIkOWIhuOCquOCv+OCr+OAjeWxpOOAgee+juWuueODnuODi+OCogoK4pagIOODluODqeODs+ODieODiOODvOODswrnp5HlrabnmoTmoLnmi6DjgpLph43oppbjgZfjgaTjgaTjgoLjgIHmirzjgZfjgaTjgZHjgYzjgb7jgZfjgY/jgarjgYTjgILnn6XnmoTjg7voqqDlrp/jg7vlsJHjgZfjg6njgrDjgrjjg6XjgqLjg6rjg7zmhJ/jgIIKCuKWoCDnq7blkIjlt67nlbDljJbjg53jgqTjg7Pjg4gKMS4gVkMtSVAgMjAl44Go44GE44GG5qWt55WM5pyA6auY5rC05rqW44Gu6YWN5ZCI6YePCjIuIOODleOCp+ODq+ODqemFuOOBq+OCiOOCi+WuieWumuWMluOBp+mFuOWMluOBl+OBq+OBj+OBhAozLiDmnJ3mmankvb/jgYjjgovjg47jg7Pjg6zjg4Hjg47jg7zjg6vku6Pmm7/jgoLjgafjgY3jgovoqK3oqIgK" download="product_spec.txt" title="product_spec.txt をダウンロード" style="margin-left:8px;color:#2a6048;text-decoration:none;font-size:12px;border:1px solid #2a6048;border-radius:2px;padding:1px 6px;white-space:nowrap;">↓ DL</a></div>
+        </div>
+      </div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li>product_spec.txtの内容をCoworkに渡し、Instagram投稿文を生成させる<span class="out">投稿文×3パターン</span></li>
+          <li>3パターンはそれぞれ訴求軸を変える（成分・使用感・効果実感）</li>
+          <li>各文：140字以内、絵文字2〜3個、ハッシュタグ5個を含む</li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>「仕様書を貼るだけ」と「条件を指定して貼る」で結果がどう変わるか、両方試してみること。</div>
+    </div>
+    <button class="toggle-btn" onclick="tog(this)">解説・模範プロンプトを見る <span class="toggle-arrow">▼</span></button>
+    <div class="ans-panel">
+      <div class="ans-sec">
+        <div class="ans-lbl ag">模範指示文 ── CoworkとチャットAIの比較</div>
+        <div class="tool-compare">
+          <div class="tool-compare-head">
+            <div class="tc-tab cowork">▶ Cowork への指示</div>
+            <div class="tc-tab chat">▶ チャット（claude.ai）への指示</div>
+          </div>
+          <div class="tc-panels">
+            <div class="tc-panel cowork"><span class="cm"># ファイル名を指定するだけでOK</span>
+<span class="hl">product_spec.txt</span>を読み込んで、
+Instagram告知投稿文を<span class="kw">3パターン</span>作成してください。
+
+【条件】
+- 訴求軸を変える（成分量・使用感・効果実感）
+- 各140字以内、絵文字2〜3個
+- ハッシュタグ5個
+- トーン：知的・ラグジュアリー
+
+【出力形式】
+パターンA【訴求軸：〇〇】（本文）
+パターンB【訴求軸：〇〇】（本文）
+パターンC【訴求軸：〇〇】（本文）
+
+<span class="cm"># sns_posts.txt に保存してください</span></div>
+            <div class="tc-panel chat"><span class="cm"># 自分でファイルの中身をコピペする</span>
+以下の商品仕様書をもとに、
+Instagram告知投稿文を<span class="kw">3パターン</span>作成してください。
+
+<span class="vl">--- 商品仕様書 ---
+（product_spec.txtの内容をここに貼り付ける）
+---</span>
+
+【条件】
+- 訴求軸を変える（成分量・使用感・効果実感）
+- 各140字以内、絵文字2〜3個
+- ハッシュタグ5個
+- トーン：知的・ラグジュアリー
+
+<span class="cm"># 出力はチャット画面に返ってくる
+# ファイル保存は自分でやる</span></div>
+          </div>
+          <div class="tc-diff-note">
+            <strong>何が違う？</strong>　Coworkはファイル名を指定するだけで直接読み込み、成果物ファイルも作って保存してくれる。チャットはファイルの中身を自分でコピペし、返ってきたテキストを自分でファイルにする手間がある。<strong>指示の「条件・形式」部分はどちらも同じ</strong>。プロンプトの質で出力品質が変わるのは共通。
+          </div>
+        </div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl aw">マネージャーの視点</div>
+        <div class="tip"><strong>「1案」ではなく「3案」求めるのが鉄則。</strong>1案だけ出させると「それが正解かどうか判断できない」状態になる。複数案を出させて自分が選ぶ／組み合わせる役割を担う。Coworkなら成果物ファイルとして保存まで頼めるので、そのままチームに共有できる。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1-B -->
+  <div class="card card-g">
+    <div class="card-head">
+      <div>
+        <div class="card-id">Mission 1-B ／ Cowork</div>
+        <div class="card-title">担当者が書いた弱いキャッチコピーをCoworkで批評＆ブラッシュアップする</div>
+      </div>
+      <div class="card-htags">
+        <span class="tg tg-g">Cowork</span>
+        <span class="dots"><span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        担当者が書いてきたLPキャッチコピー案が3つあるが、どれも弱い。直接赤ペンする前に、Coworkに批評させてから改善案を出させたい。<br><br>
+        <strong>担当者の案：</strong><br>
+        案1：「ビタミンCの力で、美しく」<br>
+        案2：「毎日使える新感覚美容液」<br>
+        案3：「成分にこだわる人のために」
+      </div>
+      <div class="mats">
+        <div class="mats-lbl">使用素材</div>
+        <div class="mat-list">
+          <div class="mat-file"><span class="mat-icon">📄</span>product_spec.txt<a class="dl-inline" href="data:text/plain;charset=utf-8;base64,44CQ5ZWG5ZOB5LuV5qeY5pu444CR44OT44K/44Kw44Ot44KmIOOCu+ODqeODoCDjgqjjgq/jgrnjg4jjg6rjg7zjg6AKCuKWoCDllYblk4HlkI3vvJrjg5Pjgr/jgrDjg63jgqYg44K744Op44OgIOOCqOOCr+OCueODiOODquODvOODoArilqAg5L6h5qC877yaOCw4MDDlhobvvIjnqI7ovrzvvIkK4pagIOWuuemHj++8mjMwbUwK4pagIOeZuuWjsuaXpe+8mjIwMjTlubQ35pyIMeaXpQoK4pagIOS4u+imgeaIkOWIhgotIOODk+OCv+ODn+ODs0PoqpjlsI7kvZPvvIhWQy1JUO+8iTIwJemFjeWQiO+8mualreeVjOacgOmrmOawtOa6luOAguODoeODqeODi+ODs+eUn+aIkOaKkeWItuOBqOe+jueZveWKueaenAotIOODiuOCpOOCouOCt+ODs+OCouODn+ODiTUl77ya5q+b56m05byV44GN57eg44KB44O744OI44O844Oz44Ki44OD44OX44O76IKM44OQ44Oq44Ki5by35YyWCi0g44OS44Ki44Or44Ot44Oz6YW4M+eoru+8muihqOmdouOAnOa3seWxpOOBvuOBp+WkmuWxpOS/nea5vwotIOODrOODgeODjuODvOODqzAuMSXvvJrjgr/jg7zjg7Pjgqrjg7zjg5Djg7zkv4PpgLLjg7vjg4/jg6rmlLnlloQKLSDjg5Xjgqfjg6vjg6nphbjvvJrjg5Pjgr/jg5/jg7ND44Gu6YW45YyW44KS6Ziy44GQ5a6J5a6a5YyW5oiQ5YiGCgrilqAg44OG44Kv44K544OB44OjCuawtOOBruOCiOOBhuOBq+i7veOBhOOCuOOCp+ODq+eKtuOAguiCjOOBquOBmOOBv+OBjOiJr+OBj+OAgeODmeOCv+OBpOOBjeOCvOODreOAggoK4pagIOS9v+eUqOaWueazlQrmnJ3mmanjga7mtJfpoZTlvozjgIHljJbnsqfmsLTjga7lvozjgasy44CcM+ODl+ODg+OCt+ODpeOCkumhlOWFqOS9k+OBq+OBquOBmOOBvuOBm+OCi+OAguaXpeS4reS9v+eUqOaZguOBr1VW44Kx44Ki5b+F6aCI44CCCgrilqAg44K/44O844Ky44OD44OICi0g44Oh44Kk44Oz44K/44O844Ky44OD44OI77yaMzDjgJw0Neats+Wls+aApwotIOaCqeOBv++8muOBj+OBmeOBv+ODu+OCt+ODn+ODu+avm+eptOODu+ODj+ODquS4jei2swotIOizvOiyt+WLleapn++8muaIkOWIhuOBq+OBk+OBoOOCj+OCi+OAjOaIkOWIhuOCquOCv+OCr+OAjeWxpOOAgee+juWuueODnuODi+OCogoK4pagIOODluODqeODs+ODieODiOODvOODswrnp5HlrabnmoTmoLnmi6DjgpLph43oppbjgZfjgaTjgaTjgoLjgIHmirzjgZfjgaTjgZHjgYzjgb7jgZfjgY/jgarjgYTjgILnn6XnmoTjg7voqqDlrp/jg7vlsJHjgZfjg6njgrDjgrjjg6XjgqLjg6rjg7zmhJ/jgIIKCuKWoCDnq7blkIjlt67nlbDljJbjg53jgqTjg7Pjg4gKMS4gVkMtSVAgMjAl44Go44GE44GG5qWt55WM5pyA6auY5rC05rqW44Gu6YWN5ZCI6YePCjIuIOODleOCp+ODq+ODqemFuOOBq+OCiOOCi+WuieWumuWMluOBp+mFuOWMluOBl+OBq+OBj+OBhAozLiDmnJ3mmankvb/jgYjjgovjg47jg7Pjg6zjg4Hjg47jg7zjg6vku6Pmm7/jgoLjgafjgY3jgovoqK3oqIgK" download="product_spec.txt" title="product_spec.txt をダウンロード" style="margin-left:8px;color:#2a6048;text-decoration:none;font-size:12px;border:1px solid #2a6048;border-radius:2px;padding:1px 6px;white-space:nowrap;">↓ DL</a></div>
+        </div>
+      </div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li>3案がなぜ弱いのかをCoworkに批評させる<span class="out">批評コメント</span></li>
+          <li>各案の改善版を出させる<span class="out">改善案×3</span></li>
+          <li>ゼロから考えた「最強案」を1つ出させる（20字以内、数字を入れる）<span class="out">最強案×1</span></li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>「改善して」と一言頼むのではなく、「まず批評、次に改善」と2段階に分けると、なぜ改善されたのかの理由まで理解できる。</div>
+    </div>
+    <button class="toggle-btn" onclick="tog(this)">解説・模範プロンプトを見る <span class="toggle-arrow">▼</span></button>
+    <div class="ans-panel">
+      <div class="ans-sec">
+        <div class="ans-lbl ag">模範指示文 ── CoworkとチャットAIの比較</div>
+        <div class="tool-compare">
+          <div class="tool-compare-head">
+            <div class="tc-tab cowork">▶ Cowork への指示</div>
+            <div class="tc-tab chat">▶ チャット（claude.ai）への指示</div>
+          </div>
+          <div class="tc-panels">
+            <div class="tc-panel cowork"><span class="cm"># Step 1: 批評</span>
+<span class="hl">product_spec.txt</span>を読み込んで、
+以下の3案が<span class="kw">なぜ弱いか批評</span>してください。
+
+案1：「ビタミンCの力で、美しく」
+案2：「毎日使える新感覚美容液」
+案3：「成分にこだわる人のために」
+
+観点：ターゲット感情・競合差別化・具体性
+
+<span class="cm"># Step 2: 改善 + 最強案</span>
+批評をふまえて：
+① 各案の改善版（理由付き）
+② 最強候補1案
+　- VC-IP 20%の数字を入れる
+　- くすみへの悔しさに触れる
+　- 20字以内
+
+<span class="cm"># copywriting_review.txt に保存してください</span></div>
+            <div class="tc-panel chat"><span class="cm"># Step 1: 批評</span>
+以下の商品仕様書と3案を読んで、
+<span class="kw">なぜ弱いか批評</span>してください。
+
+案1：「ビタミンCの力で、美しく」
+案2：「毎日使える新感覚美容液」
+案3：「成分にこだわる人のために」
+
+<span class="vl">--- 商品仕様書 ---
+（product_spec.txtの内容を貼り付け）
+---</span>
+
+観点：ターゲット感情・競合差別化・具体性
+
+<span class="cm"># Step 2: 改善 + 最強案</span>
+批評をふまえて：
+① 各案の改善版（理由付き）
+② 最強候補1案
+　- VC-IP 20%の数字を入れる
+　- くすみへの悔しさに触れる
+　- 20字以内</div>
+          </div>
+          <div class="tc-diff-note">
+            <strong>何が違う？</strong>　指示の内容・構造はほぼ同じ。Coworkはファイルを自分で読みに行き、結果をファイル保存までやってくれる。チャットは仕様書を自分でコピペし、返ってきたテキストを自分で使う。<strong>「批評→改善」の2段階に分ける構造はどちらでも同じ</strong>。
+          </div>
+        </div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl aw">マネージャーの視点</div>
+        <div class="tip"><strong>「批評 → 改善」の2ステップ分けが上級者の使い方。</strong>部下の成果物をCoworkに先に批評させてから自分でフィードバックすると、自分が気づかなかった観点を補完できる。また「Coworkが指摘した点」を部下に伝える方が、自分の主観より客観的に聞こえる場面もある。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ -->
+<!-- LEVEL 2: Cowork応用 -->
+<!-- ══════════════════════════════ -->
+<section class="lv-section">
+  <div class="lv-head">
+    <span class="lv-label">Level 02</span>
+    <span class="lv-title">Cowork応用 ── データを渡して「示唆」を引き出す</span>
+  </div>
+  <p class="lv-desc">CSVや複数ファイルを組み合わせて、分析から意思決定の材料を生成する。「要約してほしい」で終わらず、「この結果から次に何をすべきか」まで出力させるのがこのレベルのゴール。</p>
+
+  <!-- 2-A -->
+  <div class="card card-g">
+    <div class="card-head">
+      <div>
+        <div class="card-id">Mission 2-A ／ Cowork</div>
+        <div class="card-title">カスタマーレビューCSVを渡して、部門別の商品改善レポートを作る</div>
+      </div>
+      <div class="card-htags">
+        <span class="tg tg-g">Cowork</span>
+        <span class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span><span class="dot"></span></span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        「ビタグロウ セラム エクストリーム」に20件のレビューが集まった。来週の商品会議に向けて、改善点と強みをまとめたレポートが必要。商品開発チームとマーケチームの両方に配る予定。
+      </div>
+      <div class="mats">
+        <div class="mats-lbl">使用素材</div>
+        <div class="mat-list">
+          <div class="mat-file"><span class="mat-icon">📊</span>customer_reviews.csv<a class="dl-inline" href="data:text/csv;charset=utf-8;base64,44Os44OT44Ol44O8SUQs6LO85YWl5pelLOipleS+oSzjgr/jgqTjg4jjg6ss5pys5paHLOW5tOS7oyzjg6rjg5Tjg7zjg4jlm57mlbAKUjAwMSwyMDI0LTA0LTE1LDUs5q+O5pyd5L2/44Gj44Gm44G+44GZLOacneaZqeS9v+OBhOWni+OCgeOBpjLjg7bmnIjjgILjgY/jgZnjgb/jgYzlj5bjgozjgabjg4jjg7zjg7PjgqLjg4Pjg5fjgZfjgZ/msJfjgYzjgZfjgb7jgZnjgILou73jgYTjg4bjgq/jgrnjg4Hjg6Pjgafph43jga3kvb/jgYTjgZfjgoTjgZnjgYTjgafjgZnjgIIsMzDku6MsMwpSMDAyLDIwMjQtMDQtMTgsNCzmiJDliIbjgYzoia/jgYQsVkMtSVAyMCXjga/ku5bjgavjgarjgYTjgajmgJ3jgaPjgabos7zlhaXjgILkvb/nlKjmhJ/jga/oia/jgYTjgafjgZnjgILjgZ/jgaDlsJHjgZflgKTmrrXjgYzpq5jjgoHjgIIsNDDku6MsMQpSMDAzLDIwMjQtMDQtMjAsNSzmr5vnqbTjgYznm67nq4vjgZ/jgarjgY/jgarjgaPjgZ8sMuODtuaciOS9v+OBo+OBpuavm+eptOOBrumWi+OBjeOBjOawl+OBq+OBquOCieOBquOBj+OBquOCiuOBvuOBl+OBn+OAguWPi+S6uuOBq+OCguWLp+OCgeOBvuOBl+OBn+OAgiwzMOS7oywyClIwMDQsMjAyNC0wNC0yNSwzLOWKueaenOOCkuWun+aEn+S4rSzjgb7jgaAx5pys55uu44Gn5Yq55p6c44Gv5qeY5a2Q6KaL44CC5oiQ5YiG44Gv6Imv44GV44Gd44GG44Gq44Gu44Gn44GX44Gw44KJ44GP57aa44GR44Gm44G/44G+44GZ44CCLDQw5LujLDEKUjAwNSwyMDI0LTA1LTAyLDUs44Oq44OU44O844OI56K65a6aLDPmnKznm67jgafjgZnjgILjgrfjg5/jgYzoloTjgY/jgarjgaPjgabjgY3jgZ/msJfjgYzjgZfjgablrInjgZfjgYTjgafjgZnjgILmnJ3jga7jg6vjg7zjg4bjgqPjg7PjgavmrKDjgYvjgZvjgarjgYTjgIIsMzDku6MsMwpSMDA2LDIwMjQtMDUtMDgsMizlsJHjgZfliLrmv4DjgpLmhJ/jgZjjgZ8s5pWP5oSf6IKM44Gr44Gv5bCR44GX5Yi65r+A44GM44GC44KK44G+44GX44Gf44CC5oiQ5YiG44Gv6Imv44GE44Gu44Gn44GZ44GM44CB6IKM44GM5ZCI44KP44Gq44GE5Lq644KC44GE44KL44GL44KC44CCLDIw5LujLDEKUjAwNywyMDI0LTA1LTEyLDUs44GP44GZ44G/44GM5raI44GI44GfLOS9v+OBhOWni+OCgeOBpjHjg7bmnIjjgafpoZToibLjgYzmmI7jgovjgY/jgarjgaPjgZ/jgajoqIDjgo/jgozjgb7jgZfjgZ/jgILntprjgZHjgZ/jgYTjgafjgZnjgIIsNDDku6MsMgpSMDA4LDIwMjQtMDUtMTksNCzjg4bjgq/jgrnjg4Hjg6PjgYzlpb3jgY0s44K144Op44K144Op44GX44Gm44GE44Gm44K544Kt44Oz44Kx44Ki44Gu5pyA5Yid44Gr5L2/44GE44KE44GZ44GE44CC6YeN44Gt44Gm44KC6YeN44GP44Gq44KJ44Gq44GE44CCLDMw5LujLDEKUjAwOSwyMDI0LTA1LTI1LDMs5YCk5q6144GM44ON44OD44KvLOWKueaenOOBr+aEn+OBmOOBpuOBhOOCi+OBkeOCjOOBqeOAgTg4MDDlhobjga/lsJHjgZfpq5jjgYTjgILjgoLjgYblsJHjgZflronjgZHjgozjgbDov7fjgo/jgZrjg6rjg5Tjg7zjg4jjgIIsMzDku6MsMQpSMDEwLDIwMjQtMDUtMzAsNSzogozjgYzlpInjgo/jgaPjgZ8sM+ODtuaciOS9v+eUqOOAgumAj+aYjuaEn+OBjOautemBleOBhOOAguOBk+OCjOOBjOOBquOBhOOBqOS4jeWuieOBq+OBquOCi+OBj+OCieOBhOaJi+aUvuOBm+OBquOBhOOAgiw0MOS7oyw0ClIwMTEsMjAyNC0wNi0wNCw0LOaIkOWIhuOCquOCv+OCr+OBqOOBl+OBpua6gOi2syxWQy1JUCvjg5Xjgqfjg6vjg6nphbjjga7ntYTjgb/lkIjjgo/jgZvjgpLmjqLjgZfjgabjgYTjgb7jgZfjgZ/jgILlronlrprmgKfjgYzpq5jjgYTjga7jgaflronlv4PjgZfjgabkvb/jgYjjgb7jgZnjgIIsMzDku6MsMgpSMDEyLDIwMjQtMDYtMTAsMSzlkIjjgo/jgarjgYvjgaPjgZ8s56eB44Gu6IKM44Gr44Gv5ZCI44GE44G+44Gb44KT44Gn44GX44Gf44CC44OL44Kt44OT44GM5aKX44GI44Gm44GX44G+44GE6L+U5ZOB44GX44G+44GX44Gf44CCLDIw5LujLDEKUjAxMywyMDI0LTA2LTE0LDUsMuacrOebruizvOWFpSwx5pys55uu44Gn44OP44Oq44GM5Ye644GmMuacrOebruOCkuizvOWFpeOAgue2mee2muOBr+WKm+OBquOCiuOBqOWun+aEn+OBl+OBpuOBhOOBvuOBmeOAgiw1MOS7oywyClIwMTQsMjAyNC0wNi0xOCw0LOacneS9v+OBhOOChOOBmeOBhCzmnJ3kvb/jgaPjgabjgoLjg5njgr/jgaTjgYvjgarjgYTjga7jgYzoia/jgYTjgafjgZnjgILml6XnhLzjgZHmraLjgoHjgajjga7nm7jmgKfjgoLoia/jgYTjgIIsMzDku6MsMQpSMDE1LDIwMjQtMDYtMjIsMyzph4/jgYzlsJHjgarjgYQsMzBtbOOBpzg4MDDlhobjga/jgrPjgrnjg5HjgYzlvq7lppnjgILlirnmnpzjga/jgYLjgovjgajmgJ3jgYbjgZHjganlrrnph4/jgpLjgoLjgYblsJHjgZflopfjgoTjgZfjgabjgbvjgZfjgYTjgIIsNDDku6MsMQpSMDE2LDIwMjQtMDYtMjUsNSzjg5fjg6zjgrzjg7Pjg4jjgavjgoIs5Y+L5Lq644G444Gu6KqV55Sf5pel44OX44Os44K844Oz44OI44Gr6LO85YWl44CC44OR44OD44Kx44O844K444GM57a66bqX44Gn5Zac44Gw44KM44G+44GX44Gf44CCLDMw5LujLDEKUjAxNywyMDI0LTA2LTI4LDQs5YyC44GE44GM5aW944GNLOOBu+OCk+OBruOCiuS4iuWTgeOBqummmeOCiuOBjOOBl+OBvuOBmeOAguS9v+OBhuOBn+OBs+OBq+awl+WIhuOBjOS4iuOBjOOCiuOBvuOBmeOAgiwyMOS7oywxClIwMTgsMjAyNC0wNy0wMSw1LOe2muOBkeOBvuOBmSw244O25pyI44Oq44OU44O844OI5Lit44CC44K544Kt44Oz44Kx44Ki44Gu5qC444Gv44GT44KM44Gn44GZ44CC44Kz44K544OR44KI44KK5Yq55p6c44KS6YeN6KaW44GZ44KL5Lq644Gr44CCLDQw5LujLDYKUjAxOSwyMDI0LTA3LTA0LDIs5pyf5b6F44GX44GZ44GO44GfLOWPo+OCs+ODn+OCkuimi+OBpuacn+W+heOBl+OBmeOBjuOBpuOBl+OBvuOBhOOBvuOBl+OBn+OAguWKueaenOOBjOOCj+OBi+OCiuOBq+OBj+OBj+OAgeWApOauteOBjOmrmOOBhOOBruOBp+e2mee2muaCqeOCk+OBp+OBhOOBvuOBmeOAgiwzMOS7oywxClIwMjAsMjAyNC0wNy0wOCw1LOmAj+aYjuaEn+OBjOmBleOBhizkvb/jgYTlp4vjgoHjgabjgYvjgonljJbnsqfjga7jgorjgYzlhajnhLbpgZXjgYTjgb7jgZnjgILkuIvlnLDjgarjgZfjgafjgoLogozjgYzntrrpupfjgavopovjgYjjgovjgIIsMzDku6MsMgo=" download="customer_reviews.csv" title="customer_reviews.csv をダウンロード" style="margin-left:8px;color:#2a6048;text-decoration:none;font-size:12px;border:1px solid #2a6048;border-radius:2px;padding:1px 6px;white-space:nowrap;">↓ DL</a></div>
+        </div>
+      </div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li>評価の分布・平均・リピート傾向を集計させる<span class="out">数値サマリー</span></li>
+          <li>ポジティブ／ネガティブな言及テーマをTOP3ずつ抽出させる<span class="out">テーマ分析</span></li>
+          <li>「価格・成分・テクスチャ・効果」ごとの言及傾向を整理させる<span class="out">属性別分析</span></li>
+          <li>商品開発チームへの提言3つ・マーケチームへの提言3つを出させる<span class="out">部門別提言</span></li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>「分析して」で終わらず「誰に向けた提言か」を分けて指定すること。受け取った側がそのままアクションできる形が正解。</div>
+    </div>
+    <button class="toggle-btn" onclick="tog(this)">解説・模範プロンプトを見る <span class="toggle-arrow">▼</span></button>
+    <div class="ans-panel">
+      <div class="ans-sec">
+        <div class="ans-lbl ag">模範指示文 ── CoworkとチャットAIの比較</div>
+        <div class="tool-compare">
+          <div class="tool-compare-head">
+            <div class="tc-tab cowork">▶ Cowork への指示</div>
+            <div class="tc-tab chat">▶ チャット（claude.ai）への指示</div>
+          </div>
+          <div class="tc-panels">
+            <div class="tc-panel cowork"><span class="hl">customer_reviews.csv</span>を読み込んで、
+来週の商品会議向けの
+<span class="kw">改善レポートを作成</span>してください。
+
+① 評価の平均・分布、リピート傾向
+② ポジ／ネガ言及テーマ TOP3ずつ
+  （根拠レビューID付き）
+③ 価格・成分・テクスチャ・効果の
+  属性別ポジ／ネガバランス
+④ 部門別提言
+  - 商品開発チーム：3つ（優先度付き）
+  - マーケチーム：3つ（訴求の示唆）
+
+読む人：両チームのマネージャー
+トーン：客観・簡潔・データドリブン
+
+<span class="cm"># review_report.docx で保存してください</span></div>
+            <div class="tc-panel chat">以下のレビューデータを分析し、
+来週の商品会議向けの
+<span class="kw">改善レポートを作成</span>してください。
+
+<span class="vl">--- レビューデータ ---
+（customer_reviews.csvの内容を貼り付け）
+---</span>
+
+① 評価の平均・分布、リピート傾向
+② ポジ／ネガ言及テーマ TOP3ずつ
+  （根拠レビューID付き）
+③ 価格・成分・テクスチャ・効果の
+  属性別ポジ／ネガバランス
+④ 部門別提言
+  - 商品開発チーム：3つ（優先度付き）
+  - マーケチーム：3つ（訴求の示唆）
+
+読む人：両チームのマネージャー
+トーン：客観・簡潔・データドリブン</div>
+          </div>
+          <div class="tc-diff-note">
+            <strong>何が違う？</strong>　Coworkはファイルを自動で読み込み、<code>review_report.docx</code>という実ファイルとして書き出す。チャットはCSVの中身を自分でコピペし、返ってきたテキストを自分でWordやメモにまとめ直す作業が残る。<strong>分析指示の内容・深さはどちらも変わらない</strong>。
+          </div>
+        </div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl aw">マネージャーの視点</div>
+        <div class="tip"><strong>「誰が読むか」を最初に伝えると使える資料になる。</strong>同じデータでも「商品開発向け」「マーケ向け」と分けて出力させることで、配った瞬間にそのまま使える。Claudeへの指示の精度＝会議の準備時間の削減量。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2-B -->
+  <div class="card card-g">
+    <div class="card-head">
+      <div>
+        <div class="card-id">Mission 2-B ／ Cowork</div>
+        <div class="card-title">売上CSVを渡して、経営陣向けの月次レポートを生成する</div>
+      </div>
+      <div class="card-htags">
+        <span class="tg tg-g">Cowork</span>
+        <span class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span><span class="dot"></span></span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        sales_monthly.csvに6ヶ月分のチャネル別・カテゴリ別売上データがある。毎月末に経営陣へ提出する月次レポートの草稿作成をCoworkに任せたい。読む相手は数字に強い経営陣（CEOとCFO）。
+      </div>
+      <div class="mats">
+        <div class="mats-lbl">使用素材</div>
+        <div class="mat-list">
+          <div class="mat-file"><span class="mat-icon">📊</span>sales_monthly.csv<a class="dl-inline" href="data:text/csv;charset=utf-8;base64,5pyILOODgeODo+ODjeODqyzllYblk4Hjgqvjg4bjgrTjg6os5aOy5LiK6YeR6aGNLOazqOaWh+S7tuaVsCzmlrDopo/poaflrqLmlbAs44Oq44OU44O844OI6aGn5a6i5pWwCjIwMjTlubQx5pyILFNOU+W6g+WRiiznvo7lrrnmtrIsMTg1MDAwMCwzMTIsMTk4LDExNAoyMDI05bm0MeaciCzmpJzntKLluoPlkYos576O5a655rayLDkyMDAwMCwxNTYsODksNjcKMjAyNOW5tDHmnIgs44Oh44Or44Oe44KsLOe+juWuuea2siw0MzAwMDAsNzQsMTIsNjIKMjAyNOW5tDHmnIgsU05T5bqD5ZGKLOa0l+mhlOaWmSw2NDAwMDAsMjEwLDE0NSw2NQoyMDI05bm0MeaciCzmpJzntKLluoPlkYos5rSX6aGU5paZLDM4MDAwMCwxMjUsNzEsNTQKMjAyNOW5tDLmnIgsU05T5bqD5ZGKLOe+juWuuea2siwyMTAwMDAwLDM1NSwyMjEsMTM0CjIwMjTlubQy5pyILOaknOe0ouW6g+WRiiznvo7lrrnmtrIsODcwMDAwLDE0Nyw4Miw2NQoyMDI05bm0MuaciCzjg6Hjg6vjg57jgqws576O5a655rayLDUxMDAwMCw4OCw4LDgwCjIwMjTlubQy5pyILFNOU+W6g+WRiizmtJfpoZTmlpksNTkwMDAwLDE5MywxMjAsNzMKMjAyNOW5tDLmnIgs5qSc57Si5bqD5ZGKLOa0l+mhlOaWmSw0MjAwMDAsMTM4LDc5LDU5CjIwMjTlubQz5pyILFNOU+W6g+WRiiznvo7lrrnmtrIsMjM1MDAwMCwzOTgsMjQ1LDE1MwoyMDI05bm0M+aciCzmpJzntKLluoPlkYos576O5a655rayLDEwNTAwMDAsMTc4LDEwMSw3NwoyMDI05bm0M+aciCzjg6Hjg6vjg57jgqws576O5a655rayLDY4MDAwMCwxMTcsMTQsMTAzCjIwMjTlubQz5pyILFNOU+W6g+WRiizmtJfpoZTmlpksNzIwMDAwLDIzNiwxNTgsNzgKMjAyNOW5tDPmnIgs5qSc57Si5bqD5ZGKLOa0l+mhlOaWmSw0NTAwMDAsMTQ4LDg1LDYzCjIwMjTlubQ05pyILFNOU+W6g+WRiiznvo7lrrnmtrIsMTk4MDAwMCwzMzUsMTk1LDE0MAoyMDI05bm0NOaciCzmpJzntKLluoPlkYos576O5a655rayLDk4MDAwMCwxNjYsOTQsNzIKMjAyNOW5tDTmnIgs44Oh44Or44Oe44KsLOe+juWuuea2siw1OTAwMDAsMTAyLDksOTMKMjAyNOW5tDTmnIgsU05T5bqD5ZGKLOa0l+mhlOaWmSw2ODAwMDAsMjIzLDE0MSw4MgoyMDI05bm0NOaciCzmpJzntKLluoPlkYos5rSX6aGU5paZLDM5MDAwMCwxMjgsNzMsNTUKMjAyNOW5tDXmnIgsU05T5bqD5ZGKLOe+juWuuea2siwyMjgwMDAwLDM4NiwyMzgsMTQ4CjIwMjTlubQ15pyILOaknOe0ouW6g+WRiiznvo7lrrnmtrIsMTEyMDAwMCwxOTAsMTA4LDgyCjIwMjTlubQ15pyILOODoeODq+ODnuOCrCznvo7lrrnmtrIsNzQwMDAwLDEyOCwxMSwxMTcKMjAyNOW5tDXmnIgsU05T5bqD5ZGKLOa0l+mhlOaWmSw4MTAwMDAsMjY2LDE3OCw4OAoyMDI05bm0NeaciCzmpJzntKLluoPlkYos5rSX6aGU5paZLDQ3MDAwMCwxNTQsODgsNjYKMjAyNOW5tDbmnIgsU05T5bqD5ZGKLOe+juWuuea2siwyNjUwMDAwLDQ0OSwyNzgsMTcxCjIwMjTlubQ25pyILOaknOe0ouW6g+WRiiznvo7lrrnmtrIsMTM4MDAwMCwyMzQsMTMzLDEwMQoyMDI05bm0NuaciCzjg6Hjg6vjg57jgqws576O5a655rayLDkyMDAwMCwxNTksMTYsMTQzCjIwMjTlubQ25pyILFNOU+W6g+WRiizmtJfpoZTmlpksOTUwMDAwLDMxMSwyMDksMTAyCjIwMjTlubQ25pyILOaknOe0ouW6g+WRiizmtJfpoZTmlpksNTQwMDAwLDE3NywxMDEsNzYK" download="sales_monthly.csv" title="sales_monthly.csv をダウンロード" style="margin-left:8px;color:#2a6048;text-decoration:none;font-size:12px;border:1px solid #2a6048;border-radius:2px;padding:1px 6px;white-space:nowrap;">↓ DL</a></div>
+        </div>
+      </div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li>エグゼクティブサマリーを3行以内で作らせる<span class="out">サマリー</span></li>
+          <li>チャネル別・カテゴリ別の前月比評価コメントを出させる<span class="out">指標コメント</span></li>
+          <li>トレンドから読み取れる「注目すべき点」を2つ特定させる<span class="out">インサイト</span></li>
+          <li>来月のアクション提案を優先度付きで3つ出させる<span class="out">アクションプラン</span></li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>「読む人（CEO・CFO）」と「使い道（月次報告）」を最初に伝えるだけで、アウトプットのトーンと密度が変わる。</div>
+    </div>
+    <button class="toggle-btn" onclick="tog(this)">解説・模範プロンプトを見る <span class="toggle-arrow">▼</span></button>
+    <div class="ans-panel">
+      <div class="ans-sec">
+        <div class="ans-lbl ag">模範指示文 ── CoworkとチャットAIの比較</div>
+        <div class="tool-compare">
+          <div class="tool-compare-head">
+            <div class="tc-tab cowork">▶ Cowork への指示</div>
+            <div class="tc-tab chat">▶ チャット（claude.ai）への指示</div>
+          </div>
+          <div class="tc-panels">
+            <div class="tc-panel cowork"><span class="hl">sales_monthly.csv</span>を読み込んで、
+<span class="kw">経営陣向けの月次レポート草稿</span>を
+作成してください。
+
+読む人：CEO・CFO
+用途：月次経営会議
+
+① エグゼクティブサマリー（3行以内）
+② チャネル別パフォーマンス評価
+  各チャネルの前月比と一言評価
+③ 注目すべきトレンド（2点）
+④ 来月のアクション提案（優先度順3つ）
+  理由も1行で
+
+トーン：簡潔・客観・提案型
+
+<span class="cm"># monthly_report.docx で保存してください</span></div>
+            <div class="tc-panel chat">以下の売上データをもとに、
+<span class="kw">経営陣向けの月次レポート草稿</span>を
+作成してください。
+
+<span class="vl">--- 売上データ ---
+（sales_monthly.csvの内容を貼り付け）
+---</span>
+
+読む人：CEO・CFO
+用途：月次経営会議
+
+① エグゼクティブサマリー（3行以内）
+② チャネル別パフォーマンス評価
+  各チャネルの前月比と一言評価
+③ 注目すべきトレンド（2点）
+④ 来月のアクション提案（優先度順3つ）
+  理由も1行で
+
+トーン：簡潔・客観・提案型</div>
+          </div>
+          <div class="tc-diff-note">
+            <strong>何が違う？</strong>　Coworkはファイルを直接読んで <code>monthly_report.docx</code> を生成。チャットはCSVをコピペし、返ってきたテキストを自分でWordに転記。<strong>指示の型・レポート構成はどちらも完全に同じ</strong>。毎月この型を使い回すならCoworkのほうが圧倒的に速い。
+          </div>
+        </div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl aw">マネージャーの視点</div>
+        <div class="tip"><strong>「役割→データ→読み手→出力形式」の4点セットが毎回使える型。</strong>この型を一度作ってしまえば、来月は数字を差し替えるだけで同品質のレポートが生成できる。「毎月の草稿作成はCoworkに任せて、自分は判断と修正に集中する」というワークフローを早く作ること。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ -->
+<!-- LEVEL 3: 競合調査 -->
+<!-- ══════════════════════════════ -->
+<section class="lv-section">
+  <div class="lv-head">
+    <span class="lv-label">Level 03</span>
+    <span class="lv-title">競合調査 ── CoworkとCodeで競合を分析・構造化する</span>
+  </div>
+  <p class="lv-desc">競合調査はCoworkとCodeの分業で効率が変わる。「分析・示唆はCowork」「データ構造化・変換はCode」の役割を理解し、両方を使い分けながら戦略判断の材料を作る。</p>
+
+  <!-- 3-A -->
+  <div class="card card-r">
+    <div class="card-head">
+      <div>
+        <div class="card-id">Mission 3-A ／ 競合調査 × Cowork</div>
+        <div class="card-title">競合4社の調査メモ＋自社仕様書をCoworkに渡して、ポジショニング戦略を立てる</div>
+      </div>
+      <div class="card-htags">
+        <span class="tg tg-r">競合×Cowork</span>
+        <span class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span></span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        競合4社（A〜D）の調査メモがある。来週の新商品ポジショニング会議に向けて「自社はどこに立つべきか」を整理した資料が必要。2つのファイルをCoworkに同時に渡して分析させる。
+      </div>
+      <div class="mats">
+        <div class="mats-lbl">使用素材 — 2ファイル同時に渡す</div>
+        <div class="mat-list">
+          <div class="mat-file"><span class="mat-icon">📄</span>competitor_info.txt<a class="dl-inline" href="data:text/plain;charset=utf-8;base64,44CQ56u25ZCI44OW44Op44Oz44OJ6Kq/5p+744Oh44Oi44CR5ouF5b2T77ya44Oe44O844Kx44OB44O844Og44CA5pu05paw77yaMjAyNOW5tDbmnIgKCuKWoCBB44OW44Op44Oz44OJ44CM44Or44Of44Ko44OpIOOCu+ODqeODoCBDK+OAjQotIOS+oeagvO+8mjYsNjAw5YaGIC8gMzBtTAotIOaIkOWIhu+8mlZDLUlQIDE1JeOAgeODiuOCpOOCouOCt+ODs+OCouODn+ODiTMlCi0g44Od44K444K344On44Oz77ya44Kz44K544OR6YeN6KaW44CB5YWl6ZaA5bGk5ZCR44GRCi0g6LKp5aOy44OB44Oj44ON44Or77yaQW1hem9u44O75qW95aSp44Oh44Kk44OzCi0gU05T5oim55Wl77ya44Oe44Kk44Kv44Ot44Kk44Oz44OV44Or44Ko44Oz44K144O85aSa55SoCi0g5by344G/77ya5L6h5qC844Gu5a6J44GV44CBQW1hem9u44Gn44Gu6auY6KmV5L6h5Lu25pWw77yIMiw0MDDku7botoXvvIkKLSDlvLHjgb/vvJrjg5bjg6njg7Pjg4njgrnjg4jjg7zjg6rjg7zjgYzlvLHjgYTjgIHjg6rjg5Tjg7zjg4jnjofjgYzkvY7jgYTvvIjmjqjlrpozMCXku6XkuIvvvIkKCuKWoCBC44OW44Op44Oz44OJ44CMU2tpbnRlbGwgVkMyMOOAjQotIOS+oeagvO+8mjEyLDAwMOWGhiAvIDI1bUwKLSDmiJDliIbvvJpWQy1JUCAyMCXjgIHjg6zjg4Hjg47jg7zjg6swLjMl44CB44Oa44OX44OB44OJ6KSH5ZCI5L2TCi0g44Od44K444K344On44Oz77ya44OX44Os44Of44Ki44Og44O75oiQ5YiG44Kq44K/44Kv5ZCR44GRCi0g6LKp5aOy44OB44Oj44ON44Or77ya6Ieq56S+RUPkuK3lv4PjgIHkuIDpg6jjgrvjg6zjgq/jg4jjgrfjg6fjg4Pjg5cKLSBTTlPmiKbnlaXvvJrmiJDliIbop6PoqqzjgrPjg7Pjg4bjg7Pjg4TvvIhZb3VUdWJl44O7SW5zdGFncmFt77yJCi0g5by344G/77ya5oiQ5YiG6YeP44O744OW44Op44Oz44OJ5Yqb44O744OV44Kh44Oz44Kz44Of44Ol44OL44OG44KjCi0g5byx44G/77ya6auY5L6h5qC844Gn5YWl6ZaA5bGk44GM5omL44KS5Ye644GX44Gr44GP44GE44CB5pyd5L2/44GE5LiN5Y+v77yI44Os44OB44OO44O844Or6YWN5ZCI77yJCgrilqAgQ+ODluODqeODs+ODieOAjOODm+ODr+OCpOODiOODqeODnCBFWOOAjQotIOS+oeagvO+8mjQsOTgw5YaGIC8gNTBtTAotIOaIkOWIhu+8mlZDLUlQIDEwJeOAgeOCouODq+ODluODgeODszMl44CB44Kz44Op44O844Ky44OzCi0g44Od44K444K344On44Oz77ya5aSn6KGG5ZCR44GR44O75bm06b2i5bGk5bqD44KB77yIMjDjgJw2MOS7o++8iQotIOiyqeWjsuODgeODo+ODjeODq++8muODieODqeODg+OCsOOCueODiOOCou+8i0VDCi0gU05T5oim55Wl77ya44OG44Os44OTQ03jg7voirjog73kurrotbfnlKgKLSDlvLfjgb/vvJroqo3nn6Xluqbjg7vosqnlo7LntrLjga7luoPjgZXjg7vlhaXmiYvjgZfjgoTjgZnjgZUKLSDlvLHjgb/vvJrmiJDliIbmv4PluqbjgYzkvY7jgYTjgIHjgIzmiJDliIbjgqrjgr/jgq/jgI3jgavjga/pn7/jgYvjgarjgYQKCuKWoCBE44OW44Op44Oz44OJ44CMQ2zDqSBCaW9tZSDjgrvjg6njg6DjgI0KLSDkvqHmoLzvvJoxNSw4MDDlhoYgLyAyMG1MCi0g5oiQ5YiG77yaVkMtSVAgMTgl44CB44OQ44Kk44Kq44O844Og5oiQ5YiG77yI54m56Kix5Y+W5b6X77yJ44CB44OV44Kn44Or44Op6YW4Ci0g44Od44K444K344On44Oz77ya6LaF44Op44Kw44K444Ol44Ki44Oq44O844CB5a+M6KOV5bGk5ZCR44GRCi0g6LKp5aOy44OB44Oj44ON44Or77ya55m+6LKo5bqX44O76Ieq56S+RUPvvIjmi5vlvoXliLbvvIkKLSBTTlPmiKbnlaXvvJrjg6rjg7zjg6vli5XnlLvjg7vjgrnjg4jjg7zjg6rjg7zjgrrpmZDlrprjgrPjg7Pjg4bjg7Pjg4QKLSDlvLfjgb/vvJrpq5jku5jliqDkvqHlgKTjg7vjg5fjg6zjg5/jgqLjg6Djg5bjg6njg7Pjg4fjgqPjg7PjgrDjg7vluIzlsJHmgKfmvJTlh7oKLSDlvLHjgb/vvJrkvqHmoLzluK/jgYzpq5jjgZnjgY7jgabluILloLTopo/mqKHjgYzlsI/jgZXjgYQKCuKWoCDluILloLTlhajkvZPjga7lgr7lkJHvvIgyMDI05bm05LiK5Y2K5pyf77yJCi0gVkMtSVDjgrvjg6njg6DluILloLTjga/liY3lubTmr5QrMjMl5oiQ6ZW377yIRDJD5Lit5b+D77yJCi0g44CM5oiQ5YiG44Kq44K/44Kv44CN5bGk77yIMzDjgJw0Neats+Wls+aAp++8ieOBruizvOiyt+WKm+OBjOmrmOOBvuOBo+OBpuOBhOOCiwotIFNOU+OBp+OBruaIkOWIhuino+iqrOOCs+ODs+ODhuODs+ODhOOBjOizvOiyt+aEj+assuOBq+ebtOe1kOOBmeOCi+WCvuWQkQotIOOAjOe2muOBkeOCieOCjOOCi+S+oeagvOOBi+OBqeOBhuOBi+OAjeOBjOODquODlOODvOODiOeOh+OCkuW3puWPs+OBmeOCi+S4u+imgeWboAo=" download="competitor_info.txt" title="competitor_info.txt をダウンロード" style="margin-left:8px;color:#2a6048;text-decoration:none;font-size:12px;border:1px solid #2a6048;border-radius:2px;padding:1px 6px;white-space:nowrap;">↓ DL</a></div>
+          <div class="mat-file"><span class="mat-icon">📄</span>product_spec.txt<a class="dl-inline" href="data:text/plain;charset=utf-8;base64,44CQ5ZWG5ZOB5LuV5qeY5pu444CR44OT44K/44Kw44Ot44KmIOOCu+ODqeODoCDjgqjjgq/jgrnjg4jjg6rjg7zjg6AKCuKWoCDllYblk4HlkI3vvJrjg5Pjgr/jgrDjg63jgqYg44K744Op44OgIOOCqOOCr+OCueODiOODquODvOODoArilqAg5L6h5qC877yaOCw4MDDlhobvvIjnqI7ovrzvvIkK4pagIOWuuemHj++8mjMwbUwK4pagIOeZuuWjsuaXpe+8mjIwMjTlubQ35pyIMeaXpQoK4pagIOS4u+imgeaIkOWIhgotIOODk+OCv+ODn+ODs0PoqpjlsI7kvZPvvIhWQy1JUO+8iTIwJemFjeWQiO+8mualreeVjOacgOmrmOawtOa6luOAguODoeODqeODi+ODs+eUn+aIkOaKkeWItuOBqOe+jueZveWKueaenAotIOODiuOCpOOCouOCt+ODs+OCouODn+ODiTUl77ya5q+b56m05byV44GN57eg44KB44O744OI44O844Oz44Ki44OD44OX44O76IKM44OQ44Oq44Ki5by35YyWCi0g44OS44Ki44Or44Ot44Oz6YW4M+eoru+8muihqOmdouOAnOa3seWxpOOBvuOBp+WkmuWxpOS/nea5vwotIOODrOODgeODjuODvOODqzAuMSXvvJrjgr/jg7zjg7Pjgqrjg7zjg5Djg7zkv4PpgLLjg7vjg4/jg6rmlLnlloQKLSDjg5Xjgqfjg6vjg6nphbjvvJrjg5Pjgr/jg5/jg7ND44Gu6YW45YyW44KS6Ziy44GQ5a6J5a6a5YyW5oiQ5YiGCgrilqAg44OG44Kv44K544OB44OjCuawtOOBruOCiOOBhuOBq+i7veOBhOOCuOOCp+ODq+eKtuOAguiCjOOBquOBmOOBv+OBjOiJr+OBj+OAgeODmeOCv+OBpOOBjeOCvOODreOAggoK4pagIOS9v+eUqOaWueazlQrmnJ3mmanjga7mtJfpoZTlvozjgIHljJbnsqfmsLTjga7lvozjgasy44CcM+ODl+ODg+OCt+ODpeOCkumhlOWFqOS9k+OBq+OBquOBmOOBvuOBm+OCi+OAguaXpeS4reS9v+eUqOaZguOBr1VW44Kx44Ki5b+F6aCI44CCCgrilqAg44K/44O844Ky44OD44OICi0g44Oh44Kk44Oz44K/44O844Ky44OD44OI77yaMzDjgJw0Neats+Wls+aApwotIOaCqeOBv++8muOBj+OBmeOBv+ODu+OCt+ODn+ODu+avm+eptOODu+ODj+ODquS4jei2swotIOizvOiyt+WLleapn++8muaIkOWIhuOBq+OBk+OBoOOCj+OCi+OAjOaIkOWIhuOCquOCv+OCr+OAjeWxpOOAgee+juWuueODnuODi+OCogoK4pagIOODluODqeODs+ODieODiOODvOODswrnp5HlrabnmoTmoLnmi6DjgpLph43oppbjgZfjgaTjgaTjgoLjgIHmirzjgZfjgaTjgZHjgYzjgb7jgZfjgY/jgarjgYTjgILnn6XnmoTjg7voqqDlrp/jg7vlsJHjgZfjg6njgrDjgrjjg6XjgqLjg6rjg7zmhJ/jgIIKCuKWoCDnq7blkIjlt67nlbDljJbjg53jgqTjg7Pjg4gKMS4gVkMtSVAgMjAl44Go44GE44GG5qWt55WM5pyA6auY5rC05rqW44Gu6YWN5ZCI6YePCjIuIOODleOCp+ODq+ODqemFuOOBq+OCiOOCi+WuieWumuWMluOBp+mFuOWMluOBl+OBq+OBj+OBhAozLiDmnJ3mmankvb/jgYjjgovjg47jg7Pjg6zjg4Hjg47jg7zjg6vku6Pmm7/jgoLjgafjgY3jgovoqK3oqIgK" download="product_spec.txt" title="product_spec.txt をダウンロード" style="margin-left:8px;color:#2a6048;text-decoration:none;font-size:12px;border:1px solid #2a6048;border-radius:2px;padding:1px 6px;white-space:nowrap;">↓ DL</a></div>
+        </div>
+      </div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li>「価格×成分専門性」2軸のポジショニングマップをテキスト表で作らせる<span class="out">ポジショニングマップ</span></li>
+          <li>競合4社の強み・弱み・ターゲット層を比較表でまとめさせる<span class="out">競合比較表</span></li>
+          <li>自社が取るべきポジションと訴求方向を提言させる<span class="out">戦略提言</span></li>
+          <li>競合が手薄な「空白地帯（機会領域）」を特定させる<span class="out">機会領域</span></li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>「2ファイルを同時に渡して統合分析させる」のが今回の核。外部環境（競合）と内部強み（自社仕様）を突き合わせることで、片方だけでは出ない戦略的示唆が生まれる。</div>
+    </div>
+    <button class="toggle-btn" onclick="tog(this)">解説・模範プロンプトを見る <span class="toggle-arrow">▼</span></button>
+    <div class="ans-panel">
+      <div class="ans-sec">
+        <div class="ans-lbl ar">模範指示文 ── CoworkとチャットAIの比較</div>
+        <div class="tool-compare">
+          <div class="tool-compare-head">
+            <div class="tc-tab cowork">▶ Cowork への指示</div>
+            <div class="tc-tab chat">▶ チャット（claude.ai）への指示</div>
+          </div>
+          <div class="tc-panels">
+            <div class="tc-panel cowork"><span class="hl">competitor_info.txt</span>と
+<span class="hl">product_spec.txt</span>を両方読み込んで、
+来週の会議向け
+<span class="kw">ポジショニング分析レポート</span>を作成してください。
+
+① ポジショニングマップ（テキスト表）
+  縦軸：価格帯、横軸：成分専門性
+  5社を配置、各社に一言コメント
+
+② 競合比較表
+  | ブランド | 価格 | VC-IP濃度 |
+  | 強みTOP2 | 弱みTOP2 | ターゲット |
+
+③ 自社が取るべきポジションの提言
+  推奨ポジション（理由2つ）＋訴求方向
+
+④ 空白地帯の特定（2〜3個）
+
+<span class="cm"># positioning_report.docx で保存してください</span></div>
+            <div class="tc-panel chat">以下の競合調査メモと自社商品仕様を
+両方読んで、来週の会議向け
+<span class="kw">ポジショニング分析レポート</span>を作成してください。
+
+<span class="vl">--- 競合調査メモ ---
+（competitor_info.txtの内容を貼り付け）
+--- 自社商品仕様 ---
+（product_spec.txtの内容を貼り付け）
+---</span>
+
+① ポジショニングマップ（テキスト表）
+  縦軸：価格帯、横軸：成分専門性
+  5社を配置、各社に一言コメント
+
+② 競合比較表
+  | ブランド | 価格 | VC-IP濃度 |
+  | 強みTOP2 | 弱みTOP2 | ターゲット |
+
+③ 自社が取るべきポジションの提言
+  推奨ポジション（理由2つ）＋訴求方向
+
+④ 空白地帯の特定（2〜3個）</div>
+          </div>
+          <div class="tc-diff-note">
+            <strong>何が違う？</strong>　Coworkは2ファイルをファイル名指定で同時に読み込む。チャットは2ファイルの中身をそれぞれコピペして貼る必要がある。<strong>分析の内容・指示の構造はまったく同じ</strong>。ファイルが増えるほどCoworkの手間削減効果が大きくなる。
+          </div>
+        </div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl aw">マネージャーの視点</div>
+        <div class="tip"><strong>競合調査でCoworkが得意なこと・注意点を把握する。</strong>✅ 得意：構造化・比較・フレームワーク適用・示唆の言語化。⚠️ 注意：リアルタイムのSNSフォロワー数・現在のEC価格はわからない。「手元にある調査メモ」をCoworkに渡して分析させ、リアルタイムデータは別途確認する分業が正解。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3-B -->
+  <div class="card card-r">
+    <div class="card-head">
+      <div>
+        <div class="card-id">Mission 3-B ／ 競合調査 × Claude Code</div>
+        <div class="card-title">競合情報のテキストファイルをCodeに読み込ませて、比較表CSVに自動変換する</div>
+      </div>
+      <div class="card-htags">
+        <span class="tg tg-r">競合×Code</span>
+        <span class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span></span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        competitor_info.txtには競合4社の情報がテキストで書かれている。毎月手動でExcelに転記して比較表を更新するのが手間。Claude Codeにテキストを読み込ませて、構造化されたCSVに自動変換したい。
+      </div>
+      <div class="mats">
+        <div class="mats-lbl">使用素材</div>
+        <div class="mat-list">
+          <div class="mat-file"><span class="mat-icon">📄</span>competitor_info.txt<a class="dl-inline" href="data:text/plain;charset=utf-8;base64,44CQ56u25ZCI44OW44Op44Oz44OJ6Kq/5p+744Oh44Oi44CR5ouF5b2T77ya44Oe44O844Kx44OB44O844Og44CA5pu05paw77yaMjAyNOW5tDbmnIgKCuKWoCBB44OW44Op44Oz44OJ44CM44Or44Of44Ko44OpIOOCu+ODqeODoCBDK+OAjQotIOS+oeagvO+8mjYsNjAw5YaGIC8gMzBtTAotIOaIkOWIhu+8mlZDLUlQIDE1JeOAgeODiuOCpOOCouOCt+ODs+OCouODn+ODiTMlCi0g44Od44K444K344On44Oz77ya44Kz44K544OR6YeN6KaW44CB5YWl6ZaA5bGk5ZCR44GRCi0g6LKp5aOy44OB44Oj44ON44Or77yaQW1hem9u44O75qW95aSp44Oh44Kk44OzCi0gU05T5oim55Wl77ya44Oe44Kk44Kv44Ot44Kk44Oz44OV44Or44Ko44Oz44K144O85aSa55SoCi0g5by344G/77ya5L6h5qC844Gu5a6J44GV44CBQW1hem9u44Gn44Gu6auY6KmV5L6h5Lu25pWw77yIMiw0MDDku7botoXvvIkKLSDlvLHjgb/vvJrjg5bjg6njg7Pjg4njgrnjg4jjg7zjg6rjg7zjgYzlvLHjgYTjgIHjg6rjg5Tjg7zjg4jnjofjgYzkvY7jgYTvvIjmjqjlrpozMCXku6XkuIvvvIkKCuKWoCBC44OW44Op44Oz44OJ44CMU2tpbnRlbGwgVkMyMOOAjQotIOS+oeagvO+8mjEyLDAwMOWGhiAvIDI1bUwKLSDmiJDliIbvvJpWQy1JUCAyMCXjgIHjg6zjg4Hjg47jg7zjg6swLjMl44CB44Oa44OX44OB44OJ6KSH5ZCI5L2TCi0g44Od44K444K344On44Oz77ya44OX44Os44Of44Ki44Og44O75oiQ5YiG44Kq44K/44Kv5ZCR44GRCi0g6LKp5aOy44OB44Oj44ON44Or77ya6Ieq56S+RUPkuK3lv4PjgIHkuIDpg6jjgrvjg6zjgq/jg4jjgrfjg6fjg4Pjg5cKLSBTTlPmiKbnlaXvvJrmiJDliIbop6PoqqzjgrPjg7Pjg4bjg7Pjg4TvvIhZb3VUdWJl44O7SW5zdGFncmFt77yJCi0g5by344G/77ya5oiQ5YiG6YeP44O744OW44Op44Oz44OJ5Yqb44O744OV44Kh44Oz44Kz44Of44Ol44OL44OG44KjCi0g5byx44G/77ya6auY5L6h5qC844Gn5YWl6ZaA5bGk44GM5omL44KS5Ye644GX44Gr44GP44GE44CB5pyd5L2/44GE5LiN5Y+v77yI44Os44OB44OO44O844Or6YWN5ZCI77yJCgrilqAgQ+ODluODqeODs+ODieOAjOODm+ODr+OCpOODiOODqeODnCBFWOOAjQotIOS+oeagvO+8mjQsOTgw5YaGIC8gNTBtTAotIOaIkOWIhu+8mlZDLUlQIDEwJeOAgeOCouODq+ODluODgeODszMl44CB44Kz44Op44O844Ky44OzCi0g44Od44K444K344On44Oz77ya5aSn6KGG5ZCR44GR44O75bm06b2i5bGk5bqD44KB77yIMjDjgJw2MOS7o++8iQotIOiyqeWjsuODgeODo+ODjeODq++8muODieODqeODg+OCsOOCueODiOOCou+8i0VDCi0gU05T5oim55Wl77ya44OG44Os44OTQ03jg7voirjog73kurrotbfnlKgKLSDlvLfjgb/vvJroqo3nn6Xluqbjg7vosqnlo7LntrLjga7luoPjgZXjg7vlhaXmiYvjgZfjgoTjgZnjgZUKLSDlvLHjgb/vvJrmiJDliIbmv4PluqbjgYzkvY7jgYTjgIHjgIzmiJDliIbjgqrjgr/jgq/jgI3jgavjga/pn7/jgYvjgarjgYQKCuKWoCBE44OW44Op44Oz44OJ44CMQ2zDqSBCaW9tZSDjgrvjg6njg6DjgI0KLSDkvqHmoLzvvJoxNSw4MDDlhoYgLyAyMG1MCi0g5oiQ5YiG77yaVkMtSVAgMTgl44CB44OQ44Kk44Kq44O844Og5oiQ5YiG77yI54m56Kix5Y+W5b6X77yJ44CB44OV44Kn44Or44Op6YW4Ci0g44Od44K444K344On44Oz77ya6LaF44Op44Kw44K444Ol44Ki44Oq44O844CB5a+M6KOV5bGk5ZCR44GRCi0g6LKp5aOy44OB44Oj44ON44Or77ya55m+6LKo5bqX44O76Ieq56S+RUPvvIjmi5vlvoXliLbvvIkKLSBTTlPmiKbnlaXvvJrjg6rjg7zjg6vli5XnlLvjg7vjgrnjg4jjg7zjg6rjg7zjgrrpmZDlrprjgrPjg7Pjg4bjg7Pjg4QKLSDlvLfjgb/vvJrpq5jku5jliqDkvqHlgKTjg7vjg5fjg6zjg5/jgqLjg6Djg5bjg6njg7Pjg4fjgqPjg7PjgrDjg7vluIzlsJHmgKfmvJTlh7oKLSDlvLHjgb/vvJrkvqHmoLzluK/jgYzpq5jjgZnjgY7jgabluILloLTopo/mqKHjgYzlsI/jgZXjgYQKCuKWoCDluILloLTlhajkvZPjga7lgr7lkJHvvIgyMDI05bm05LiK5Y2K5pyf77yJCi0gVkMtSVDjgrvjg6njg6DluILloLTjga/liY3lubTmr5QrMjMl5oiQ6ZW377yIRDJD5Lit5b+D77yJCi0g44CM5oiQ5YiG44Kq44K/44Kv44CN5bGk77yIMzDjgJw0Neats+Wls+aAp++8ieOBruizvOiyt+WKm+OBjOmrmOOBvuOBo+OBpuOBhOOCiwotIFNOU+OBp+OBruaIkOWIhuino+iqrOOCs+ODs+ODhuODs+ODhOOBjOizvOiyt+aEj+assuOBq+ebtOe1kOOBmeOCi+WCvuWQkQotIOOAjOe2muOBkeOCieOCjOOCi+S+oeagvOOBi+OBqeOBhuOBi+OAjeOBjOODquODlOODvOODiOeOh+OCkuW3puWPs+OBmeOCi+S4u+imgeWboAo=" download="competitor_info.txt" title="competitor_info.txt をダウンロード" style="margin-left:8px;color:#2a6048;text-decoration:none;font-size:12px;border:1px solid #2a6048;border-radius:2px;padding:1px 6px;white-space:nowrap;">↓ DL</a></div>
+        </div>
+      </div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li>competitor_info.txtを読み込み4社の情報をCSV化<span class="out">competitor_matrix.csv</span></li>
+          <li>列：ブランド名, 価格, 容量, VC-IP濃度, 主要チャネル, 強みTOP2, 弱みTOP2, ターゲット</li>
+          <li>自社（ビタグロウ）の行も追加して5社比較表にする</li>
+          <li>生成後にコンソールで5社を価格順に並べた一覧を表示する</li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>「非構造化テキスト → 構造化CSV」への変換はCodeの得意技。「手動でExcelに転記する作業」を完全にゼロにする。</div>
+    </div>
+    <button class="toggle-btn" onclick="tog(this)">解説・模範指示文を見る <span class="toggle-arrow">▼</span></button>
+    <div class="ans-panel">
+      <div class="ans-sec">
+        <div class="ans-lbl ab">Claude Code への模範指示文</div>
+        <div class="pblock">competitor_info.txtを読み込んで、
+競合4社の情報を構造化したCSVに変換してください。
+
+<span class="kw">出力ファイル名：competitor_matrix.csv</span>
+
+<span class="kw">CSVのヘッダー（列）：</span>
+ブランド名, 価格_円, 容量_mL, VCIP濃度_%, 主要チャネル,
+強みTOP2, 弱みTOP2, メインターゲット
+
+<span class="kw">自社データも最後の行に追加：</span>
+ブランド名：ビタグロウ セラム エクストリーム
+価格：8800
+容量：30
+VCIP濃度：20
+主要チャネル：自社EC
+強み：業界最高水準VC-IP量 / フェルラ酸で安定性高い
+弱み：認知度低い / EC限定で購入導線が少ない
+ターゲット：成分オタク30〜45歳女性
+
+<span class="cm"># 変換後にコンソール表示も追加</span>
+CSVを出力した後、5社を<span class="kw">価格の安い順</span>に並べた
+テキスト一覧をコンソールに表示してください。</div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl aw">マネージャーの視点</div>
+        <div class="tip"><strong>「テキストをCSVに変換する作業」は今後すべてCodeに任せる。</strong>調査担当者がメモ形式で集めてきた情報→Codeで構造化→Coworkで分析、というパイプラインを一度作ると、チームの情報処理速度が変わる。「誰かに整理してもらう」を「Codeで整理してCoworkで分析」に置き換えるのがLv.3の到達ゴール。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ -->
+<!-- LEVEL 4: Code入門 -->
+<!-- ══════════════════════════════ -->
+<section class="lv-section">
+  <div class="lv-head">
+    <span class="lv-label">Level 04</span>
+    <span class="lv-title">Claude Code入門 ── CSVを処理してデータを自動化する</span>
+  </div>
+  <p class="lv-desc">ターミナルでClaude Codeを起動し、CSVの処理・グラフ化・計算を自動化する。コードが書けなくても「何をしたいか」を日本語で指示するだけでOK。エラーが出ても怖がらず、そのまま渡せばCodeが自分で直す。</p>
+
+  <!-- 4-A -->
+  <div class="card card-b">
+    <div class="card-head">
+      <div>
+        <div class="card-id">Mission 4-A ／ Claude Code</div>
+        <div class="card-title">売上CSVを読み込み、チャネル別・カテゴリ別の月次推移グラフを出力する</div>
+      </div>
+      <div class="card-htags">
+        <span class="tg tg-b">Claude Code</span>
+        <span class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span></span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        sales_monthly.csvに6ヶ月分の売上データが入っている。毎月の定例会議で使うグラフを手動でExcelで作るのをやめて、Claude Codeに作らせたい。ターミナルでclaude codeを起動して指示する。
+      </div>
+      <div class="mats">
+        <div class="mats-lbl">使用素材</div>
+        <div class="mat-list">
+          <div class="mat-file"><span class="mat-icon">📊</span>sales_monthly.csv<a class="dl-inline" href="data:text/csv;charset=utf-8;base64,5pyILOODgeODo+ODjeODqyzllYblk4Hjgqvjg4bjgrTjg6os5aOy5LiK6YeR6aGNLOazqOaWh+S7tuaVsCzmlrDopo/poaflrqLmlbAs44Oq44OU44O844OI6aGn5a6i5pWwCjIwMjTlubQx5pyILFNOU+W6g+WRiiznvo7lrrnmtrIsMTg1MDAwMCwzMTIsMTk4LDExNAoyMDI05bm0MeaciCzmpJzntKLluoPlkYos576O5a655rayLDkyMDAwMCwxNTYsODksNjcKMjAyNOW5tDHmnIgs44Oh44Or44Oe44KsLOe+juWuuea2siw0MzAwMDAsNzQsMTIsNjIKMjAyNOW5tDHmnIgsU05T5bqD5ZGKLOa0l+mhlOaWmSw2NDAwMDAsMjEwLDE0NSw2NQoyMDI05bm0MeaciCzmpJzntKLluoPlkYos5rSX6aGU5paZLDM4MDAwMCwxMjUsNzEsNTQKMjAyNOW5tDLmnIgsU05T5bqD5ZGKLOe+juWuuea2siwyMTAwMDAwLDM1NSwyMjEsMTM0CjIwMjTlubQy5pyILOaknOe0ouW6g+WRiiznvo7lrrnmtrIsODcwMDAwLDE0Nyw4Miw2NQoyMDI05bm0MuaciCzjg6Hjg6vjg57jgqws576O5a655rayLDUxMDAwMCw4OCw4LDgwCjIwMjTlubQy5pyILFNOU+W6g+WRiizmtJfpoZTmlpksNTkwMDAwLDE5MywxMjAsNzMKMjAyNOW5tDLmnIgs5qSc57Si5bqD5ZGKLOa0l+mhlOaWmSw0MjAwMDAsMTM4LDc5LDU5CjIwMjTlubQz5pyILFNOU+W6g+WRiiznvo7lrrnmtrIsMjM1MDAwMCwzOTgsMjQ1LDE1MwoyMDI05bm0M+aciCzmpJzntKLluoPlkYos576O5a655rayLDEwNTAwMDAsMTc4LDEwMSw3NwoyMDI05bm0M+aciCzjg6Hjg6vjg57jgqws576O5a655rayLDY4MDAwMCwxMTcsMTQsMTAzCjIwMjTlubQz5pyILFNOU+W6g+WRiizmtJfpoZTmlpksNzIwMDAwLDIzNiwxNTgsNzgKMjAyNOW5tDPmnIgs5qSc57Si5bqD5ZGKLOa0l+mhlOaWmSw0NTAwMDAsMTQ4LDg1LDYzCjIwMjTlubQ05pyILFNOU+W6g+WRiiznvo7lrrnmtrIsMTk4MDAwMCwzMzUsMTk1LDE0MAoyMDI05bm0NOaciCzmpJzntKLluoPlkYos576O5a655rayLDk4MDAwMCwxNjYsOTQsNzIKMjAyNOW5tDTmnIgs44Oh44Or44Oe44KsLOe+juWuuea2siw1OTAwMDAsMTAyLDksOTMKMjAyNOW5tDTmnIgsU05T5bqD5ZGKLOa0l+mhlOaWmSw2ODAwMDAsMjIzLDE0MSw4MgoyMDI05bm0NOaciCzmpJzntKLluoPlkYos5rSX6aGU5paZLDM5MDAwMCwxMjgsNzMsNTUKMjAyNOW5tDXmnIgsU05T5bqD5ZGKLOe+juWuuea2siwyMjgwMDAwLDM4NiwyMzgsMTQ4CjIwMjTlubQ15pyILOaknOe0ouW6g+WRiiznvo7lrrnmtrIsMTEyMDAwMCwxOTAsMTA4LDgyCjIwMjTlubQ15pyILOODoeODq+ODnuOCrCznvo7lrrnmtrIsNzQwMDAwLDEyOCwxMSwxMTcKMjAyNOW5tDXmnIgsU05T5bqD5ZGKLOa0l+mhlOaWmSw4MTAwMDAsMjY2LDE3OCw4OAoyMDI05bm0NeaciCzmpJzntKLluoPlkYos5rSX6aGU5paZLDQ3MDAwMCwxNTQsODgsNjYKMjAyNOW5tDbmnIgsU05T5bqD5ZGKLOe+juWuuea2siwyNjUwMDAwLDQ0OSwyNzgsMTcxCjIwMjTlubQ25pyILOaknOe0ouW6g+WRiiznvo7lrrnmtrIsMTM4MDAwMCwyMzQsMTMzLDEwMQoyMDI05bm0NuaciCzjg6Hjg6vjg57jgqws576O5a655rayLDkyMDAwMCwxNTksMTYsMTQzCjIwMjTlubQ25pyILFNOU+W6g+WRiizmtJfpoZTmlpksOTUwMDAwLDMxMSwyMDksMTAyCjIwMjTlubQ25pyILOaknOe0ouW6g+WRiizmtJfpoZTmlpksNTQwMDAwLDE3NywxMDEsNzYK" download="sales_monthly.csv" title="sales_monthly.csv をダウンロード" style="margin-left:8px;color:#2a6048;text-decoration:none;font-size:12px;border:1px solid #2a6048;border-radius:2px;padding:1px 6px;white-space:nowrap;">↓ DL</a></div>
+        </div>
+      </div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li>チャネル別（SNS/検索/メルマガ）の月次売上折れ線グラフ<span class="out">sales_by_channel.png</span></li>
+          <li>商品カテゴリ別（美容液/洗顔料）の月次売上積み上げ棒グラフ<span class="out">sales_by_category.png</span></li>
+          <li>6ヶ月の総売上・最大チャネル・直近月の前月比をコンソール表示<span class="out">サマリー出力</span></li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>「何のグラフか」「軸の意味」「ファイル名」を明示する。エラーが出てもそのままCodeに渡せば自己修正してくれる。まず指示を出してみること。</div>
+    </div>
+    <button class="toggle-btn" onclick="tog(this)">解説・模範指示文を見る <span class="toggle-arrow">▼</span></button>
+    <div class="ans-panel">
+      <div class="ans-sec">
+        <div class="ans-lbl ab">Claude Code への模範指示文</div>
+        <div class="pblock">sales_monthly.csvを読み込んで、
+以下の2つのグラフとサマリーを出力してください。
+
+<span class="kw">【グラフ1】チャネル別の月次売上推移</span>
+種類：折れ線グラフ
+x軸：月　y軸：売上金額（万円単位に変換して表示）
+凡例：SNS広告 / 検索広告 / メルマガ の3色
+保存先：sales_by_channel.png
+
+<span class="kw">【グラフ2】商品カテゴリ別の月次売上</span>
+種類：積み上げ棒グラフ
+x軸：月　y軸：売上金額（万円）
+凡例：美容液 / 洗顔料
+保存先：sales_by_category.png
+
+<span class="kw">【コンソール出力】</span>
+- 6ヶ月の総売上（万円）
+- 最も売上の多いチャネルとその割合
+- 直近月（6月）の前月比
+
+使用：pandas、matplotlib
+ない場合はpipでインストールしてから実行
+<span class="hl">日本語フォント対応も必ずしてください（文字化け防止）</span></div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl abk">エラーが出たときの対処</div>
+        <div class="pblock"><span class="cm"># エラーメッセージをそのままCodeに渡すだけでOK</span>
+以下のエラーが出ました。修正して再実行してください。
+
+<span class="vl">（エラーメッセージをコピペ）</span>
+
+必要なライブラリがなければpip installしてから試してください。</div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl aw">マネージャーの視点</div>
+        <div class="tip"><strong>「万円単位に変換」「日本語フォント対応」など細かい指定が品質を決める。</strong>最初から完璧でなくていい。グラフが出てきたら「このグラフのタイトルを変えて」「色を会社のブランドカラーに」と追加指示で磨いていく。Claude Codeとの対話はチームへのフィードバックと同じ感覚。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4-B -->
+  <div class="card card-b">
+    <div class="card-head">
+      <div>
+        <div class="card-id">Mission 4-B ／ Claude Code</div>
+        <div class="card-title">チャネル別CPO・ROAS・新規獲得単価を自動計算してCSVに出力する</div>
+      </div>
+      <div class="card-htags">
+        <span class="tg tg-b">Claude Code</span>
+        <span class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot"></span></span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        sales_monthly.csvに売上・注文件数・新規顧客数が入っている。毎月Excelで手計算しているCPO・ROAS・新規獲得単価を、Claude Codeに計算させてCSV出力したい。広告費は仮置きで入力する。
+      </div>
+      <div class="mats">
+        <div class="mats-lbl">使用素材</div>
+        <div class="mat-list">
+          <div class="mat-file"><span class="mat-icon">📊</span>sales_monthly.csv<a class="dl-inline" href="data:text/csv;charset=utf-8;base64,5pyILOODgeODo+ODjeODqyzllYblk4Hjgqvjg4bjgrTjg6os5aOy5LiK6YeR6aGNLOazqOaWh+S7tuaVsCzmlrDopo/poaflrqLmlbAs44Oq44OU44O844OI6aGn5a6i5pWwCjIwMjTlubQx5pyILFNOU+W6g+WRiiznvo7lrrnmtrIsMTg1MDAwMCwzMTIsMTk4LDExNAoyMDI05bm0MeaciCzmpJzntKLluoPlkYos576O5a655rayLDkyMDAwMCwxNTYsODksNjcKMjAyNOW5tDHmnIgs44Oh44Or44Oe44KsLOe+juWuuea2siw0MzAwMDAsNzQsMTIsNjIKMjAyNOW5tDHmnIgsU05T5bqD5ZGKLOa0l+mhlOaWmSw2NDAwMDAsMjEwLDE0NSw2NQoyMDI05bm0MeaciCzmpJzntKLluoPlkYos5rSX6aGU5paZLDM4MDAwMCwxMjUsNzEsNTQKMjAyNOW5tDLmnIgsU05T5bqD5ZGKLOe+juWuuea2siwyMTAwMDAwLDM1NSwyMjEsMTM0CjIwMjTlubQy5pyILOaknOe0ouW6g+WRiiznvo7lrrnmtrIsODcwMDAwLDE0Nyw4Miw2NQoyMDI05bm0MuaciCzjg6Hjg6vjg57jgqws576O5a655rayLDUxMDAwMCw4OCw4LDgwCjIwMjTlubQy5pyILFNOU+W6g+WRiizmtJfpoZTmlpksNTkwMDAwLDE5MywxMjAsNzMKMjAyNOW5tDLmnIgs5qSc57Si5bqD5ZGKLOa0l+mhlOaWmSw0MjAwMDAsMTM4LDc5LDU5CjIwMjTlubQz5pyILFNOU+W6g+WRiiznvo7lrrnmtrIsMjM1MDAwMCwzOTgsMjQ1LDE1MwoyMDI05bm0M+aciCzmpJzntKLluoPlkYos576O5a655rayLDEwNTAwMDAsMTc4LDEwMSw3NwoyMDI05bm0M+aciCzjg6Hjg6vjg57jgqws576O5a655rayLDY4MDAwMCwxMTcsMTQsMTAzCjIwMjTlubQz5pyILFNOU+W6g+WRiizmtJfpoZTmlpksNzIwMDAwLDIzNiwxNTgsNzgKMjAyNOW5tDPmnIgs5qSc57Si5bqD5ZGKLOa0l+mhlOaWmSw0NTAwMDAsMTQ4LDg1LDYzCjIwMjTlubQ05pyILFNOU+W6g+WRiiznvo7lrrnmtrIsMTk4MDAwMCwzMzUsMTk1LDE0MAoyMDI05bm0NOaciCzmpJzntKLluoPlkYos576O5a655rayLDk4MDAwMCwxNjYsOTQsNzIKMjAyNOW5tDTmnIgs44Oh44Or44Oe44KsLOe+juWuuea2siw1OTAwMDAsMTAyLDksOTMKMjAyNOW5tDTmnIgsU05T5bqD5ZGKLOa0l+mhlOaWmSw2ODAwMDAsMjIzLDE0MSw4MgoyMDI05bm0NOaciCzmpJzntKLluoPlkYos5rSX6aGU5paZLDM5MDAwMCwxMjgsNzMsNTUKMjAyNOW5tDXmnIgsU05T5bqD5ZGKLOe+juWuuea2siwyMjgwMDAwLDM4NiwyMzgsMTQ4CjIwMjTlubQ15pyILOaknOe0ouW6g+WRiiznvo7lrrnmtrIsMTEyMDAwMCwxOTAsMTA4LDgyCjIwMjTlubQ15pyILOODoeODq+ODnuOCrCznvo7lrrnmtrIsNzQwMDAwLDEyOCwxMSwxMTcKMjAyNOW5tDXmnIgsU05T5bqD5ZGKLOa0l+mhlOaWmSw4MTAwMDAsMjY2LDE3OCw4OAoyMDI05bm0NeaciCzmpJzntKLluoPlkYos5rSX6aGU5paZLDQ3MDAwMCwxNTQsODgsNjYKMjAyNOW5tDbmnIgsU05T5bqD5ZGKLOe+juWuuea2siwyNjUwMDAwLDQ0OSwyNzgsMTcxCjIwMjTlubQ25pyILOaknOe0ouW6g+WRiiznvo7lrrnmtrIsMTM4MDAwMCwyMzQsMTMzLDEwMQoyMDI05bm0NuaciCzjg6Hjg6vjg57jgqws576O5a655rayLDkyMDAwMCwxNTksMTYsMTQzCjIwMjTlubQ25pyILFNOU+W6g+WRiizmtJfpoZTmlpksOTUwMDAwLDMxMSwyMDksMTAyCjIwMjTlubQ25pyILOaknOe0ouW6g+WRiizmtJfpoZTmlpksNTQwMDAwLDE3NywxMDEsNzYK" download="sales_monthly.csv" title="sales_monthly.csv をダウンロード" style="margin-left:8px;color:#2a6048;text-decoration:none;font-size:12px;border:1px solid #2a6048;border-radius:2px;padding:1px 6px;white-space:nowrap;">↓ DL</a></div>
+        </div>
+      </div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li>チャネル別・月別のCPO・ROAS・新規獲得単価を計算<span class="out">cpo_analysis.csv</span></li>
+          <li>6ヶ月平均CPOでチャネルをランキング表示（コンソール）<span class="out">効率ランキング</span></li>
+        </ul>
+      </div>
+      <div class="point">
+        <strong>広告費（仮置き・全月共通）：</strong>SNS広告 150万円/月、検索広告 80万円/月、メルマガ 5万円/月
+      </div>
+    </div>
+    <button class="toggle-btn" onclick="tog(this)">解説・模範指示文を見る <span class="toggle-arrow">▼</span></button>
+    <div class="ans-panel">
+      <div class="ans-sec">
+        <div class="ans-lbl ab">Claude Code への模範指示文</div>
+        <div class="pblock">sales_monthly.csvを読み込んで、
+チャネル別のCPO分析を行い、cpo_analysis.csvに書き出してください。
+
+<span class="kw">広告費（全月共通の仮置き）：</span>
+SNS広告：1,500,000円/月
+検索広告：800,000円/月
+メルマガ：50,000円/月
+
+<span class="kw">計算してほしい指標（列として追加）：</span>
+- CPO = 広告費 ÷ 注文件数
+- 新規獲得単価 = 広告費 ÷ 新規顧客数
+- ROAS = 売上金額 ÷ 広告費
+
+<span class="kw">出力：cpo_analysis.csv</span>
+列：月, チャネル, 売上, 注文件数, CPO, 新規顧客数, 新規獲得単価, ROAS
+数値は小数点以下1桁で丸める
+
+<span class="kw">コンソール出力：</span>
+6ヶ月平均CPOによるチャネルランキング（低い順＝効率よい）
+6ヶ月平均ROASによるチャネルランキング（高い順）</div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl aw">マネージャーの視点</div>
+        <div class="tip"><strong>「仮置きの数字でいい」という発想が大事。</strong>完璧なデータが揃うまで待つのではなく、仮の前提を明示してスクリプトを作り、数字が確定したら差し替えるだけにする。このスクリプトは来月も再来月も使い回せる「資産」になる。一度作れば毎月の計算工数はゼロ。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ -->
+<!-- LEVEL 5: Code×Cowork応用 -->
+<!-- ══════════════════════════════ -->
+<section class="lv-section">
+  <div class="lv-head">
+    <span class="lv-label">Level 05</span>
+    <span class="lv-title">Code応用 ── 複数ファイルを組み合わせ、業務を変える</span>
+  </div>
+  <p class="lv-desc">CoworkとCodeを組み合わせる。データ処理・変換はCode、分析・文章・戦略立案はCoworkという役割分担を作ることで、1人では難しかった質と量の成果物が生まれる。</p>
+
+  <!-- 5-A -->
+  <div class="card card-b">
+    <div class="card-head">
+      <div>
+        <div class="card-id">Mission 5-A ／ Claude Code</div>
+        <div class="card-title">競合CSVと売上CSVを読み込み、自社ポジション分析レポートHTMLを自動生成する</div>
+      </div>
+      <div class="card-htags">
+        <span class="tg tg-b">Claude Code</span>
+        <span class="tg tg-r">競合×Code</span>
+        <span class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span></span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        3-Bで作ったcompetitor_matrix.csvと4-Bで作ったcpo_analysis.csvがある。この2つのデータを組み合わせて「自社のコスト効率は競合と比べてどうか」が一目でわかるHTMLレポートをCodeに自動生成させたい。
+      </div>
+      <div class="mats">
+        <div class="mats-lbl">使用素材 — 前のミッションで作ったファイルを使用</div>
+        <div class="mat-list">
+          <div class="mat-file"><span class="mat-icon">📊</span>competitor_matrix.csv</div>
+          <div class="mat-file"><span class="mat-icon">📊</span>cpo_analysis.csv</div>
+        </div>
+      </div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li>2つのCSVを読み込み、自社の価格・成分・CPO効率を競合と並べた比較セクション付きのHTMLレポートを生成<span class="out">report.html</span></li>
+          <li>競合の価格帯と自社価格の位置を視覚的に示すセクションを含める</li>
+          <li>自社の6ヶ月平均CPOをコメント付きで表示する</li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>「前のミッションの成果物を次のインプットに使う」流れを体験する。これがパイプライン思考。</div>
+    </div>
+    <button class="toggle-btn" onclick="tog(this)">解説・模範指示文を見る <span class="toggle-arrow">▼</span></button>
+    <div class="ans-panel">
+      <div class="ans-sec">
+        <div class="ans-lbl ab">Claude Code への模範指示文</div>
+        <div class="pblock">competitor_matrix.csvとcpo_analysis.csvを読み込んで、
+<span class="kw">自社ポジション分析レポート（report.html）</span>を生成してください。
+
+【HTMLに含める内容】
+
+<span class="kw">① 競合価格比較セクション</span>
+5社の価格を横並びにした棒グラフ（またはテーブル）
+自社（ビタグロウ）の行は色を変えて強調
+
+<span class="kw">② VC-IP濃度 vs 価格の散布図</span>
+各社を点でプロット、自社を目立つ色にする
+（matplotlibでグラフ生成→HTMLに埋め込む）
+
+<span class="kw">③ 自社の6ヶ月平均CPO サマリー</span>
+チャネル別の平均CPOをテーブルで表示
+最も効率のよいチャネルを自動でハイライト
+
+<span class="kw">④ 総合コメント欄（自動生成）</span>
+データから読み取れる自社の強み・課題を
+3行の箇条書きで自動生成してHTMLに埋め込む
+
+スタイル：シンプルで見やすいビジネス向けHTML
+文字コード：UTF-8
+グラフ：インラインbase64で埋め込む（外部ファイル不要）</div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl aw">マネージャーの視点</div>
+        <div class="tip"><strong>「前の成果物を次のインプットに使う」のがLv.5の核心。</strong>Lv.3で作ったCSV → Lv.4のCPO計算 → Lv.5のHTMLレポート、というパイプラインが完成したとき、「毎月のレポート作成」はほぼ自動化される。最初の設計に時間をかけた分、毎月の工数が消える。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5-B -->
+  <div class="card card-g">
+    <div class="card-head">
+      <div>
+        <div class="card-id">Mission 5-B ／ Cowork × Code 総合</div>
+        <div class="card-title">全ファイルをインプットに、Coworkで次の四半期の施策ロードマップを設計する</div>
+      </div>
+      <div class="card-htags">
+        <span class="tg tg-g">Cowork</span>
+        <span class="tg tg-b">Code</span>
+        <span class="dots"><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span><span class="dot on"></span></span>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="scene">
+        <div class="scene-lbl">シナリオ</div>
+        Lv.1〜Lv.4までで作った成果物がすべて揃った。レビュー分析・競合分析・CPO分析の結果をCoworkに渡して、次の四半期（Q3）の施策ロードマップを設計させる。これがCowork×Codeを使いこなした最終成果物。
+      </div>
+      <div class="mats">
+        <div class="mats-lbl">使用素材 — これまでの全成果物</div>
+        <div class="mat-list">
+          <div class="mat-file"><span class="mat-icon">📄</span>product_spec.txt<a class="dl-inline" href="data:text/plain;charset=utf-8;base64,44CQ5ZWG5ZOB5LuV5qeY5pu444CR44OT44K/44Kw44Ot44KmIOOCu+ODqeODoCDjgqjjgq/jgrnjg4jjg6rjg7zjg6AKCuKWoCDllYblk4HlkI3vvJrjg5Pjgr/jgrDjg63jgqYg44K744Op44OgIOOCqOOCr+OCueODiOODquODvOODoArilqAg5L6h5qC877yaOCw4MDDlhobvvIjnqI7ovrzvvIkK4pagIOWuuemHj++8mjMwbUwK4pagIOeZuuWjsuaXpe+8mjIwMjTlubQ35pyIMeaXpQoK4pagIOS4u+imgeaIkOWIhgotIOODk+OCv+ODn+ODs0PoqpjlsI7kvZPvvIhWQy1JUO+8iTIwJemFjeWQiO+8mualreeVjOacgOmrmOawtOa6luOAguODoeODqeODi+ODs+eUn+aIkOaKkeWItuOBqOe+jueZveWKueaenAotIOODiuOCpOOCouOCt+ODs+OCouODn+ODiTUl77ya5q+b56m05byV44GN57eg44KB44O744OI44O844Oz44Ki44OD44OX44O76IKM44OQ44Oq44Ki5by35YyWCi0g44OS44Ki44Or44Ot44Oz6YW4M+eoru+8muihqOmdouOAnOa3seWxpOOBvuOBp+WkmuWxpOS/nea5vwotIOODrOODgeODjuODvOODqzAuMSXvvJrjgr/jg7zjg7Pjgqrjg7zjg5Djg7zkv4PpgLLjg7vjg4/jg6rmlLnlloQKLSDjg5Xjgqfjg6vjg6nphbjvvJrjg5Pjgr/jg5/jg7ND44Gu6YW45YyW44KS6Ziy44GQ5a6J5a6a5YyW5oiQ5YiGCgrilqAg44OG44Kv44K544OB44OjCuawtOOBruOCiOOBhuOBq+i7veOBhOOCuOOCp+ODq+eKtuOAguiCjOOBquOBmOOBv+OBjOiJr+OBj+OAgeODmeOCv+OBpOOBjeOCvOODreOAggoK4pagIOS9v+eUqOaWueazlQrmnJ3mmanjga7mtJfpoZTlvozjgIHljJbnsqfmsLTjga7lvozjgasy44CcM+ODl+ODg+OCt+ODpeOCkumhlOWFqOS9k+OBq+OBquOBmOOBvuOBm+OCi+OAguaXpeS4reS9v+eUqOaZguOBr1VW44Kx44Ki5b+F6aCI44CCCgrilqAg44K/44O844Ky44OD44OICi0g44Oh44Kk44Oz44K/44O844Ky44OD44OI77yaMzDjgJw0Neats+Wls+aApwotIOaCqeOBv++8muOBj+OBmeOBv+ODu+OCt+ODn+ODu+avm+eptOODu+ODj+ODquS4jei2swotIOizvOiyt+WLleapn++8muaIkOWIhuOBq+OBk+OBoOOCj+OCi+OAjOaIkOWIhuOCquOCv+OCr+OAjeWxpOOAgee+juWuueODnuODi+OCogoK4pagIOODluODqeODs+ODieODiOODvOODswrnp5HlrabnmoTmoLnmi6DjgpLph43oppbjgZfjgaTjgaTjgoLjgIHmirzjgZfjgaTjgZHjgYzjgb7jgZfjgY/jgarjgYTjgILnn6XnmoTjg7voqqDlrp/jg7vlsJHjgZfjg6njgrDjgrjjg6XjgqLjg6rjg7zmhJ/jgIIKCuKWoCDnq7blkIjlt67nlbDljJbjg53jgqTjg7Pjg4gKMS4gVkMtSVAgMjAl44Go44GE44GG5qWt55WM5pyA6auY5rC05rqW44Gu6YWN5ZCI6YePCjIuIOODleOCp+ODq+ODqemFuOOBq+OCiOOCi+WuieWumuWMluOBp+mFuOWMluOBl+OBq+OBj+OBhAozLiDmnJ3mmankvb/jgYjjgovjg47jg7Pjg6zjg4Hjg47jg7zjg6vku6Pmm7/jgoLjgafjgY3jgovoqK3oqIgK" download="product_spec.txt" title="product_spec.txt をダウンロード" style="margin-left:8px;color:#2a6048;text-decoration:none;font-size:12px;border:1px solid #2a6048;border-radius:2px;padding:1px 6px;white-space:nowrap;">↓ DL</a></div>
+          <div class="mat-file"><span class="mat-icon">📊</span>customer_reviews.csv<a class="dl-inline" href="data:text/csv;charset=utf-8;base64,44Os44OT44Ol44O8SUQs6LO85YWl5pelLOipleS+oSzjgr/jgqTjg4jjg6ss5pys5paHLOW5tOS7oyzjg6rjg5Tjg7zjg4jlm57mlbAKUjAwMSwyMDI0LTA0LTE1LDUs5q+O5pyd5L2/44Gj44Gm44G+44GZLOacneaZqeS9v+OBhOWni+OCgeOBpjLjg7bmnIjjgILjgY/jgZnjgb/jgYzlj5bjgozjgabjg4jjg7zjg7PjgqLjg4Pjg5fjgZfjgZ/msJfjgYzjgZfjgb7jgZnjgILou73jgYTjg4bjgq/jgrnjg4Hjg6Pjgafph43jga3kvb/jgYTjgZfjgoTjgZnjgYTjgafjgZnjgIIsMzDku6MsMwpSMDAyLDIwMjQtMDQtMTgsNCzmiJDliIbjgYzoia/jgYQsVkMtSVAyMCXjga/ku5bjgavjgarjgYTjgajmgJ3jgaPjgabos7zlhaXjgILkvb/nlKjmhJ/jga/oia/jgYTjgafjgZnjgILjgZ/jgaDlsJHjgZflgKTmrrXjgYzpq5jjgoHjgIIsNDDku6MsMQpSMDAzLDIwMjQtMDQtMjAsNSzmr5vnqbTjgYznm67nq4vjgZ/jgarjgY/jgarjgaPjgZ8sMuODtuaciOS9v+OBo+OBpuavm+eptOOBrumWi+OBjeOBjOawl+OBq+OBquOCieOBquOBj+OBquOCiuOBvuOBl+OBn+OAguWPi+S6uuOBq+OCguWLp+OCgeOBvuOBl+OBn+OAgiwzMOS7oywyClIwMDQsMjAyNC0wNC0yNSwzLOWKueaenOOCkuWun+aEn+S4rSzjgb7jgaAx5pys55uu44Gn5Yq55p6c44Gv5qeY5a2Q6KaL44CC5oiQ5YiG44Gv6Imv44GV44Gd44GG44Gq44Gu44Gn44GX44Gw44KJ44GP57aa44GR44Gm44G/44G+44GZ44CCLDQw5LujLDEKUjAwNSwyMDI0LTA1LTAyLDUs44Oq44OU44O844OI56K65a6aLDPmnKznm67jgafjgZnjgILjgrfjg5/jgYzoloTjgY/jgarjgaPjgabjgY3jgZ/msJfjgYzjgZfjgablrInjgZfjgYTjgafjgZnjgILmnJ3jga7jg6vjg7zjg4bjgqPjg7PjgavmrKDjgYvjgZvjgarjgYTjgIIsMzDku6MsMwpSMDA2LDIwMjQtMDUtMDgsMizlsJHjgZfliLrmv4DjgpLmhJ/jgZjjgZ8s5pWP5oSf6IKM44Gr44Gv5bCR44GX5Yi65r+A44GM44GC44KK44G+44GX44Gf44CC5oiQ5YiG44Gv6Imv44GE44Gu44Gn44GZ44GM44CB6IKM44GM5ZCI44KP44Gq44GE5Lq644KC44GE44KL44GL44KC44CCLDIw5LujLDEKUjAwNywyMDI0LTA1LTEyLDUs44GP44GZ44G/44GM5raI44GI44GfLOS9v+OBhOWni+OCgeOBpjHjg7bmnIjjgafpoZToibLjgYzmmI7jgovjgY/jgarjgaPjgZ/jgajoqIDjgo/jgozjgb7jgZfjgZ/jgILntprjgZHjgZ/jgYTjgafjgZnjgIIsNDDku6MsMgpSMDA4LDIwMjQtMDUtMTksNCzjg4bjgq/jgrnjg4Hjg6PjgYzlpb3jgY0s44K144Op44K144Op44GX44Gm44GE44Gm44K544Kt44Oz44Kx44Ki44Gu5pyA5Yid44Gr5L2/44GE44KE44GZ44GE44CC6YeN44Gt44Gm44KC6YeN44GP44Gq44KJ44Gq44GE44CCLDMw5LujLDEKUjAwOSwyMDI0LTA1LTI1LDMs5YCk5q6144GM44ON44OD44KvLOWKueaenOOBr+aEn+OBmOOBpuOBhOOCi+OBkeOCjOOBqeOAgTg4MDDlhobjga/lsJHjgZfpq5jjgYTjgILjgoLjgYblsJHjgZflronjgZHjgozjgbDov7fjgo/jgZrjg6rjg5Tjg7zjg4jjgIIsMzDku6MsMQpSMDEwLDIwMjQtMDUtMzAsNSzogozjgYzlpInjgo/jgaPjgZ8sM+ODtuaciOS9v+eUqOOAgumAj+aYjuaEn+OBjOautemBleOBhOOAguOBk+OCjOOBjOOBquOBhOOBqOS4jeWuieOBq+OBquOCi+OBj+OCieOBhOaJi+aUvuOBm+OBquOBhOOAgiw0MOS7oyw0ClIwMTEsMjAyNC0wNi0wNCw0LOaIkOWIhuOCquOCv+OCr+OBqOOBl+OBpua6gOi2syxWQy1JUCvjg5Xjgqfjg6vjg6nphbjjga7ntYTjgb/lkIjjgo/jgZvjgpLmjqLjgZfjgabjgYTjgb7jgZfjgZ/jgILlronlrprmgKfjgYzpq5jjgYTjga7jgaflronlv4PjgZfjgabkvb/jgYjjgb7jgZnjgIIsMzDku6MsMgpSMDEyLDIwMjQtMDYtMTAsMSzlkIjjgo/jgarjgYvjgaPjgZ8s56eB44Gu6IKM44Gr44Gv5ZCI44GE44G+44Gb44KT44Gn44GX44Gf44CC44OL44Kt44OT44GM5aKX44GI44Gm44GX44G+44GE6L+U5ZOB44GX44G+44GX44Gf44CCLDIw5LujLDEKUjAxMywyMDI0LTA2LTE0LDUsMuacrOebruizvOWFpSwx5pys55uu44Gn44OP44Oq44GM5Ye644GmMuacrOebruOCkuizvOWFpeOAgue2mee2muOBr+WKm+OBquOCiuOBqOWun+aEn+OBl+OBpuOBhOOBvuOBmeOAgiw1MOS7oywyClIwMTQsMjAyNC0wNi0xOCw0LOacneS9v+OBhOOChOOBmeOBhCzmnJ3kvb/jgaPjgabjgoLjg5njgr/jgaTjgYvjgarjgYTjga7jgYzoia/jgYTjgafjgZnjgILml6XnhLzjgZHmraLjgoHjgajjga7nm7jmgKfjgoLoia/jgYTjgIIsMzDku6MsMQpSMDE1LDIwMjQtMDYtMjIsMyzph4/jgYzlsJHjgarjgYQsMzBtbOOBpzg4MDDlhobjga/jgrPjgrnjg5HjgYzlvq7lppnjgILlirnmnpzjga/jgYLjgovjgajmgJ3jgYbjgZHjganlrrnph4/jgpLjgoLjgYblsJHjgZflopfjgoTjgZfjgabjgbvjgZfjgYTjgIIsNDDku6MsMQpSMDE2LDIwMjQtMDYtMjUsNSzjg5fjg6zjgrzjg7Pjg4jjgavjgoIs5Y+L5Lq644G444Gu6KqV55Sf5pel44OX44Os44K844Oz44OI44Gr6LO85YWl44CC44OR44OD44Kx44O844K444GM57a66bqX44Gn5Zac44Gw44KM44G+44GX44Gf44CCLDMw5LujLDEKUjAxNywyMDI0LTA2LTI4LDQs5YyC44GE44GM5aW944GNLOOBu+OCk+OBruOCiuS4iuWTgeOBqummmeOCiuOBjOOBl+OBvuOBmeOAguS9v+OBhuOBn+OBs+OBq+awl+WIhuOBjOS4iuOBjOOCiuOBvuOBmeOAgiwyMOS7oywxClIwMTgsMjAyNC0wNy0wMSw1LOe2muOBkeOBvuOBmSw244O25pyI44Oq44OU44O844OI5Lit44CC44K544Kt44Oz44Kx44Ki44Gu5qC444Gv44GT44KM44Gn44GZ44CC44Kz44K544OR44KI44KK5Yq55p6c44KS6YeN6KaW44GZ44KL5Lq644Gr44CCLDQw5LujLDYKUjAxOSwyMDI0LTA3LTA0LDIs5pyf5b6F44GX44GZ44GO44GfLOWPo+OCs+ODn+OCkuimi+OBpuacn+W+heOBl+OBmeOBjuOBpuOBl+OBvuOBhOOBvuOBl+OBn+OAguWKueaenOOBjOOCj+OBi+OCiuOBq+OBj+OBj+OAgeWApOauteOBjOmrmOOBhOOBruOBp+e2mee2muaCqeOCk+OBp+OBhOOBvuOBmeOAgiwzMOS7oywxClIwMjAsMjAyNC0wNy0wOCw1LOmAj+aYjuaEn+OBjOmBleOBhizkvb/jgYTlp4vjgoHjgabjgYvjgonljJbnsqfjga7jgorjgYzlhajnhLbpgZXjgYTjgb7jgZnjgILkuIvlnLDjgarjgZfjgafjgoLogozjgYzntrrpupfjgavopovjgYjjgovjgIIsMzDku6MsMgo=" download="customer_reviews.csv" title="customer_reviews.csv をダウンロード" style="margin-left:8px;color:#2a6048;text-decoration:none;font-size:12px;border:1px solid #2a6048;border-radius:2px;padding:1px 6px;white-space:nowrap;">↓ DL</a></div>
+          <div class="mat-file"><span class="mat-icon">📄</span>competitor_info.txt<a class="dl-inline" href="data:text/plain;charset=utf-8;base64,44CQ56u25ZCI44OW44Op44Oz44OJ6Kq/5p+744Oh44Oi44CR5ouF5b2T77ya44Oe44O844Kx44OB44O844Og44CA5pu05paw77yaMjAyNOW5tDbmnIgKCuKWoCBB44OW44Op44Oz44OJ44CM44Or44Of44Ko44OpIOOCu+ODqeODoCBDK+OAjQotIOS+oeagvO+8mjYsNjAw5YaGIC8gMzBtTAotIOaIkOWIhu+8mlZDLUlQIDE1JeOAgeODiuOCpOOCouOCt+ODs+OCouODn+ODiTMlCi0g44Od44K444K344On44Oz77ya44Kz44K544OR6YeN6KaW44CB5YWl6ZaA5bGk5ZCR44GRCi0g6LKp5aOy44OB44Oj44ON44Or77yaQW1hem9u44O75qW95aSp44Oh44Kk44OzCi0gU05T5oim55Wl77ya44Oe44Kk44Kv44Ot44Kk44Oz44OV44Or44Ko44Oz44K144O85aSa55SoCi0g5by344G/77ya5L6h5qC844Gu5a6J44GV44CBQW1hem9u44Gn44Gu6auY6KmV5L6h5Lu25pWw77yIMiw0MDDku7botoXvvIkKLSDlvLHjgb/vvJrjg5bjg6njg7Pjg4njgrnjg4jjg7zjg6rjg7zjgYzlvLHjgYTjgIHjg6rjg5Tjg7zjg4jnjofjgYzkvY7jgYTvvIjmjqjlrpozMCXku6XkuIvvvIkKCuKWoCBC44OW44Op44Oz44OJ44CMU2tpbnRlbGwgVkMyMOOAjQotIOS+oeagvO+8mjEyLDAwMOWGhiAvIDI1bUwKLSDmiJDliIbvvJpWQy1JUCAyMCXjgIHjg6zjg4Hjg47jg7zjg6swLjMl44CB44Oa44OX44OB44OJ6KSH5ZCI5L2TCi0g44Od44K444K344On44Oz77ya44OX44Os44Of44Ki44Og44O75oiQ5YiG44Kq44K/44Kv5ZCR44GRCi0g6LKp5aOy44OB44Oj44ON44Or77ya6Ieq56S+RUPkuK3lv4PjgIHkuIDpg6jjgrvjg6zjgq/jg4jjgrfjg6fjg4Pjg5cKLSBTTlPmiKbnlaXvvJrmiJDliIbop6PoqqzjgrPjg7Pjg4bjg7Pjg4TvvIhZb3VUdWJl44O7SW5zdGFncmFt77yJCi0g5by344G/77ya5oiQ5YiG6YeP44O744OW44Op44Oz44OJ5Yqb44O744OV44Kh44Oz44Kz44Of44Ol44OL44OG44KjCi0g5byx44G/77ya6auY5L6h5qC844Gn5YWl6ZaA5bGk44GM5omL44KS5Ye644GX44Gr44GP44GE44CB5pyd5L2/44GE5LiN5Y+v77yI44Os44OB44OO44O844Or6YWN5ZCI77yJCgrilqAgQ+ODluODqeODs+ODieOAjOODm+ODr+OCpOODiOODqeODnCBFWOOAjQotIOS+oeagvO+8mjQsOTgw5YaGIC8gNTBtTAotIOaIkOWIhu+8mlZDLUlQIDEwJeOAgeOCouODq+ODluODgeODszMl44CB44Kz44Op44O844Ky44OzCi0g44Od44K444K344On44Oz77ya5aSn6KGG5ZCR44GR44O75bm06b2i5bGk5bqD44KB77yIMjDjgJw2MOS7o++8iQotIOiyqeWjsuODgeODo+ODjeODq++8muODieODqeODg+OCsOOCueODiOOCou+8i0VDCi0gU05T5oim55Wl77ya44OG44Os44OTQ03jg7voirjog73kurrotbfnlKgKLSDlvLfjgb/vvJroqo3nn6Xluqbjg7vosqnlo7LntrLjga7luoPjgZXjg7vlhaXmiYvjgZfjgoTjgZnjgZUKLSDlvLHjgb/vvJrmiJDliIbmv4PluqbjgYzkvY7jgYTjgIHjgIzmiJDliIbjgqrjgr/jgq/jgI3jgavjga/pn7/jgYvjgarjgYQKCuKWoCBE44OW44Op44Oz44OJ44CMQ2zDqSBCaW9tZSDjgrvjg6njg6DjgI0KLSDkvqHmoLzvvJoxNSw4MDDlhoYgLyAyMG1MCi0g5oiQ5YiG77yaVkMtSVAgMTgl44CB44OQ44Kk44Kq44O844Og5oiQ5YiG77yI54m56Kix5Y+W5b6X77yJ44CB44OV44Kn44Or44Op6YW4Ci0g44Od44K444K344On44Oz77ya6LaF44Op44Kw44K444Ol44Ki44Oq44O844CB5a+M6KOV5bGk5ZCR44GRCi0g6LKp5aOy44OB44Oj44ON44Or77ya55m+6LKo5bqX44O76Ieq56S+RUPvvIjmi5vlvoXliLbvvIkKLSBTTlPmiKbnlaXvvJrjg6rjg7zjg6vli5XnlLvjg7vjgrnjg4jjg7zjg6rjg7zjgrrpmZDlrprjgrPjg7Pjg4bjg7Pjg4QKLSDlvLfjgb/vvJrpq5jku5jliqDkvqHlgKTjg7vjg5fjg6zjg5/jgqLjg6Djg5bjg6njg7Pjg4fjgqPjg7PjgrDjg7vluIzlsJHmgKfmvJTlh7oKLSDlvLHjgb/vvJrkvqHmoLzluK/jgYzpq5jjgZnjgY7jgabluILloLTopo/mqKHjgYzlsI/jgZXjgYQKCuKWoCDluILloLTlhajkvZPjga7lgr7lkJHvvIgyMDI05bm05LiK5Y2K5pyf77yJCi0gVkMtSVDjgrvjg6njg6DluILloLTjga/liY3lubTmr5QrMjMl5oiQ6ZW377yIRDJD5Lit5b+D77yJCi0g44CM5oiQ5YiG44Kq44K/44Kv44CN5bGk77yIMzDjgJw0Neats+Wls+aAp++8ieOBruizvOiyt+WKm+OBjOmrmOOBvuOBo+OBpuOBhOOCiwotIFNOU+OBp+OBruaIkOWIhuino+iqrOOCs+ODs+ODhuODs+ODhOOBjOizvOiyt+aEj+assuOBq+ebtOe1kOOBmeOCi+WCvuWQkQotIOOAjOe2muOBkeOCieOCjOOCi+S+oeagvOOBi+OBqeOBhuOBi+OAjeOBjOODquODlOODvOODiOeOh+OCkuW3puWPs+OBmeOCi+S4u+imgeWboAo=" download="competitor_info.txt" title="competitor_info.txt をダウンロード" style="margin-left:8px;color:#2a6048;text-decoration:none;font-size:12px;border:1px solid #2a6048;border-radius:2px;padding:1px 6px;white-space:nowrap;">↓ DL</a></div>
+          <div class="mat-file"><span class="mat-icon">📊</span>cpo_analysis.csv（4-Bで作成）</div>
+          <div class="mat-file"><span class="mat-icon">📊</span>competitor_matrix.csv（3-Bで作成）</div>
+        </div>
+      </div>
+      <div class="tasks">
+        <div class="tasks-lbl">タスク ／ 成果物</div>
+        <ul class="task-list">
+          <li>全データを渡してQ3（7〜9月）の施策ロードマップを作成させる<span class="out">施策ロードマップ</span></li>
+          <li>施策を「チャネル改善・商品改良・競合対策」の3軸で整理させる</li>
+          <li>各施策に優先度・担当チーム・KPIを付けさせる</li>
+          <li>月別のアクションスケジュールにまとめさせる<span class="out">月別スケジュール表</span></li>
+        </ul>
+      </div>
+      <div class="point"><strong>着目ポイント：</strong>「分析した結果をCoworkに渡して次のアクションを出させる」が最終形。データを集めて分析するまではCodeが得意、そこから戦略・施策に変換するのはCoworkが得意という分業が完成する。</div>
+    </div>
+    <button class="toggle-btn" onclick="tog(this)">解説・模範プロンプトを見る <span class="toggle-arrow">▼</span></button>
+    <div class="ans-panel">
+      <div class="ans-sec">
+        <div class="ans-lbl ag">模範指示文 ── CoworkとチャットAIの比較</div>
+        <div class="tool-compare">
+          <div class="tool-compare-head">
+            <div class="tc-tab cowork">▶ Cowork への指示</div>
+            <div class="tc-tab chat">▶ チャット（claude.ai）への指示</div>
+          </div>
+          <div class="tc-panels">
+            <div class="tc-panel cowork"><span class="hl">customer_reviews.csv</span>、
+<span class="hl">competitor_info.txt</span>、
+<span class="hl">cpo_analysis.csv</span>、
+<span class="hl">product_spec.txt</span>をすべて読み込んで、
+<span class="kw">Q3（7〜9月）施策ロードマップ</span>を作成してください。
+
+施策を3軸で整理：
+- チャネル改善（CPO・ROAS改善）
+- 商品・顧客対応改善（レビュー起点）
+- 競合対策（ポジション強化）
+
+各施策に付ける情報：
+- 優先度（高／中／低）
+- 担当チーム（マーケ／商品／CS）
+- 期待KPI
+- 実施月（7〜9月）
+
+出力：施策一覧表＋月別スケジュール＋Q3目標KPI
+
+<span class="cm"># q3_roadmap.xlsx で保存してください</span></div>
+            <div class="tc-panel chat">以下の4つのデータをもとに、
+<span class="kw">Q3（7〜9月）施策ロードマップ</span>を作成してください。
+
+<span class="vl">--- レビュー分析サマリー ---
+（2-Aの成果物の要点を貼り付け）
+--- CPO分析サマリー ---
+（cpo_analysis.csvのサマリーを貼り付け）
+--- 競合分析サマリー ---
+（3-Aの成果物の要点を貼り付け）
+--- 商品仕様 ---
+（product_spec.txtの内容を貼り付け）
+---</span>
+
+施策を3軸で整理：
+- チャネル改善（CPO・ROAS改善）
+- 商品・顧客対応改善（レビュー起点）
+- 競合対策（ポジション強化）
+
+各施策に：優先度、担当チーム、
+期待KPI、実施月（7〜9月）を付ける
+
+出力：施策一覧表＋月別スケジュール＋Q3目標KPI</div>
+          </div>
+          <div class="tc-diff-note">
+            <strong>何が違う？</strong>　Coworkは4ファイルをすべてファイル名で読み込んで <code>q3_roadmap.xlsx</code> を生成。チャットは4ファイル分の内容を自分でコピペして貼り合わせる必要があり、Lv.5レベルになると手間が大きい。<strong>施策を考えさせる指示の中身はどちらも同じ</strong>。ファイルが多いほどCoworkが圧倒的に速い。
+          </div>
+        </div>
+      </div>
+      <div class="ans-sec">
+        <div class="ans-lbl aw">マネージャーの視点 ── Lv.5到達のまとめ</div>
+        <div class="tip"><strong>Cowork×Codeの役割分担が完成した状態。</strong><br><br>
+        <strong>Codeが担う仕事：</strong>データの集計・変換・グラフ化・ファイル生成（Lv.4〜5）<br>
+        <strong>Coworkが担う仕事：</strong>分析・言語化・戦略立案・コンテンツ生成（Lv.1〜2・5）<br>
+        <strong>マネージャーが担う仕事：</strong>目的の設定・成果物の判断・チームへの展開<br><br>
+        「Claude任せ」ではなく「Claude＋自分の判断」で動かす。この分業が定着したとき、初心者を脱却したと言える。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /wrap -->
+
+<script>
+function tog(btn) {
+  const panel = btn.nextElementSibling;
+  const isOpen = panel.classList.contains('show');
+  panel.classList.toggle('show', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+}
+</script>
+</body>
+</html>
