@@ -574,8 +574,8 @@ body{
   <div class="idx-row"><div class="idx-id">1-A</div><div>プロジェクト用 CLAUDE.md を設計・作成する</div><div><span class="idx-topic c1 b1" style="background:var(--green-bg)">CLAUDE.md</span></div><div><span style="color:var(--t1)">●●○○○</span></div></div>
   <div class="idx-row"><div class="idx-id">2-A</div><div>月次レポート生成ワークフローをテキストで定義する</div><div><span class="idx-topic c2 b2" style="background:var(--blue-bg)">Workflow</span></div><div><span style="color:var(--t2)">●●○○○</span></div></div>
   <div class="idx-row"><div class="idx-id">2-B</div><div>ワークフロー定義ファイルから Claude Code に実行させる</div><div><span class="idx-topic c2 b2" style="background:var(--blue-bg)">Workflow</span></div><div><span style="color:var(--t2)">●●●○○</span></div></div>
-  <div class="idx-row"><div class="idx-id">3-A</div><div>レビュー分析 Skill を作成して呼び出す</div><div><span class="idx-topic c3 b3" style="background:var(--purple-bg)">Skills</span></div><div><span style="color:var(--t3)">●●●○○</span></div></div>
-  <div class="idx-row"><div class="idx-id">3-B</div><div>競合スクレイピング用 Skill を作り、ワークフローから呼び出す</div><div><span class="idx-topic c3 b3" style="background:var(--purple-bg)">Skills</span></div><div><span style="color:var(--t3)">●●●●○</span></div></div>
+  <div class="idx-row"><div class="idx-id">3-A</div><div>YAML フロントマター付き SKILL.md を作成して呼び出す</div><div><span class="idx-topic c3 b3" style="background:var(--purple-bg)">Skills</span></div><div><span style="color:var(--t3)">●●●○○</span></div></div>
+  <div class="idx-row"><div class="idx-id">3-B</div><div>パラメータ付き Skill を作り、自動トリガーで呼び出す</div><div><span class="idx-topic c3 b3" style="background:var(--purple-bg)">Skills</span></div><div><span style="color:var(--t3)">●●●●○</span></div></div>
   <div class="idx-row"><div class="idx-id">4-A</div><div>/report スラッシュコマンドを定義して毎月呼び出す</div><div><span class="idx-topic c4 b4" style="background:var(--amber-bg)">Slash Cmds</span></div><div><span style="color:var(--t4)">●●●○○</span></div></div>
   <div class="idx-row"><div class="idx-id">5-A</div><div>ファイル保存時に自動バリデーションする Hook を設定する</div><div><span class="idx-topic c5 b5" style="background:var(--cyan-bg)">Hooks</span></div><div><span style="color:var(--t5)">●●●●○</span></div></div>
   <div class="idx-row"><div class="idx-id">6-A</div><div>Subagent を使って競合×売上の並列分析パイプラインを作る</div><div><span class="idx-topic c6 b6" style="background:var(--red-bg)">Subagents</span></div><div><span style="color:var(--t6)">●●●●●</span></div></div>
@@ -875,8 +875,9 @@ Claude: 「グラフのサイズが指定されていません。
     <span class="topic-title" style="color:var(--t3)">Skills（スキル定義）</span>
   </div>
   <div class="topic-concept">
-    <strong>Skill とは：</strong>特定の処理を「再利用可能な部品」として定義したファイル。ワークフローから呼び出したり、単独で使ったりできる。CLAUDE.md がプロジェクト全体の設定なら、Skill は「特定タスクの専門家」。<br>
-    <strong>典型的な使い方：</strong><code>skills/review_analysis.md</code> に「レビュー分析の手順と出力フォーマット」を書いておき、ワークフローの中から <code>review_analysis スキルを使ってください</code> と呼び出す。
+    <strong>Skill とは：</strong>Claudeに特定のタスクやワークフローの処理方法を教える「命令セット」。フォルダとしてパッケージ化され、中に <code>SKILL.md</code>（YAMLフロントマター付きMarkdown）を必ず含む。CLAUDE.md がプロジェクト全体の設定なら、Skill は「特定タスクの専門家」。<br>
+    <strong>構造：</strong>スキルは <code>スキル名/SKILL.md</code> というフォルダ構成をとる。フォルダ名は<strong>ケバブケース</strong>（例：<code>review-analysis</code>）。SKILL.md の先頭に <code>name</code> と <code>description</code> を書いた <strong>YAMLフロントマター</strong>（<code>---</code> で囲む）を置くと、Claudeが「このスキルをいつ使うべきか」を自動判断できるようになる（＝段階的開示）。<br>
+    <strong>典型的な使い方：</strong><code>skills/review-analysis/SKILL.md</code> にフロントマター＋レビュー分析の手順を書いておくと、「レビューを分析して」と言うだけで Claude が自動的にこのスキルを読み込んで実行する。
   </div>
 
   <!-- 3-A -->
@@ -891,7 +892,8 @@ Claude: 「グラフのサイズが指定されていません。
     <div class="card-body">
       <div class="scene">
         <div class="scene-lbl">シナリオ</div>
-        レビュー分析は月次レポートにも競合分析にも使う汎用処理。毎回同じ分析手順を書くのをやめて、<strong>skills/review_analysis.md</strong> に一度定義しておき、どのワークフローからも呼び出せるようにする。
+        レビュー分析は月次レポートにも競合分析にも使う汎用処理。毎回同じ分析手順を書くのをやめて、<strong>skills/review-analysis/SKILL.md</strong> に一度定義しておき、どのワークフローからも呼び出せるようにする。<br>
+        <strong>ポイント：</strong>Skill は「フォルダ＋SKILL.md」という構成をとる。SKILL.md の先頭に <strong>YAMLフロントマター</strong>（<code>name</code> と <code>description</code>）を書くと、Claudeが自動的にスキルの用途を判断できるようになる。フォルダ名は<strong>ケバブケース</strong>（ハイフン区切り）で統一する。
       </div>
       <div class="ftree">
         <div class="ftree-lbl">作成するファイル</div><pre><span class="dir">d2c-analytics/</span>
@@ -899,26 +901,32 @@ Claude: 「グラフのサイズが指定されていません。
 ├── workflows/
 │   └── monthly_report.md
 ├── <span class="new">skills/</span>
-│   └── <span class="new">review_analysis.md</span>    ← 今回作る
+│   └── <span class="new">review-analysis/</span>        ← ケバブケース
+│       └── <span class="new">SKILL.md</span>            ← 今回作る
 └── ...</pre></div>
       <div class="tasks">
         <div class="tasks-lbl">タスク ／ 成果物</div>
         <ul class="task-list">
-          <li>レビュー分析の手順・入出力・フォーマットを定義した <code>skills/review_analysis.md</code> を作成する<span class="out">review_analysis.md</span></li>
-          <li>Skill には「呼び出しトリガーとなるキーワード」と「出力フォーマットのテンプレート」を含める</li>
-          <li>Claude Code に単独で Skill を呼び出させて動作確認する<span class="out">レビュー分析結果</span></li>
+          <li>レビュー分析スキルのフォルダ <code>skills/review-analysis/</code> を作り、中に <code>SKILL.md</code> を作成する<span class="out">SKILL.md</span></li>
+          <li>SKILL.md の先頭に <strong>YAMLフロントマター</strong>（<code>name: review-analysis</code>、<code>description: ...</code>）を書く</li>
+          <li>フロントマターの後に、処理手順・入出力・出力フォーマットを Markdown で記述する</li>
+          <li>Claude Code に「レビューを分析して」と指示して、スキルが自動で読み込まれることを確認する<span class="out">レビュー分析結果</span></li>
         </ul>
       </div>
-      <div class="point"><strong>着目ポイント：</strong>Skill の品質は「出力フォーマットの明確さ」で決まる。「箇条書きで3つ」「表形式で」など出力の型を決めておくと、どのワークフローに組み込んでも一貫した品質になる。</div>
+      <div class="point"><strong>着目ポイント：</strong>YAMLフロントマターの <code>description</code> が「いつこのスキルを使うか」の判断基準になる。「レビュー分析」「顧客フィードバック」などユーザーが言いそうなフレーズを含めておくと、明示的に呼び出さなくてもClaudeが自動判断で読み込んでくれる。</div>
     </div>
     <button class="tog-btn" onclick="tog(this)">解説・模範 Skill ファイルを見る <span class="tog-arr">▼</span></button>
     <div class="ans">
       <div class="ans-sec">
-        <div class="ans-lbl c3">模範 skills/review_analysis.md</div>
-        <div class="cb"><span class="cb-label">review_analysis.md</span><span class="hd"># Skill: レビュー分析</span>
+        <div class="ans-lbl c3">模範 skills/review-analysis/SKILL.md</div>
+        <div class="cb"><span class="cb-label">SKILL.md</span><span class="cmt">---
+name: review-analysis
+description: 顧客レビューデータを分析し、評価分布・ポジティブ/ネガティブ言及・
+  属性別傾向をサマリーにまとめます。ユーザーが「レビューを分析して」
+  「顧客フィードバックをまとめて」「レビュー傾向を教えて」と言うときに使用します。
+---</span>
 
-<span class="hd">## 呼び出しトリガー</span>
-「レビュー分析スキルを使って」または「review_analysis を実行して」
+<span class="hd"># レビュー分析</span>
 
 <span class="hd">## 入力</span>
 <span class="kw">- customer_reviews.csv</span>（必須）
@@ -965,13 +973,13 @@ Claude: 「グラフのサイズが指定されていません。
       <div class="ans-sec">
         <div class="ans-lbl c3">ワークフローからの呼び出し方</div>
         <div class="cb"><span class="cb-label">monthly_report.md に追記する例</span><span class="fn">### Step 2.5: レビュー分析の挿入</span>
-<span class="kw">skills/review_analysis.md</span> の Skill を使って
-customer_reviews.csv を分析し、
+<span class="kw">review-analysis</span> スキルを使って
+顧客レビューデータを分析し、
 結果を月次レポートの「顧客フィードバック」セクションに挿入する。</div>
       </div>
       <div class="ans-sec">
         <div class="ans-lbl" style="color:var(--amber)">ポイント</div>
-        <div class="tip"><strong>Skill は「部品」、Workflow は「設計図」、CLAUDE.md は「プロジェクト仕様書」。</strong>この3層構造が揃うと、Claude Code は設計図を読んで部品を組み合わせながら自律的に仕事を進められる。1つのSkillを複数のWorkflowから再利用することで、定義の重複がなくなり保守が楽になる。</div>
+        <div class="tip"><strong>Skill は「部品」、Workflow は「設計図」、CLAUDE.md は「プロジェクト仕様書」。</strong>この3層構造が揃うと、Claude Code は設計図を読んで部品を組み合わせながら自律的に仕事を進められる。1つのSkillを複数のWorkflowから再利用することで、定義の重複がなくなり保守が楽になる。<br><br><strong>YAMLフロントマターの段階的開示：</strong>フロントマター（name + description）は常にClaudeのシステムプロンプトに読み込まれるが、SKILL.md本文は「関連する」と判断されたときだけ読み込まれる。これにより、多数のスキルを登録してもトークン消費を最小限に抑えられる。</div>
       </div>
     </div>
   </div>
@@ -988,42 +996,53 @@ customer_reviews.csv を分析し、
     <div class="card-body">
       <div class="scene">
         <div class="scene-lbl">シナリオ</div>
-        competitor_info.txt を使った競合分析を Skill 化する。今回は「分析する競合ブランド数」や「比較軸」をパラメータとして渡せる設計にして、柔軟に呼び出せる Skill を作る。
+        競合データの分析を Skill 化する。今回は Mission 3-A で学んだ SKILL.md の構造に加え、「分析する競合ブランド」や「比較軸」をパラメータとして渡せる設計にする。<br>
+        <strong>ポイント：</strong>YAMLフロントマターの <code>description</code> にパラメータの説明も含めると、Claude が「このスキルにはどんな引数を渡せるか」を自動で理解する。
       </div>
+      <div class="ftree">
+        <div class="ftree-lbl">作成するファイル</div><pre><span class="dir">d2c-analytics/</span>
+├── skills/
+│   ├── review-analysis/
+│   │   └── SKILL.md
+│   └── <span class="new">competitor-analysis/</span>    ← ケバブケース
+│       └── <span class="new">SKILL.md</span>            ← 今回作る
+└── ...</pre></div>
       <div class="tasks">
         <div class="tasks-lbl">タスク ／ 成果物</div>
         <ul class="task-list">
-          <li>パラメータ付き Skill <code>skills/competitor_analysis.md</code> を作成する<span class="out">competitor_analysis.md</span></li>
-          <li>パラメータ：<code>brands</code>（分析対象ブランド）、<code>axes</code>（比較軸：価格/成分/チャネルなど）</li>
+          <li><code>skills/competitor-analysis/SKILL.md</code> を作成し、YAMLフロントマター（<code>name: competitor-analysis</code>）を書く<span class="out">SKILL.md</span></li>
+          <li><code>description</code> に「競合分析」「ブランド比較」などのトリガーフレーズと、受け取れるパラメータ（brands, axes）を記述する</li>
+          <li>SKILL.md 本文にパラメータの受け取り方・処理手順・出力フォーマットを記述する</li>
           <li>「Aブランドと Bブランドだけ価格と成分で比較して」という呼び出しで動作確認する<span class="out">競合比較レポート</span></li>
         </ul>
       </div>
-      <div class="point"><strong>着目ポイント：</strong>パラメータを受け取る Skill を作ると「汎用ツール」になる。パラメータなしの Skill は「決まった処理をするマクロ」。どちらが向いているかはユースケースによって変わる。</div>
+      <div class="point"><strong>着目ポイント：</strong>パラメータを受け取る Skill を作ると「汎用ツール」になる。パラメータなしの Skill は「決まった処理をするマクロ」。どちらが向いているかはユースケースによって変わる。<code>description</code> にパラメータの存在を書いておくと、Claudeがユーザーの指示から自動的に引数を抽出して渡してくれる。</div>
     </div>
     <button class="tog-btn" onclick="tog(this)">解説・模範 Skill を見る <span class="tog-arr">▼</span></button>
     <div class="ans">
       <div class="ans-sec">
-        <div class="ans-lbl c3">模範 skills/competitor_analysis.md</div>
-        <div class="cb"><span class="cb-label">competitor_analysis.md</span><span class="hd"># Skill: 競合分析</span>
+        <div class="ans-lbl c3">模範 skills/competitor-analysis/SKILL.md</div>
+        <div class="cb"><span class="cb-label">SKILL.md</span><span class="cmt">---
+name: competitor-analysis
+description: 競合ブランドと自社商品を比較分析します。brandsパラメータで分析対象を、
+  axesパラメータで比較軸を指定できます。ユーザーが「競合を比較して」
+  「ブランド比較」「競合分析して」と言うときに使用します。
+---</span>
 
-<span class="hd">## 呼び出し方</span>
-<span class="str">competitor_analysis スキルを使って。
-パラメータ：
-  brands: [分析したいブランド名（複数可、未指定=全ブランド）]
-  axes:   [比較軸（価格 / 成分濃度 / チャネル / ターゲット）]</span>
+<span class="hd"># 競合分析</span>
 
-例：
-<span class="kw">「competitor_analysis を実行して。
-  brands: A, B。axes: 価格, 成分濃度」</span>
+<span class="hd">## パラメータ</span>
+- <span class="kw">brands</span>：分析対象ブランド名（複数可、未指定＝全ブランド）
+- <span class="kw">axes</span>：比較軸（価格 / 成分濃度 / チャネル / ターゲット）
 
 <span class="hd">## 入力ファイル</span>
-- <span class="kw">competitor_info.txt</span>（必須）
-- <span class="kw">product_spec.txt</span>（自社比較に使用）
+- 競合情報データ（必須）
+- 自社商品仕様（自社比較に使用）
 
 <span class="hd">## 処理</span>
-1. 指定された brands のデータを competitor_info.txt から抽出
+1. 指定された brands のデータを競合情報から抽出
 2. 指定された axes の情報を各ブランドから取り出す
-3. 自社（ビタグロウ）のデータを product_spec.txt から取り出す
+3. 自社（ビタグロウ）のデータを商品仕様から取り出す
 4. 指定 axes を列とした比較表を作成する
 5. 自社の相対的なポジションにコメントを付ける
 
@@ -1037,7 +1056,7 @@ customer_reviews.csv を分析し、
       </div>
       <div class="ans-sec">
         <div class="ans-lbl" style="color:var(--amber)">ポイント</div>
-        <div class="tip"><strong>パラメータは「使うたびに変わる条件」に使う。</strong>「どのブランドを比較するか」は毎回変わる可能性があるのでパラメータ向き。「出力先フォルダ」は毎回変わらないので CLAUDE.md に書くべき。この判断基準を持つと Skill の設計が上手くなる。</div>
+        <div class="tip"><strong>パラメータは「使うたびに変わる条件」に使う。</strong>「どのブランドを比較するか」は毎回変わる可能性があるのでパラメータ向き。「出力先フォルダ」は毎回変わらないので CLAUDE.md に書くべき。<br><br><strong>フロントマターの description にパラメータを含める理由：</strong>Claudeはフロントマターだけを先に読み込む（段階的開示の第1レベル）。description に「brandsパラメータで対象を指定」と書いておけば、ユーザーが「AとBを比較して」と言ったとき、Claudeが自動でこのスキルを選び、SKILL.md本文を読み込んで実行する。</div>
       </div>
     </div>
   </div>
@@ -1113,7 +1132,7 @@ customer_reviews.csv を分析し、
 
 カスタマーレビューを分析します。
 
-<span class="kw">skills/review_analysis.md</span> の Skill を実行してください。
+<span class="kw">review-analysis</span> スキルを実行してください。
 
 引数が渡された場合（例：/review 30代）：
 - 指定された年代のレビューのみを対象にする
@@ -1268,18 +1287,18 @@ CLAUDE.md の「出力ルール」に以下を追加してください：
 <span class="kw">以下の3つのSubagentを同時に起動してください：</span>
 
 <span class="fn">### Subagent A — 売上分析</span>
-担当 Skill: <span class="kw">skills/sales_analysis.md</span>（作成済みのものを使用）
-入力: sales_monthly.csv
+担当スキル: <span class="kw">sales-analysis</span>（作成済みのものを使用）
+入力: 月次売上データ
 出力: <span class="var">outputs/subagent_sales_YYYYMMDD.md</span>
 
 <span class="fn">### Subagent B — レビュー分析</span>
-担当 Skill: <span class="kw">skills/review_analysis.md</span>
-入力: customer_reviews.csv
+担当スキル: <span class="kw">review-analysis</span>
+入力: 顧客レビューデータ
 出力: <span class="var">outputs/subagent_review_YYYYMMDD.md</span>
 
 <span class="fn">### Subagent C — 競合分析</span>
-担当 Skill: <span class="kw">skills/competitor_analysis.md</span>
-入力: competitor_info.txt, product_spec.txt
+担当スキル: <span class="kw">competitor-analysis</span>
+入力: 競合情報データ、自社商品仕様
 出力: <span class="var">outputs/subagent_competitor_YYYYMMDD.md</span>
 
 <span class="hd">## Phase 2: 統合（全Subagent完了後に実行）</span>
@@ -1454,7 +1473,7 @@ claude mcp add notion-mcp <span class="str">https://mcp.notion.com/sse</span></d
         <div class="tip"><strong>7トピックで作り上げた構造の全体像。</strong><br><br>
         <strong>CLAUDE.md</strong> ── プロジェクトの記憶。常に読まれる設定書。<br>
         <strong>Workflow</strong> ── 処理の設計図。ステップ定義と依存関係を管理。<br>
-        <strong>Skills</strong> ── 再利用可能な処理部品。複数のWorkflowから呼ばれる。<br>
+        <strong>Skills</strong> ── YAMLフロントマター付きSKILL.mdで定義する再利用可能な処理部品。段階的開示で自動トリガーされる。<br>
         <strong>Slash Commands</strong> ── 頻繁に使う操作の起動ボタン。<br>
         <strong>Hooks</strong> ── 自動品質保証。ファイル保存時などに自動で走る検査。<br>
         <strong>Subagents</strong> ── 並列処理の設計。独立した分析を同時に走らせる。<br>
