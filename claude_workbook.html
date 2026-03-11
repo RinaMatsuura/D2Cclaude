@@ -327,7 +327,8 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--i
     <div class="card-body">
       <div class="scene">
         <div class="scene-lbl">シナリオ</div>
-        新商品「ビタグロウ セラム エクストリーム」のプロジェクトフォルダを前任者から引き継いだ。フォルダにはファイルが4つ入っているが、それぞれ何が書いてあるのか説明がない。まずCoworkにフォルダ内の全ファイルを読ませて、プロジェクトの全体像がわかる CLAUDE.md を作ってもらおう。
+        新商品「ビタグロウ セラム エクストリーム」のプロジェクトフォルダを前任者から引き継いだ。フォルダにはファイルが4つ入っているが、それぞれ何が書いてあるのか説明がない。まずCoworkにフォルダ内の全ファイルを読ませて、プロジェクトの全体像がわかる CLAUDE.md を作ってもらおう。<br><br>
+        <strong>なぜ CLAUDE.md？</strong>　CLAUDE.mdはClaude CoworkやClaude Codeが起動時に最初に読む特別なファイル。ここにプロジェクトの説明を書いておくと、以降の指示で「商品情報から〜して」「売上データを分析して」とデータの内容だけ伝えれば、Claudeが自分でどのファイルを読むべきか判断してくれるようになる。
       </div>
       <div class="tasks">
         <div class="tasks-lbl">タスク ／ 成果物</div>
@@ -337,7 +338,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--i
           <li>Claudeがプロジェクトの全体像を理解できるようにする</li>
         </ul>
       </div>
-      <div class="point"><strong>着目ポイント：</strong>「ファイルを全部読んで説明して」と雑に頼むのと、「各ファイルの形式・概要・主要項目を整理して」と条件を指定するのでは、成果物の使いやすさが大きく変わる。</div>
+      <div class="point"><strong>着目ポイント：</strong>「ファイルを全部読んで説明して」と雑に頼むのと、「各ファイルの形式・概要・主要項目を整理して」と条件を指定するのでは、成果物の使いやすさが大きく変わる。CLAUDE.mdの出来が良いほど、以降のミッションでの指示がシンプルになる。</div>
     </div>
     <button class="toggle-btn" onclick="tog(this)">解説・模範プロンプトを見る <span class="toggle-arrow">▼</span></button>
     <div class="ans-panel">
@@ -394,7 +395,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--paper);color:var(--i
       </div>
       <div class="ans-sec">
         <div class="ans-lbl aw">マネージャーの視点</div>
-        <div class="tip"><strong>プロジェクトを引き継いだら、最初にCLAUDE.mdを作らせる。</strong>これは実務でも効く。新メンバーが「このフォルダ何が入ってるんですか？」と聞く時間がゼロになる。Coworkなら30秒で終わる作業だが、手動でやると全ファイルを開いて読む必要がある。「まず地図を作る」習慣をチームに根付かせよう。</div>
+        <div class="tip"><strong>プロジェクトを引き継いだら、最初にCLAUDE.mdを作らせる。</strong>CLAUDE.mdはClaudeにとっての「プロジェクトの地図」。一度作れば、以降は「売上データを分析して」と言うだけでClaudeが該当ファイルを自分で見つけて読む。ファイル名を毎回指定する手間がなくなる。Coworkなら30秒で終わる作業だが、この30秒がその後の全作業を効率化する。「まず地図を作る」習慣をチームに根付かせよう。</div>
       </div>
     </div>
   </div>
