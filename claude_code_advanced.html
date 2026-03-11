@@ -7,37 +7,38 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0d0d10;
-  --bg2: #13131a;
-  --bg3: #1a1a24;
-  --border: #2a2a38;
-  --border2: #363650;
-  --text: #e8e6f0;
-  --muted: #6b6880;
-  --dim: #3d3a50;
-  --green: #3dd68c;
-  --green-d: #1a6e42;
-  --green-bg: #0d2e1e;
-  --blue: #60a5fa;
-  --blue-d: #1e4a8a;
-  --blue-bg: #0d1e38;
-  --amber: #fbbf24;
-  --amber-bg: #2a1e06;
-  --purple: #a78bfa;
-  --purple-bg: #1a1030;
-  --red: #f87171;
-  --red-bg: #2a0e0e;
-  --cyan: #22d3ee;
-  --cyan-bg: #061e24;
+  --bg: #f0f2f7;
+  --bg2: #e6e9f0;
+  --bg3: #dce0ea;
+  --border: #c5c9d6;
+  --border2: #a8aec0;
+  --text: #1a1d2b;
+  --muted: #5c6178;
+  --dim: #8b90a5;
+  --green: #1a8a52;
+  --green-d: #15703f;
+  --green-bg: #e0f5ea;
+  --blue: #2563b0;
+  --blue-d: #1e4f8a;
+  --blue-bg: #e0ecf8;
+  --amber: #a07010;
+  --amber-bg: #fdf4dc;
+  --purple: #6d4dbe;
+  --purple-bg: #ede6fa;
+  --red: #c03030;
+  --red-bg: #fce8e8;
+  --cyan: #0e7f90;
+  --cyan-bg: #ddf4f8;
 
   /* topic colors */
-  --t1: #3dd68c; /* CLAUDE.md */
-  --t2: #60a5fa; /* Workflow */
-  --t3: #a78bfa; /* Skills */
-  --t4: #fbbf24; /* Slash Commands */
-  --t5: #22d3ee; /* Hooks */
-  --t6: #f87171; /* Subagents */
-  --t7: #fb923c; /* Tasks/MCP */
+  --t1: #1a8a52; /* CLAUDE.md */
+  --t2: #2563b0; /* Workflow */
+  --t3: #6d4dbe; /* Skills */
+  --t4: #a07010; /* Slash Commands */
+  --t5: #0e7f90; /* Hooks */
+  --t6: #c03030; /* Subagents */
+  --t7: #c06020; /* Tasks/MCP */
+  --bg7: #fdf0e4;
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
@@ -71,7 +72,7 @@ body{
   position:absolute;
   top:-60px;right:-100px;
   width:500px;height:500px;
-  background:radial-gradient(circle, rgba(61,214,140,0.06) 0%, transparent 70%);
+  background:radial-gradient(circle, rgba(26,138,82,0.08) 0%, transparent 70%);
   pointer-events:none;
 }
 .cover-badge{
@@ -92,7 +93,7 @@ body{
   line-height:1.05;
   letter-spacing:-2px;
   margin-bottom:20px;
-  background:linear-gradient(135deg, #e8e6f0 0%, #6b6880 100%);
+  background:linear-gradient(135deg, #1a1d2b 0%, #5c6178 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;
 }
@@ -396,8 +397,9 @@ body{
 .cb{
   font-family:'JetBrains Mono',monospace;
   font-size:12px;line-height:1.95;
-  background:var(--bg3);
-  border:1px solid var(--border);
+  background:#1e2030;
+  color:#d0d4e0;
+  border:1px solid #3a3e52;
   border-radius:4px;
   padding:18px 20px;
   white-space:pre;
@@ -408,33 +410,34 @@ body{
 .cb-label{
   position:absolute;top:10px;right:14px;
   font-size:9px;letter-spacing:1.5px;text-transform:uppercase;
-  color:var(--dim);
+  color:#6a7090;
 }
-/* syntax tokens */
-.cb .cm{color:#4a4a62}     /* comment */
-.cb .kw{color:var(--green)} /* keyword/important */
-.cb .str{color:var(--amber)} /* string */
-.cb .var{color:var(--cyan)} /* variable/filename */
-.cb .fn{color:var(--purple)} /* function */
-.cb .num{color:var(--red)} /* number */
-.cb .hd{color:var(--blue)}  /* heading/section */
-.cb .op{color:var(--muted)} /* operator/punct */
+/* syntax tokens (dark bg) */
+.cb .cm{color:#6a7090}     /* comment */
+.cb .cmt{color:#6a7090}    /* comment alt */
+.cb .kw{color:#3dd68c}     /* keyword/important */
+.cb .str{color:#fbbf24}    /* string */
+.cb .var{color:#22d3ee}    /* variable/filename */
+.cb .fn{color:#a78bfa}     /* function */
+.cb .num{color:#f87171}    /* number */
+.cb .hd{color:#60a5fa}     /* heading/section */
+.cb .op{color:#6b6880}     /* operator/punct */
 
 /* diff block */
 .diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:10px}
 .diff-pane{padding:16px 18px;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.9;white-space:pre-wrap;word-break:break-word}
-.diff-pane.before{background:#1a0e0e;color:#c07070}
-.diff-pane.after{background:var(--green-bg);color:#70c0a0}
+.diff-pane.before{background:#fce8e8;color:#a02020}
+.diff-pane.after{background:var(--green-bg);color:#1a7a48}
 .diff-head{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:4px 4px 0 0;overflow:hidden;margin-bottom:0}
 .diff-head+.diff-grid{border-radius:0 0 4px 4px}
 .diff-htab{padding:6px 18px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;text-align:center}
-.diff-htab.before{background:#2a1414;color:var(--red)}
+.diff-htab.before{background:#f5d0d0;color:var(--red)}
 .diff-htab.after{background:var(--green-bg);color:var(--green)}
 
 /* tip */
 .tip{
   background:var(--amber-bg);
-  border:1px solid #4a3810;
+  border:1px solid #d4b870;
   border-left:3px solid var(--amber);
   border-radius:0 4px 4px 0;
   padding:13px 17px;
@@ -445,12 +448,12 @@ body{
 /* warning */
 .warn{
   background:var(--red-bg);
-  border:1px solid #4a1818;
+  border:1px solid #e0a0a0;
   border-left:3px solid var(--red);
   border-radius:0 4px 4px 0;
   padding:12px 16px;
   font-size:12.5px;line-height:1.7;
-  color:#c07070;
+  color:#a03030;
   margin-bottom:10px;
 }
 .warn strong{color:var(--red)}
@@ -467,7 +470,7 @@ body{
 .c4{color:var(--t4)} .b4{border-color:var(--t4)} .bg4{background:var(--amber-bg)}
 .c5{color:var(--t5)} .b5{border-color:var(--t5)} .bg5{background:var(--cyan-bg)}
 .c6{color:var(--t6)} .b6{border-color:var(--t6)} .bg6{background:var(--red-bg)}
-.c7{color:#fb923c}   .b7{border-color:#fb923c}   .bg7{background:#1e1206}
+.c7{color:var(--t7)}   .b7{border-color:var(--t7)}   .bg7{background:var(--bg7)}
 
 /* topic border left on card */
 .t1-card{border-left:3px solid var(--t1)}
@@ -476,7 +479,7 @@ body{
 .t4-card{border-left:3px solid var(--t4)}
 .t5-card{border-left:3px solid var(--t5)}
 .t6-card{border-left:3px solid var(--t6)}
-.t7-card{border-left:3px solid var(--fb923c,#fb923c)}
+.t7-card{border-left:3px solid var(--t7)}
 
 @media(max-width:700px){
   .lmap{grid-template-columns:repeat(4,1fr)}
@@ -490,8 +493,8 @@ body{
 
 /* ── DOWNLOAD BOX ── */
 .dl-box{
-  background:#13131a;
-  border:1px solid #2a2a38;
+  background:var(--bg2);
+  border:1px solid var(--border);
   border-radius:6px;
   padding:28px 32px;
   margin-bottom:48px;
@@ -499,28 +502,28 @@ body{
 .dl-box-title{
   font-family:'JetBrains Mono',monospace;
   font-size:11px;letter-spacing:2.5px;text-transform:uppercase;
-  color:#3dd68c;margin-bottom:10px;font-weight:500;
+  color:var(--green);margin-bottom:10px;font-weight:500;
 }
 .dl-box-sub{
-  font-size:13.5px;color:#6b6880;margin-bottom:20px;line-height:1.6;
+  font-size:13.5px;color:var(--muted);margin-bottom:20px;line-height:1.6;
 }
 .dl-files{
   display:flex;flex-wrap:wrap;gap:10px;
 }
 .dl-btn{
   display:inline-flex;align-items:center;gap:8px;
-  background:#1a1a24;border:1px solid #363650;
+  background:var(--bg3);border:1px solid var(--border2);
   border-radius:4px;padding:10px 16px;
-  text-decoration:none;color:#e8e6f0;
+  text-decoration:none;color:var(--text);
   font-size:13px;font-family:'JetBrains Mono',monospace;
   transition:background 0.15s,border-color 0.15s;
   cursor:pointer;
 }
-.dl-btn:hover{background:#0d2e1e;color:#3dd68c;border-color:#3dd68c;}
-.dl-btn:hover .dl-arrow{color:#3dd68c;}
+.dl-btn:hover{background:var(--green-bg);color:var(--green);border-color:var(--green);}
+.dl-btn:hover .dl-arrow{color:var(--green);}
 .dl-icon{font-size:15px;}
 .dl-name{font-weight:500;}
-.dl-arrow{color:#6b6880;font-size:16px;margin-left:4px;}
+.dl-arrow{color:var(--muted);font-size:16px;margin-left:4px;}
 
 </style>
 </head>
@@ -542,7 +545,7 @@ body{
     <span class="ctag c4 b4" style="background:var(--amber-bg)">Slash Commands</span>
     <span class="ctag c5 b5" style="background:var(--cyan-bg)">Hooks</span>
     <span class="ctag c6 b6" style="background:var(--red-bg)">Subagents</span>
-    <span class="ctag c7 b7" style="background:var(--bg7,#1e1206)">Tasks / MCP</span>
+    <span class="ctag c7 b7" style="background:var(--bg7)">Tasks / MCP</span>
   </div>
 </header>
 
@@ -565,7 +568,7 @@ body{
   <div class="lmap-item"><div class="lmap-n">04</div><div class="lmap-icon">⚡</div><div class="lmap-label" style="color:var(--t4)">Slash<br>Cmds</div></div>
   <div class="lmap-item"><div class="lmap-n">05</div><div class="lmap-icon">🪝</div><div class="lmap-label" style="color:var(--t5)">Hooks</div></div>
   <div class="lmap-item"><div class="lmap-n">06</div><div class="lmap-icon">🤖</div><div class="lmap-label" style="color:var(--t6)">Sub<br>agents</div></div>
-  <div class="lmap-item"><div class="lmap-n">07</div><div class="lmap-icon">🔌</div><div class="lmap-label" style="color:var(--t7,#fb923c)">Tasks<br>MCP</div></div>
+  <div class="lmap-item"><div class="lmap-n">07</div><div class="lmap-icon">🔌</div><div class="lmap-label" style="color:var(--t7)">Tasks<br>MCP</div></div>
 </div>
 
 <!-- ══ INDEX ══ -->
@@ -580,8 +583,8 @@ body{
   <div class="idx-row"><div class="idx-id">4-A</div><div>/report スラッシュコマンドを定義して毎月呼び出す</div><div><span class="idx-topic c4 b4" style="background:var(--amber-bg)">Slash Cmds</span></div><div><span style="color:var(--t4)">●●●○○</span></div></div>
   <div class="idx-row"><div class="idx-id">5-A</div><div>ファイル保存時に自動バリデーションする Hook を設定する</div><div><span class="idx-topic c5 b5" style="background:var(--cyan-bg)">Hooks</span></div><div><span style="color:var(--t5)">●●●●○</span></div></div>
   <div class="idx-row"><div class="idx-id">6-A</div><div>Subagent を使って競合×売上の並列分析パイプラインを作る</div><div><span class="idx-topic c6 b6" style="background:var(--red-bg)">Subagents</span></div><div><span style="color:var(--t6)">●●●●●</span></div></div>
-  <div class="idx-row"><div class="idx-id">7-A</div><div>Tasks でバックグラウンド処理スケジュールを組む</div><div><span class="idx-topic c7 b7" style="background:var(--bg7,#1e1206)">Tasks</span></div><div><span style="color:#fb923c">●●●●○</span></div></div>
-  <div class="idx-row"><div class="idx-id">7-B</div><div>MCP サーバーを接続して Slack/Notion と連携する</div><div><span class="idx-topic c7 b7" style="background:var(--bg7,#1e1206)">MCP</span></div><div><span style="color:#fb923c">●●●●●</span></div></div>
+  <div class="idx-row"><div class="idx-id">7-A</div><div>Tasks でバックグラウンド処理スケジュールを組む</div><div><span class="idx-topic c7 b7" style="background:var(--bg7)">Tasks</span></div><div><span style="color:var(--t7)">●●●●○</span></div></div>
+  <div class="idx-row"><div class="idx-id">7-B</div><div>MCP サーバーを接続して Slack/Notion と連携する</div><div><span class="idx-topic c7 b7" style="background:var(--bg7)">MCP</span></div><div><span style="color:var(--t7)">●●●●●</span></div></div>
 </div>
 
 <!-- ══════════════════════════════ -->
@@ -1524,7 +1527,7 @@ CLAUDE.md の「出力ルール」に以下を追加してください：
 <section class="topic-sec">
   <div class="topic-head">
     <span class="topic-num">Topic 07</span>
-    <span class="topic-title" style="color:#fb923c">Tasks ／ MCP</span>
+    <span class="topic-title" style="color:var(--t7)">Tasks ／ MCP</span>
   </div>
   <div class="topic-concept">
     <strong>Tasks とは：</strong>Claude Code をバックグラウンドで定期実行・スケジュール実行させる仕組み。「毎月1日に月次レポートを自動生成」のような定期処理を設定できる。<br>
@@ -1532,7 +1535,7 @@ CLAUDE.md の「出力ルール」に以下を追加してください：
   </div>
 
   <!-- 7-A -->
-  <div class="card" style="border:1px solid var(--border);border-left:3px solid #fb923c">
+  <div class="card" style="border:1px solid var(--border);border-left:3px solid var(--t7)">
     <div class="card-head">
       <div>
         <div class="card-id c7">Mission 7-A ／ Tasks</div>
@@ -1579,7 +1582,7 @@ CLAUDE.md の「出力ルール」に以下を追加してください：
   </div>
 
   <!-- 7-B -->
-  <div class="card" style="border:1px solid var(--border);border-left:3px solid #fb923c">
+  <div class="card" style="border:1px solid var(--border);border-left:3px solid var(--t7)">
     <div class="card-head">
       <div>
         <div class="card-id c7">Mission 7-B ／ MCP</div>
